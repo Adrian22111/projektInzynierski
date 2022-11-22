@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dog index{% endblock %}
+
+{% block body %}
+    <h1>Dog index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Race</th>
+                <th>Sex</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for dog in dogs %}
+            <tr>
+                <td>{{ dog.id }}</td>
+                <td>{{ dog.name }}</td>
+                <td>{{ dog.age }}</td>
+                <td>{{ dog.race }}</td>
+                <td>{{ dog.sex }}</td>
+                <td>{{ dog.description }}</td>
+                <td>{{ dog.image }}</td>
+                <td>
+                    <a href="{{ path('app_dog_show', {'id': dog.id}) }}">show</a>
+                    <a href="{{ path('app_dog_edit', {'id': dog.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_dog_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit AdoptionCase{% endblock %}
+
+{% block body %}
+    <h1>Edit AdoptionCase</h1>
+
+    {{ include('adoption_case/_form.html.twig', {'button_label': 'Update'}) }}
+    <a href="{{ path('app_adoption_case_index') }}">back to list</a>
+
+    {{ include('adoption_case/_delete_form.html.twig') }}
+{% endblock %}

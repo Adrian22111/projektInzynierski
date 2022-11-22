@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New AdoptionCase{% endblock %}
+
+{% block body %}
+    <h1>Create new AdoptionCase</h1>
+
+    {{ include('adoption_case/_form.html.twig') }}
+
+    <a href="{{ path('app_adoption_case_index') }}">back to list</a>
+{% endblock %}

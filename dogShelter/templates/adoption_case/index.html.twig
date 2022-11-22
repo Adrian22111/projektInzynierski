@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AdoptionCase index{% endblock %}
+
+{% block body %}
+    <h1>AdoptionCase index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Pies</th>
+                <th>Klient</th>
+                <th>Pracownicy</th>
+                <th>Dokumenty</th>
+                <th>Opcje</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for adoption_case in adoption_cases %}
+            <tr>
+                <td>{{ adoption_case.id }}</td>
+                <td><a href="{{ path('app_dog_show', {'id': adoption_case.dog.id}) }}">{{ adoption_case.dog}}</a></td>
+                <td><a href="{{ path('app_user_show', {'id': adoption_case.client.id}) }}">{{ adoption_case.client}}</a></td>
+                <td> 
+                    {% for employee in adoption_case.employee %}
+                        <div><a href="{{ path('app_user_show', {'id': employee.id}) }}">{{ employee.username }}</a></div>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for document in adoption_case.documents %}
+                        <div><a href="{{ path('app_documents_show', {'id': document.id}) }}">{{ document.documentName }}</a></div>
+                    {% endfor %}
+                </td>
+                </td>
+                <td>
+                    <a href="{{ path('app_adoption_case_show', {'id': adoption_case.id}) }}">show</a>
+                    <a href="{{ path('app_adoption_case_edit', {'id': adoption_case.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_adoption_case_new') }}">Create new</a>
+{% endblock %}
