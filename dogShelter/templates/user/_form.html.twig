@@ -1,4 +1,47 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+        <div>        
+            {{ form_label(form.username) }}
+            {{ form_widget(form.username )}}
+            {{ form_errors(form.username) }}
+        </div>
+        <div>
+        {% if isEdit == true %}
+        {% else %}
+            {{ form_label(form.password) }}
+            {{ form_widget(form.password)}}
+            {{ form_errors(form.password) }}
+        {% endif %}
+        </div>
+        <div>
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email)}}
+            {{ form_errors(form.email) }}
+        </div>
+        <div>
+            {{ form_label(form.roles) }}
+            {{ form_widget(form.roles)}}
+            {{ form_errors(form.roles) }}
+        </div>
+        <div>
+            {{ form_label(form.phoneNumber) }}
+            {{ form_widget(form.phoneNumber)}}
+            {{ form_errors(form.phoneNumber) }}
+        </div>
+        <div>
+            {{ form_label(form.facebookProfile) }}
+            {{ form_widget(form.facebookProfile)}}
+            {{ form_errors(form.facebookProfile) }}
+        </div>
+        <div>
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description)}}
+            {{ form_errors(form.description) }}
+        </div>
+        <div>
+            {{ form_label(form.profileImage) }}
+            {{ form_widget(form.profileImage)}}
+            {{ form_errors(form.profileImage) }}
+        </div>
+
     <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+{{ form_end(form, ) }}

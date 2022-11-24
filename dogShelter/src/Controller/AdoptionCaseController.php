@@ -73,10 +73,7 @@ class AdoptionCaseController extends AbstractController
 
              
         if ($form->isSubmitted() && $form->isValid()) {
-            // $client->setAvailable(false);
-            // $adoptionCase->setClient($client);
-            // $dog->setInAdoption(true);
-            // $adoptionCase->setDog($dog);
+
             $adoptionCaseRepository->save($adoptionCase,true);
             return $this->redirectToRoute('app_adoption_case_index', [], Response::HTTP_SEE_OTHER);
         }

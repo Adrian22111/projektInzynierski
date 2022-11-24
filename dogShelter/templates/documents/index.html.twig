@@ -19,7 +19,11 @@
             <tr>
                 <td>{{ document.id }}</td>
                 <td>{{ document.documentName }}</td>
-                <td> <a href="{{ path('app_adoption_case_show', {'id': document.AdoptionCase.id}) }}">{{document.AdoptionCase}}</a></td>
+                {% if document.AdoptionCase.id is defined %}
+                    <td> <a href="{{ path('app_adoption_case_show', {'id': document.AdoptionCase.id}) }}">{{document.AdoptionCase}}</a></td>
+                {% else %}
+                    <td>brak</td>
+                {% endif %}
                 <td>
                     <a href="{{ path('app_documents_show', {'id': document.id}) }}">show</a>
                     <a href="{{ path('app_documents_edit', {'id': document.id}) }}">edit</a>

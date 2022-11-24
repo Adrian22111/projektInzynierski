@@ -6,14 +6,13 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TelType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
-class UserType extends AbstractType
+class UserEditType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -30,14 +29,11 @@ class UserType extends AbstractType
                     'multiple'=>true,
                     'required'=>true
             ))
-            ->add('available')
-            ->add('password',PasswordType::class)
             ->add('email',EmailType::class)
             ->add('description',TextareaType::class)
             ->add('facebookProfile',UrlType::class)
             ->add('phoneNumber',TelType::class)
             ->add('profileImage')
-            ->add('guardianOf')
 
         ;
     }
