@@ -4,13 +4,16 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class UserEditType extends AbstractType
 {
@@ -30,10 +33,30 @@ class UserEditType extends AbstractType
                     'required'=>true
             ))
             ->add('email',EmailType::class)
-            ->add('description',TextareaType::class)
-            ->add('facebookProfile',UrlType::class)
-            ->add('phoneNumber',TelType::class)
-            ->add('profileImage')
+            ->add('description',TextareaType::class,[
+                'required' => false,
+            ])
+            ->add('facebookProfile',UrlType::class,[
+                'required' => false,
+            ])
+            ->add('phoneNumber',TelType::class,[
+                'required' => false,
+            ])
+            ->add('profileImage',FileType::class,[
+                'label' => 'Zdjęcie profilowe jpg/png',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '4096k',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Dostępne formaty to PNG/JPG'
+                    ])
+                ]
+            ])
 
         ;
     }

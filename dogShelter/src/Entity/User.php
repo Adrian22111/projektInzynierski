@@ -61,7 +61,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?AdoptionCase $clientAdoptionCases = null;
 
     #[ORM\Column]
-    private ?bool $available = null;
+    private ?bool $available = true;
 
 
 
