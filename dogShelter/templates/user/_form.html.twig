@@ -5,8 +5,7 @@
             {{ form_errors(form.username) }}
         </div>
         <div>
-        {% if isEdit == true %}
-        {% else %}
+        {% if form.password is defined %}
             {{ form_label(form.password) }}
             {{ form_widget(form.password)}}
             {{ form_errors(form.password) }}
@@ -22,26 +21,42 @@
             {{ form_widget(form.roles)}}
             {{ form_errors(form.roles) }}
         </div>
+        {% if  form.phoneNumber is defined %}
         <div>
             {{ form_label(form.phoneNumber) }}
             {{ form_widget(form.phoneNumber)}}
             {{ form_errors(form.phoneNumber) }}
         </div>
+        {% endif %}
+        {% if  form.facebookProfile is defined %}
         <div>
             {{ form_label(form.facebookProfile) }}
             {{ form_widget(form.facebookProfile)}}
             {{ form_errors(form.facebookProfile) }}
         </div>
+        {% endif %}
+        {% if  form.description is defined %}
         <div>
             {{ form_label(form.description) }}
             {{ form_widget(form.description)}}
             {{ form_errors(form.description) }}
         </div>
+        {% endif %}
+        {% if  form.profileImage is defined %}
         <div>
             {{ form_label(form.profileImage) }}
             {{ form_widget(form.profileImage)}}
             {{ form_errors(form.profileImage) }}
         </div>
+        {% endif %}
+        {% if  form.guardianOf is defined %}
+        <div>
+            {{ form_label(form.guardianOf) }}
+            {{ form_widget(form.guardianOf)}}
+            {{ form_errors(form.guardianOf) }}
+        </div>
+        {% endif %}
+
 
     <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form, ) }}
+{{ form_end(form) }}

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
-use App\Form\UserEditType;
 use App\Form\ChangePasswordType;
 use App\Repository\UserRepository;
 use Symfony\Component\Filesystem\Filesystem;
@@ -92,7 +91,7 @@ class UserController extends AbstractController
     {
         
 
-        $form = $this->createForm(UserEditType::class, $user);
+        $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
