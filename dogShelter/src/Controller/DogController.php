@@ -84,10 +84,15 @@ class DogController extends AbstractController
     #[Route('/{id}/edit', name: 'app_dog_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Dog $dog, DogRepository $dogRepository, SluggerInterface $slugger, UserRepository $users): Response
     {
+        $guardiansToDelete = $dog->getGuardian();
         $form = $this->createForm(DogType::class, $dog);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            foreach($guardiansToDelete as $guardianToDelete)
+            {
+                $dog->removeGuardian($guardianToDelete);
+            }
             if($form->get('image')->getData() != null)
             {
                 if($dog->getImage()!= null)
@@ -123,11 +128,11 @@ class DogController extends AbstractController
                 }
             }
             
-            // $guardians = $form->get('guardian')->getData();  
-            // foreach($guardians as $guardian)
-            // {
-            //     $guardian->addGuardianOf($dog);
-            // }
+            $guardians = $form->get('guardian')->getData();  
+            foreach($guardians as $guardian)
+            {
+                $guardian->addGuardianOf($dog);
+            }
             $dogRepository->save($dog, true);
 
             return $this->redirectToRoute('app_dog_index', [], Response::HTTP_SEE_OTHER);
