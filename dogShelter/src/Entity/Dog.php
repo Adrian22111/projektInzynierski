@@ -36,11 +36,12 @@ class Dog
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'guardianOf')]
     private Collection $guardian;
 
+
     #[ORM\OneToOne(mappedBy: 'dog', cascade: ['persist', 'remove'])]
     private ?AdoptionCase $adoptionCase = null;
 
     #[ORM\Column]
-    private ?bool $inAdoption = null;
+    private ?bool $inAdoption = false;
 
     public function __construct()
     {

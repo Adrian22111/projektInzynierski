@@ -38,6 +38,11 @@ class DogRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    // public function getAll($id)
+    // {
+    //     return $this->createQueryBuilder('u')
+
+    // }
 
 //    /**
 //     * @return Dog[] Returns an array of Dog objects

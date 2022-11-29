@@ -34,20 +34,41 @@ class UserType extends AbstractType
                     'multiple'=>true,
                     'required'=>true
             ))
-            ->add('password',PasswordType::class)
             ->add('email',EmailType::class)
             ->add('phoneNumber',TelType::class,[
                 'required' => false,
+                
             ])
-
+            ->add('profileImage',FileType::class,[
+                'label' => 'Zdjęcie profilowe jpg/png',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '4096k',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Dostępne formaty to PNG/JPG'
+                    ])
+                ]
+            ]);
 
         ;
         $builder->addEventListener(FormEvents::PRE_SET_DATA,function(FormEvent $event){
             $form = $event->getForm();
             $user = $event->getData();
-            if($user || null != $user->getId())
+            if(!$user || null === $user->getId())
             {
-                $form->remove('password');
+                $form->add('password',PasswordType::class)
+                     
+                ;
+                
+                
+            }
+            else
+            {
                 $roles = $user->getRoles();
                 foreach($roles as $role)
                 {
@@ -57,31 +78,21 @@ class UserType extends AbstractType
                             ->add('description',TextareaType::class,[
                                 'required' => false,
                             ])
-                            ->add('profileImage',FileType::class,[
-                                'label' => 'Zdjęcie profilowe jpg/png',
-                                'mapped' => false,
-                                'required' => false,
-                                'constraints' => [
-                                    new File([
-                                        'maxSize' => '4096k',
-                                        'mimeTypes' => [
-                                            'image/jpeg',
-                                            'image/png',
-                                        ],
-                                        'mimeTypesMessage' => 'Dostępne formaty to PNG/JPG'
-                                    ])
-                                ]
-                            ])
                             ->add('facebookProfile',UrlType::class,[
                                 'required' => false,
                             ])
-                            ->add('guardianOf');
+                            ->add('guardianOf')
+                            ->add('available');
+
+                
                     }
                 }
+                                    
             }
+
         });
-        
     }
+
 
     public function configureOptions(OptionsResolver $resolver): void
     {
