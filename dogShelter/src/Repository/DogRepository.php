@@ -38,9 +38,28 @@ class DogRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-    // public function getAll($id)
+    public function getGuardians($id)
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.id = :id')
+            ->setParameter('id',$id)
+            ->join('d.guardian','g')
+            ->join('app\Entity\User','u')
+            ->Select('u')
+            ->andWhere('u.id = g.id')
+            ->getQuery()
+            ->execute()    
+        ;
+
+    }
+        // public function getGuardians($id)
     // {
     //     return $this->createQueryBuilder('u')
+    //         ->Join('u.guardianOf','g')
+    //         ->select('g')
+    //         ->getQuery()
+    //         ->execute()    
+    //     ;
 
     // }
 
