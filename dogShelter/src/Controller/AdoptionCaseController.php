@@ -31,11 +31,14 @@ class AdoptionCaseController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
             $user = $form->get('client')->getData();
-            $user->setAvailable(false);
-            $dog = $form->get('dog')->getData();
-            $dog->setInAdoption(true);
-            $adoptionCaseRepository->save($adoptionCase, true);
+                $user->setAvailable(false);
+                $dog = $form->get('dog')->getData();
+                $dog->setInAdoption(true);
+                $adoptionCaseRepository->save($adoptionCase, true);
+            
+
 
             return $this->redirectToRoute('app_adoption_case_index', [], Response::HTTP_SEE_OTHER);
         }

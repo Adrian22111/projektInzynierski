@@ -24,7 +24,7 @@ class DogType extends AbstractType
             ->add('description')
             ->add('image',FileType::class,[
                 'label' => 'Dodaj Zdjęcie w formacie IMG/JPG',
-                'mapped' => true,
+                'mapped' => false,
                 'required' => false,
                 'constraints' => [
                     new File([

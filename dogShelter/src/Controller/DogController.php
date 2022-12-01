@@ -84,18 +84,12 @@ class DogController extends AbstractController
     #[Route('/{id}/edit', name: 'app_dog_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Dog $dog, DogRepository $dogRepository, SluggerInterface $slugger, UserRepository $users): Response
     {
-        // $guardiansToDelete = $dog->getGuardian();
         $form = $this->createForm(DogType::class, $dog);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            // foreach($guardiansToDelete as $guardianToDelete)
-            // {
-            //     $dog->removeGuardian($guardianToDelete);
-            // }
             if($form->get('image')->getData() != null)
             {
-                if($dog->getImage()!= null)
+                if($dog->getImage() != null)
                 {
                     $dog->setImage(
                         new File($this->getParameter('dogimages_directory').'/'.$dog->getImage())
@@ -103,33 +97,28 @@ class DogController extends AbstractController
                     $filesystem = new Filesystem();
                     $filesystem->remove($dog->getImage());
                 }
-                $file = $form->get('image')->getData();
-                if($file)
+                 $file = $form->get('image')->getData();
+                $originalFileName = pathinfo(
+                    $file->getClientOriginalName(),
+                    PATHINFO_FILENAME
+                );
+                $safeFileName = $slugger->slug($originalFileName);
+                $newFileName = $safeFileName."_".uniqid().".".$file->guessExtension();
+                try
                 {
-                    $originalFileName = pathinfo(
-                        $file->getClientOriginalName(),
-                        PATHINFO_FILENAME
+                    $file->move(
+                        $this->getParameter('dogimages_directory'),
+                        $newFileName,
                     );
-                    $safeFileName = $slugger->slug($originalFileName);
-                    $newFileName = $safeFileName."_".uniqid().".".$file->guessExtension();
-                    try
-                    {
-                        $file->move(
-                            $this->getParameter('dogimages_directory'),
-                            $newFileName,
-                        );
-
-                    }
-                    catch(FileException $e)
-                    {
-
-                    }
-                    $dog->setImage($newFileName);
                 }
+                catch(FileException $e)
+                {
+
+                }
+                $dog->setImage($newFileName);
             }
             $dogId = $dog->getId();
             $currentGuardiansId = $dogRepository->getGuardians($dogId);
-            //dd($currentGuardiansId);
             foreach($currentGuardiansId as $currentGuardian)
             {
                 $currentGuardian->removeGuardianOf($dog);
@@ -154,16 +143,26 @@ class DogController extends AbstractController
     public function delete(Request $request, Dog $dog, DogRepository $dogRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$dog->getId(), $request->request->get('_token'))) {
-            if($dog->getImage()!=null)
+            if($dog->getAdoptionCase()!= null)
             {
-                $dog->setImage(
-                    new File($this->getParameter('dogimages_directory').'/'.$dog->getImage())
-                );
-                
-                $filesystem = new Filesystem();
-                $filesystem->remove($dog->getImage());
+                $this->addFlash('failure','rozstrzygnij najpierw sprawę adopcji');
+                return $this->redirectToRoute('app_dog_edit',['id'=>$dog->getId()]);
             }
-            $dogRepository->remove($dog, true);
+            else
+            {
+                if($dog->getImage()!=null)
+                {
+                    $dog->setImage(
+                        new File($this->getParameter('dogimages_directory').'/'.$dog->getImage())
+                    );
+                    
+                    $filesystem = new Filesystem();
+                    $filesystem->remove($dog->getImage());
+                }
+
+                $dogRepository->remove($dog, true);
+            }
+
         }
 
         return $this->redirectToRoute('app_dog_index', [], Response::HTTP_SEE_OTHER);

@@ -32,6 +32,7 @@ class AdoptionCaseType extends AbstractType
             ->add('dog',EntityType::class,[
                 'class' => Dog::class,
                 'choice_label' => 'name',
+                'required' => true,
                 'mapped' => true,
                 'multiple' => false,
                 'query_builder' => function(DogRepository $dogs) use ($options)
@@ -50,6 +51,7 @@ class AdoptionCaseType extends AbstractType
             ->add('employee',EntityType::class,[
                 'class' => User::class,
                 'choice_label' => 'username',
+                'required' => true,
                 'mapped' => true,
                 'multiple' => true,
                 'query_builder' => function(UserRepository $users)
@@ -78,6 +80,7 @@ class AdoptionCaseType extends AbstractType
                 'choice_label' => 'username',
                 'mapped' => true,
                 'multiple' => false,
+                'required' => true,
                 'query_builder' => function(UserRepository $users) use ($options)
                 {
                     $clientId = $options['clientId'];
