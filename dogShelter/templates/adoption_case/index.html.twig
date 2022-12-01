@@ -3,48 +3,51 @@
 {% block title %}AdoptionCase index{% endblock %}
 
 {% block body %}
-    <h1>AdoptionCase index</h1>
+    <div class="flex-col   mt-10 ">
+        <div class="text-2xl text-center mb-2 "> Sprawy Adopcji</div>
+        <table class="w-1/2 border-1 shadow-xl mx-auto">
+            <thead class="text-center" >
+                <tr>
+                    <th class=" border-2">Id</th>
+                    <th class=" border-2">Pies</th>
+                    <th class=" border-2">Klient</th>
+                    <th class=" border-2">Pracownicy</th>
+                    <th class=" border-2">Dokumenty</th>
+                    <th class=" border-2">Opcje</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+            {% for adoption_case in adoption_cases %}
+                <tr>
+                    <td class=" border-2">{{ adoption_case.id }}</td>
+                    <td class=" border-2"><a href="{{ path('app_dog_show', {'id': adoption_case.dog.id}) }}">{{ adoption_case.dog}}</a></td>
+                    <td class=" border-2"><a href="{{ path('app_user_show', {'id': adoption_case.client.id}) }}">{{ adoption_case.client}}</a></td>
+                    <td class=" border-2"> 
+                        {% for employee in adoption_case.employee %}
+                            <div><a href="{{ path('app_user_show', {'id': employee.id}) }}">{{ employee.username }}</a></div>
+                        {% endfor %}
+                    </td>
+                    <td class=" border-2">
+                        {% for document in adoption_case.documents %}
+                            <div><a href="{{ path('app_documents_show', {'id': document.id}) }}">{{ document.documentName }}</a></div>
+                        {% endfor %}
+                    </td>
+                    
+                    <td class=" border-2">
+                        <a href="{{ path('app_adoption_case_show', {'id': adoption_case.id}) }}">Podgląd</a>
+                        <a href="{{ path('app_adoption_case_edit', {'id': adoption_case.id}) }}">Edycja</a>
+                        <a href="{{ path('app_adoption_case_new') }}">Nowa Sprawa</a>
+                        <a href="{{ path('app_documents_new') }}">Dodaj dokument</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Pies</th>
-                <th>Klient</th>
-                <th>Pracownicy</th>
-                <th>Dokumenty</th>
-                <th>Opcje</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for adoption_case in adoption_cases %}
-            <tr>
-                <td>{{ adoption_case.id }}</td>
-                <td><a href="{{ path('app_dog_show', {'id': adoption_case.dog.id}) }}">{{ adoption_case.dog}}</a></td>
-                <td><a href="{{ path('app_user_show', {'id': adoption_case.client.id}) }}">{{ adoption_case.client}}</a></td>
-                <td> 
-                    {% for employee in adoption_case.employee %}
-                        <div><a href="{{ path('app_user_show', {'id': employee.id}) }}">{{ employee.username }}</a></div>
-                    {% endfor %}
-                </td>
-                <td>
-                    {% for document in adoption_case.documents %}
-                        <div><a href="{{ path('app_documents_show', {'id': document.id}) }}">{{ document.documentName }}</a></div>
-                    {% endfor %}
-                </td>
-                </td>
-                <td>
-                    <a href="{{ path('app_adoption_case_show', {'id': adoption_case.id}) }}">show</a>
-                    <a href="{{ path('app_adoption_case_edit', {'id': adoption_case.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="2">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_adoption_case_new') }}">Create new</a>
+    
 {% endblock %}

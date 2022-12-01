@@ -32,17 +32,6 @@ class AdoptionCase
     private ?User $client = null;
 
 
-
-
-
-
-
-
-
-
-
-
-
     public function __construct()
     {
         $this->documents = new ArrayCollection();
