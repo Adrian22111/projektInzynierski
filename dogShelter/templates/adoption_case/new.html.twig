@@ -3,9 +3,9 @@
 {% block title %}New AdoptionCase{% endblock %}
 
 {% block body %}
-    <h1>Create new AdoptionCase</h1>
-
-    {{ include('adoption_case/_form.html.twig') }}
-
-    <a href="{{ path('app_adoption_case_index') }}">back to list</a>
+    <div class="flex-col text-center mt-10 w-1/6 border-1 shadow-xl mx-auto ">
+        <div class="mb-2 text-xl  ">Nowa Sprawa Adopcji</div>
+        {{ include('adoption_case/_form.html.twig') }}
+        <a href="{{ path('app_adoption_case_index') }}"><div class="border-x-2 border-b-2 bg-yellow-500 hover:bg-yellow-400">Lista spraw</div></a>
+    </div>
 {% endblock %}

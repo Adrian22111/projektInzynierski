@@ -39,9 +39,9 @@
         <tr>
             <th class="text-left border-2">Opcje</th>
             <td class="text-left border-2">
-                <div><a href="{{ path('app_adoption_case_index') }}">Wszystkie Psy</a></div>
-                <div><a href="{{ path('app_adoption_case_edit', {'id': adoption_case.id}) }}">Edytuj</a></div>
-                <div class="text-red-700">{{ include('adoption_case/_delete_form.html.twig') }}</div>
+                <div class="w-full bg-green-500 hover:bg-green-400 border-b-2 text-center"><a href="{{ path('app_adoption_case_edit', {'id': adoption_case.id}) }}">Edytuj</a></div>
+                <div class="w-full bg-yellow-500 hover:bg-yellow-400 border-b-2 text-center" ><a href="{{ path('app_adoption_case_index') }}">Wszystkie Sprawy</a></div>
+                <div>{{ include('adoption_case/_delete_form.html.twig') }}</div>
             </td>
         </tr> 
     </table>

@@ -1,4 +1,19 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <div>
+        {{ form_label(form.dog,'Wybierz Psa',{'label_attr':{'class':'block'}}) }}
+        {{ form_widget(form.dog,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+        {{ form_errors(form.dog) }}
+    </div>
+    <div>
+        {{ form_label(form.employee,'Wybierz pracownika',{'label_attr':{'class':'block'}}) }}
+        {{ form_widget(form.employee,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md  p-2 mt-1 mb-2'}})}}
+        {{ form_errors(form.employee) }}
+    </div>
+    <div>
+        {{ form_label(form.client,'Dodaj Klienta',{'label_attr':{'class':'block'}}) }}
+        {{ form_widget(form.client,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md  p-2 mt-1 mb-2'}})}}
+        {{ form_errors(form.client) }}
+    </div>
+
+    <button class="btn border-2 bg-green-500 w-full hover:bg-green-400 ">{{ button_label|default('Zapisz') }}</button>
 {{ form_end(form) }}

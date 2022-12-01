@@ -3,10 +3,10 @@
 {% block title %}Edit AdoptionCase{% endblock %}
 
 {% block body %}
-    <h1>Edit AdoptionCase</h1>
-
-    {{ include('adoption_case/_form.html.twig', {'button_label': 'Update'}) }}
-    <a href="{{ path('app_adoption_case_index') }}">back to list</a>
-
-    {{ include('adoption_case/_delete_form.html.twig') }}
+    <div class="flex-col text-center mt-10 w-1/6 border-1 shadow-xl mx-auto ">
+        <div class="mb-2 text-xl  ">Edycja Sprawy Adopcji</div>
+        {{ include('adoption_case/_form.html.twig', {'button_label': 'Aktualizuj'}) }}
+        <a href="{{ path('app_adoption_case_index') }}"><div class="border-x-2 border-b-2 bg-yellow-500 hover:bg-yellow-400">Lista spraw</div></a>
+        {{ include('adoption_case/_delete_form.html.twig') }}   
+    </div>
 {% endblock %}
