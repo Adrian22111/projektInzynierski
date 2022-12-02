@@ -3,24 +3,38 @@
 {% block title %}Documents{% endblock %}
 
 {% block body %}
-    <h1>Documents</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ document.id }}</td>
-            </tr>
-            <tr>
-                <th>DocumentName</th>
-                <td>{{ document.documentName }}</td>
-            </tr>
-        </tbody>
+<div class="flex-col justify-center mt-10">
+    <div class="text-2xl text-center mb-2">Dokument nr: {{document.id}}</div>
+    <div class="text-2xl text-center mb-2"> {{document.documentName}}</div>
+    <table class="w-1/5  shadow-xl mx-auto ">
+        <tr >
+            <th class="text-left border-2">Id</th>
+            <td class="text-left border-2">{{ document.id }}</td>
+        </tr> 
+        <tr>
+            <th class="text-left border-2">Akronim</th>
+            <td class="text-left border-2">{{ document.documentName }}</td>       
+        </tr> 
+        <tr>
+            <th class="text-left border-2">Oryginalna Nazwa</th>
+            <td class="text-left border-2">{{ document.documentSource }}</td>
+        </tr> 
+        <tr>
+            <th class="text-left border-2">Przypisany do sprawy</th>
+            {% if document.AdoptionCase is defined %}
+                <td class="text-left border-2">{{ document.AdoptionCase }}</td>
+            {% else %}
+                <td class="text-left border-2 ">Brak Sprawy</td>
+            {% endif %}
+        </tr> 
+        <tr>
+            <th class="text-left border-2">Opcje</th>
+            <td class="text-left border-2">
+                <div class="w-full bg-green-500 hover:bg-green-400 border-b-2 text-center text-white"><a href="{{ path('app_documents_edit', {'id': document.id}) }}">Edytuj</a></div>
+                <div class="w-full bg-yellow-500 hover:bg-yellow-400 border-b-2 text-center text-white" ><a href="{{ path('app_documents_index') }}">Wszystkie Dokumenty</a></div>
+                <div>{{ include('documents/_delete_form.html.twig') }}</div>
+            </td>
+        </tr> 
     </table>
-
-    <a href="{{ path('app_documents_index') }}">back to list</a>
-
-    <a href="{{ path('app_documents_edit', {'id': document.id}) }}">edit</a>
-
-    {{ include('documents/_delete_form.html.twig') }}
+</div>
 {% endblock %}

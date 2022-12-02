@@ -42,7 +42,7 @@ class AdoptionCase
     }
     public function __toString()
     {
-        return $this->getId();
+        return $this->getId().". ".$this->getDog();
     }
 
     public function getId(): ?int

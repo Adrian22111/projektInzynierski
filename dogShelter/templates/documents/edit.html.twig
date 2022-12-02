@@ -3,11 +3,10 @@
 {% block title %}Edit Documents{% endblock %}
 
 {% block body %}
-    <h1>Edit Documents</h1>
-
-    {{ include('documents/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_documents_index') }}">back to list</a>
-
-    {{ include('documents/_delete_form.html.twig') }}
+    <div class="flex-col text-center mt-10 w-1/6 border-1 shadow-xl mx-auto ">
+        <div class="mb-2 text-xl  ">Edytuj Dokument</div>
+        {{ include('documents/_form.html.twig',{'button_label': 'Aktualizuj'}) }}
+        <a href="{{ path('app_documents_index') }}"><div class="border-x-2 border-b-2 bg-yellow-500 hover:bg-yellow-400 text-white">Dokumenty</div></a>
+        {{ include('documents/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

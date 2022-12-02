@@ -1,41 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Documents index{% endblock %}
+{% block title %}{% endblock %}
 
 {% block body %}
-    <h1>Documents index</h1>
+    <div class="flex-col   mt-10 ">
+        <div class="text-2xl text-center mb-2 ">Dokumenty</div>
+        <div class="text-xl text-center mb-2 text-green-500 hover:text-green-400"><a href="{{path('app_adoption_case_new')}}">Dodaj Nowy Dokument</a></div>
+        <table class="w-1/2 border-1 shadow-xl mx-auto">
+            <thead class="text-center" >
+                <tr>
+                    <th class=" border-2">Id</th>
+                    <th class=" border-2">Akronim Dokumentu</th>
+                    <th class=" border-2">Oryginalna Nazwa</th>
+                    <th class=" border-2">Przypisany do sprawy</th>
+                    <th class=" border-2">Opcje</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+            {% for document in documents %}
+                <tr>
+                    <td class=" border-2">{{ document.id }}</td>
+                    <td class=" border-2"><a href="{{ path('app_documents_show', {'id': document.id}) }}">{{ document.documentName}}</a></td>
+                    <td class=" border-2"><a href="{{ path('app_documents_show', {'id': document.id}) }}">{{ document.documentSource}}</a></td>
+                    {% if document.AdoptionCase.id is defined %}
+                    <td class=" border-2"> <a href="{{ path('app_adoption_case_show', {'id': document.AdoptionCase.id}) }}">{{document.AdoptionCase}}</a></td>
+                    {% else %}
+                    <td class=" border-2">brak</td>
+                    {% endif %}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nazwa Dokumentu</th>
-                <th>Sprawa nr. </th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for document in documents %}
-            <tr>
-                <td>{{ document.id }}</td>
-                <td>{{ document.documentName }}</td>
-                {% if document.AdoptionCase.id is defined %}
-                    <td> <a href="{{ path('app_adoption_case_show', {'id': document.AdoptionCase.id}) }}">{{document.AdoptionCase}}</a></td>
-                {% else %}
-                    <td>brak</td>
-                {% endif %}
-                <td>
-                    <a href="{{ path('app_documents_show', {'id': document.id}) }}">show</a>
-                    <a href="{{ path('app_documents_edit', {'id': document.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('app_documents_new') }}">Create new</a>
+                    <td class=" border-2">
+                        <div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white"><a href="{{ path('app_documents_show', {'id': document.id}) }}">Podgląd</a></div>
+                        <div class="border-x-2 border-b-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white"><a href="{{ path('app_documents_edit', {'id': document.id}) }}">Edycja</a></div>
+                         {{ include('documents/_delete_form.html.twig') }}                 
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

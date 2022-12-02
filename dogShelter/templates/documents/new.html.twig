@@ -3,9 +3,10 @@
 {% block title %}New Documents{% endblock %}
 
 {% block body %}
-    <h1>Create new Documents</h1>
 
-    {{ include('documents/_form.html.twig') }}
-
-    <a href="{{ path('app_documents_index') }}">back to list</a>
+    <div class="flex-col text-center mt-10 w-1/6 border-1 shadow-xl mx-auto ">
+        <div class="mb-2 text-xl  ">Dodaj Dokument</div>
+        {{ include('documents/_form.html.twig') }}
+        <a href="{{ path('app_documents_index') }}"><div class="border-x-2 border-b-2 bg-yellow-500 hover:bg-yellow-400 text-white">Dokumenty</div></a>
+    </div>
 {% endblock %}
