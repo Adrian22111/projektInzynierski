@@ -7,7 +7,7 @@
     <div class="text-2xl text-center mb-2">Dokument nr: {{document.id}}</div>
     <div class="text-2xl text-center mb-2"> {{document.documentName}}</div>
     <table class="w-1/5  shadow-xl mx-auto ">
-        <tr >
+        <tr  >
             <th class="text-left border-2">Id</th>
             <td class="text-left border-2">{{ document.id }}</td>
         </tr> 
@@ -15,11 +15,11 @@
             <th class="text-left border-2">Akronim</th>
             <td class="text-left border-2">{{ document.documentName }}</td>       
         </tr> 
-        <tr>
+        <tr >
             <th class="text-left border-2">Oryginalna Nazwa</th>
             <td class="text-left border-2">{{ document.documentSource }}</td>
         </tr> 
-        <tr>
+        <tr >
             <th class="text-left border-2">Przypisany do sprawy</th>
             {% if document.AdoptionCase is defined %}
                 <td class="text-left border-2">{{ document.AdoptionCase }}</td>

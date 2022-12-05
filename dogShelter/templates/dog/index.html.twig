@@ -3,34 +3,53 @@
 {% block title %}Dog index{% endblock %}
 
 {% block body %}
-    <h1>Dog index</h1>
-
-    <table class="table">
-        <thead>
+<div class="flex-col mt-10">
+    <div class="text-2xl text-center mb-2 ">Wszystkie Psy</div>
+    <div class="text-xl text-center mb-2 text-green-500 hover:text-green-400"><a href="{{path('app_dog_new')}}">Dodaj Nowego Psa</a></div>
+    <table class="table w-11/12 border-1 shadow-xl mx-auto">
+        <thead class="text-center">
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Age</th>
-                <th>Race</th>
-                <th>Sex</th>
-                <th>Description</th>
-                <th>Image</th>
-                <th>actions</th>
+                <th class=" border-2">Id</th>
+                <th class=" border-2">Imie</th>
+                <th class=" border-2">Wiek</th>
+                <th class=" border-2">Rasa</th>
+                <th class=" border-2">Płeć</th>
+                <th class=" border-2">Opis</th>
+                <th class=" border-2">Opiekunowie</th>
+                <th class=" border-2">Sprawa Adopcji</th>
+                <th class=" border-2">Zdjęcie</th>
+                <th class=" border-2">Opcje</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="text-center ">
         {% for dog in dogs %}
-            <tr>
-                <td>{{ dog.id }}</td>
-                <td>{{ dog.name }}</td>
-                <td>{{ dog.age }}</td>
-                <td>{{ dog.race }}</td>
-                <td>{{ dog.sex }}</td>
-                <td>{{ dog.description }}</td>
-                <td>{{ dog.image }}</td>
-                <td>
-                    <a href="{{ path('app_dog_show', {'id': dog.id}) }}">show</a>
-                    <a href="{{ path('app_dog_edit', {'id': dog.id}) }}">edit</a>
+            <tr class="align-top ">
+                <td class="border-2">{{ dog.id }}</td>
+                <td class="border-2"><a href="{{path('app_dog_show',{id:dog.id})}}">{{ dog.name }}</a></td>
+                <td class="border-2">{{ dog.age }}</td>
+                <td class="border-2">{{ dog.race }}</td>
+                <td class="border-2">{{ dog.sex }}</td>
+                {% if dog.description|length > 30  %}
+                    <td class="border-2">Opis Utworzony</td>
+                {% else %}
+                    <td class="border-2 text-red-500">Brak Opisu</td>
+                {% endif %}
+                <td class="border-2">
+                    {% for guardian in dog.guardian %}
+                        <div><a href="{{path('app_user_show',{id:guardian.id})}}">{{guardian}}</a></div>
+                    {% endfor %}
+                </td>
+                {% if dog.AdoptionCase.id is defined%}
+                    <td class="border-2"><div><a href="{{path('app_adoption_case_show',{id:dog.AdoptionCase.id})}}">{{dog.AdoptionCase}}</a></div></td>
+                {% else %}
+                    <td class="border-2 text-red-500">Brak</td>
+                {% endif %}
+                <td class="border-2"><a href="{{path('app_dog_edit',{id:dog.id})}}">{{include('dog/_dog_image.html.twig',{'height':20,'width':20, dog:dog})}}</a></td>
+                {# {{ dog.image|length > 70? dog.image|slice(0,66)~dog.image|slice(-4):dog.image}} #}
+                <td class="border-2">
+                    <div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white"><a href="{{ path('app_dog_show', {'id': dog.id}) }}">Pokaż</a></div>
+                    <div class="border-x-2 border-b-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white"><a href="{{ path('app_dog_edit', {'id': dog.id}) }}">Edytuj</a></div>
+                    <div>{{ include('dog/_delete_form.html.twig') }}</div>
                 </td>
             </tr>
         {% else %}
@@ -40,6 +59,5 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_dog_new') }}">Create new</a>
+</div>
 {% endblock %}

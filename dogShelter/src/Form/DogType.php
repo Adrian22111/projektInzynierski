@@ -11,6 +11,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class DogType extends AbstractType
 {
@@ -20,8 +22,21 @@ class DogType extends AbstractType
             ->add('name')
             ->add('age')
             ->add('race')
-            ->add('sex')
-            ->add('description')
+            ->add('sex',ChoiceType::class,[
+                'label' => 'Płeć',
+                'mapped' => true,
+                'required' => true,
+                'choices' => [
+                    'Samiec' => 'Samiec',
+                    'Samica' => 'Samica',
+                ],
+
+            ])
+            ->add('description',TextareaType::class,[
+                'label' => 'Opis',
+                'mapped' => true,
+                'required' => false,
+            ])
             ->add('image',FileType::class,[
                 'label' => 'Dodaj Zdjęcie w formacie IMG/JPG',
                 'mapped' => false,

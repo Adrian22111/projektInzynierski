@@ -3,9 +3,9 @@
 {% block title %}New Dog{% endblock %}
 
 {% block body %}
-    <h1>Create new Dog</h1>
-
-    {{ include('dog/_form.html.twig') }}
-
-    <a href="{{ path('app_dog_index') }}">back to list</a>
+    <div class = "flex-col justify-center w-1/3 mx-auto text-center mt-10 shadow-xl">
+        <div class="mb-2 text-xl">Dodaj Nowego Psa</div>
+        <div class="">{{ include('dog/_form.html.twig') }}</div>
+        <div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white"><a href="{{ path('app_dog_index') }}">Lista Psów</a></div>
+    </div>
 {% endblock %}

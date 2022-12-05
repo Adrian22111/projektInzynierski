@@ -63,6 +63,8 @@ class DogController extends AbstractController
                 $guardian->addGuardianOf($dog);
             }
             $dogRepository->save($dog, true);
+            
+            
             $this->addFlash('success','Pomyślnie dodano zdjęcie');
             return $this->redirectToRoute('app_dog_index', [], Response::HTTP_SEE_OTHER);
         }

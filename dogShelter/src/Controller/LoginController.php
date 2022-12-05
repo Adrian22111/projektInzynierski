@@ -9,7 +9,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LoginController extends AbstractController
 {
-    #[Route('/login', name: 'app_login')]
+    #[Route('/login', name: 'app_login',methods: ['POST','GET'])]
     public function index(AuthenticationUtils $utils): Response
     {
         $lastUsername = $utils->getLastUsername();
