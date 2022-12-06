@@ -14,7 +14,9 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class UserType extends AbstractType
@@ -39,21 +41,8 @@ class UserType extends AbstractType
                 'required' => false,
                 
             ])
-            ->add('profileImage',FileType::class,[
-                'label' => 'Zdjęcie profilowe jpg/png',
-                'mapped' => false,
-                'required' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '4096k',
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/png',
-                        ],
-                        'mimeTypesMessage' => 'Dostępne formaty to PNG/JPG'
-                    ])
-                ]
-            ]);
+            ->add('profileImage',HiddenType::class)
+
 
         ;
         $builder->addEventListener(FormEvents::PRE_SET_DATA,function(FormEvent $event){
@@ -62,7 +51,14 @@ class UserType extends AbstractType
             if(!$user || null === $user->getId())
             {
                 $form->add('password',PasswordType::class)
-                     
+                    ->add('password', RepeatedType::class, [
+                        'type' => PasswordType::class,
+                        'invalid_message' => 'Hasła muszą być takie same',
+                        'required' => true,
+                        'first_options'  => ['label' => 'Hasło'],
+                        'second_options' => ['label' => 'Powtórz Hasło'],
+                    ])  
+              
                 ;
                 
                 
@@ -82,12 +78,36 @@ class UserType extends AbstractType
                                 'required' => false,
                             ])
                             ->add('guardianOf')
-                            ->add('available');
-
+                            ->add('available',ChoiceType::class,[
+                                'label' => 'Dostępność',
+                                'mapped' => true,
+                                'required' => true,
+                                'choices' => [
+                                    'Dostępny/a' => 1,
+                                    'Niedostępny/a' => 0,
+                                ],
                 
+                            ])
+                            ->add('profileImage',FileType::class,[
+                                'label' => 'Zdjęcie profilowe jpg/png',
+                                'mapped' => false,
+                                'required' => false,
+                                'constraints' => [
+                                    new File([
+                                        'maxSize' => '4096k',
+                                        'mimeTypes' => [
+                                            'image/jpeg',
+                                            'image/png',
+                                        ],
+                                        'mimeTypesMessage' => 'Dostępne formaty to PNG/JPG'
+                                    ])
+                                ]
+                            ]);
+
                     }
+
                 }
-                                    
+                                   
             }
 
         });

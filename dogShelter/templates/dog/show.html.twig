@@ -32,7 +32,8 @@
             {% if is_granted('ROLE_PRACOWNIK')%}
             <tr>
                 <th class="text-left flex"><img class="w-3 h-3 mt-1 mr-1" src="{{ pageimages~'paw.png' }}"/>Zdjęcie</th>
-                <td class="text-left ">{{ dog.image|length > 20 ? dog.image:dog.image|slice(0,20)}}</td>
+                <td class="text-left ">{{ dog.image|length > 17 ? dog.image|slice(0,13) ~ dog.image|slice(-4):dog.image}}</td>
+                {# {{ dog.image|length > 70? dog.image|slice(0,66)~dog.image|slice(-4):dog.image}} #}
             </tr>
             {% endif %}
             <tr>

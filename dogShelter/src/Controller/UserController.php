@@ -146,20 +146,32 @@ class UserController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
         {
-            
+            $oldPassword = $form->get('oldPassword')->getData();
             $password = $form->get('password')->getData();
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $password
-            ));
-            $id = $user->getId();
-            $users->save($user,true);
-            $this->addFlash('success','poprawnie zmieniono hasło');
-            return $this->redirectToRoute('app_user_edit',['id'=>$id],Response::HTTP_SEE_OTHER);
+            // $oldPasswordHashed = $userPasswordHasher->hashPassword($user,$oldPassword);
+            
+            if($userPasswordHasher->isPasswordValid($user, $oldPassword))
+            {
+                
+                $user->setPassword(
+                    $userPasswordHasher->hashPassword(
+                        $user,
+                        $password
+                ));
+                $id = $user->getId();
+                $users->save($user,true);
+                $this->addFlash('success','poprawnie zmieniono hasło');
+                return $this->redirectToRoute('app_user_edit',['id'=>$id],Response::HTTP_SEE_OTHER);
+            }
+            else
+            {
+                $this->addFlash('failure','nie udało sie zmienić hasła');
+            }
+
         }
         return $this->renderForm('user/_change_password.html.twig',[
-            'form' => $form
+            'form' => $form,
+            'user' => $user,
         ]);
 
 

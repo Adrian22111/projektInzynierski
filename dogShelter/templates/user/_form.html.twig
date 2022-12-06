@@ -1,62 +1,84 @@
 {{ form_start(form) }}
         <div>        
-            {{ form_label(form.username) }}
-            {{ form_widget(form.username )}}
+            {{ form_label(form.username,'Nazwa Użytkownika (Login)',{'label_attr':{'class':'block'}}) }}
+            {{ form_widget(form.username,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}} )}}
             {{ form_errors(form.username) }}
         </div>
         <div>
-        {% if form.password is defined %}
-            {{ form_label(form.password) }}
-            {{ form_widget(form.password)}}
-            {{ form_errors(form.password) }}
+        {% if form.password.first is defined %}
+            {{ form_label(form.password.first,'Hasło',{'label_attr':{'class':'block'}}) }}
+            {{ form_widget(form.password.first,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+            {{ form_errors(form.password.first) }}
         {% endif %}
         </div>
         <div>
-            {{ form_label(form.email) }}
-            {{ form_widget(form.email)}}
-            {{ form_errors(form.email) }}
+        {% if form.password.second is defined %}
+            {{ form_label(form.password.second,'Powtórz Hasło',{'label_attr':{'class':'block'}}) }}
+            {{ form_widget(form.password.second,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+            {{ form_errors(form.password.second) }}
+        {% endif %}
         </div>
         <div>
-            {{ form_label(form.roles) }}
-            {{ form_widget(form.roles)}}
-            {{ form_errors(form.roles) }}
+            {{ form_label(form.email,'Podaj Email',{'label_attr':{'class':'block'}}) }}
+            {{ form_widget(form.email,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+            {{ form_errors(form.email) }}
         </div>
         {% if  form.phoneNumber is defined %}
         <div>
-            {{ form_label(form.phoneNumber) }}
-            {{ form_widget(form.phoneNumber)}}
+            {{ form_label(form.phoneNumber,'Numer Telefonu',{'label_attr':{'class':'block'}}) }}
+            {{ form_widget(form.phoneNumber,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
             {{ form_errors(form.phoneNumber) }}
         </div>
         {% endif %}
+        {% if  form.available is defined %}
+        <div>
+            {{ form_label(form.available,'Dostępność',{'label_attr':{'class':'block'}}) }}
+            {{ form_widget(form.available,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+            {{ form_errors(form.available) }}
+        </div>
+        {% endif %}
+        <div>
+            {{ form_label(form.roles,'Uprawnienia',{'label_attr':{'class':'block'}}) }}
+            {{ form_widget(form.roles,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+            {{ form_errors(form.roles) }}
+        </div>
         {% if  form.facebookProfile is defined %}
         <div>
-            {{ form_label(form.facebookProfile) }}
-            {{ form_widget(form.facebookProfile)}}
+            {{ form_label(form.facebookProfile,'Profil Facebook',{'label_attr':{'class':'block'}}) }}
+            {{ form_widget(form.facebookProfile,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
             {{ form_errors(form.facebookProfile) }}
         </div>
         {% endif %}
+        {% if form.guardianOf is defined and is_granted('ROLE_PRACOWNIK')%}
+            {% if  is_granted('ROLE_ADMIN') %}
+            <div>
+                {{ form_label(form.guardianOf,'Opiekun',{'label_attr':{'class':'block'}}) }}
+                {{ form_widget(form.guardianOf,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+                {{ form_errors(form.guardianOf) }}
+            </div>
+            {% else %}
+                {% do form.guardianOf.setRendered %}
+            {% endif %}
+        {% endif %}
+        {# {% if form.profileImage is defined  %} #}
+        {% if form.profileImage is defined and "hidden" not in form.profileImage.vars.block_prefixes %}
+        <div>
+            {{ form_label(form.profileImage,'Zdjęcie Profilowe',{'label_attr':{'class':'block'}}) }}
+            {{ form_widget(form.profileImage)}}
+            {{ form_errors(form.profileImage) }}
+        </div> 
+        {% endif %}
         {% if  form.description is defined %}
         <div>
-            {{ form_label(form.description) }}
-            {{ form_widget(form.description)}}
+            {{ form_label(form.description,'Opis',{'label_attr':{'class':'block'}}) }}
+            {{ form_widget(form.description,{'attr':{'class':'w-3/4 h-40 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
             {{ form_errors(form.description) }}
         </div>
         {% endif %}
-        {% if  form.profileImage is defined  %}
-        <div>
-            {{ form_label(form.profileImage) }}
-            {{ form_widget(form.profileImage)}}
-            {{ form_errors(form.profileImage) }}
-        </div>
-        {% endif %}
-        {% if  form.guardianOf is defined %}
-        <div>
-            {{ form_label(form.guardianOf) }}
-            {{ form_widget(form.guardianOf)}}
-            {{ form_errors(form.guardianOf) }}
-        </div>
-        {% endif %}
+
+        
 
 
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+    <button class="btn border-2 bg-green-500 w-full hover:bg-green-400 text-white">{{ button_label|default('Zapisz') }}</button>
 {{ form_end(form) }}
