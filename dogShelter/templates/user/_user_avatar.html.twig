@@ -1,0 +1,6 @@
+{% if user and user.profileImage %}
+    <img src="{{ profileimages~user.profileImage }}" class="inline-block h-{{height}} w-{{width}} rounded-full ">
+{% else %}
+    <img src="{{ pageimages~'avatarplaceholder.png' }}" class="inline-block h-{{height}} w-{{width}} rounded-full ">
+    {# <div class="inline-block bg-gray-500 rounded-md h-{{height}} w-{{width}}"></div> #}
+{% endif %}

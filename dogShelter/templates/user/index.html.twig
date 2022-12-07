@@ -1,41 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User index{% endblock %}
+{% block title %}Użytkownicy{% endblock %}
 
 {% block body %}
-    <h1>User index</h1>
-
-    <table class="table">
-        <thead>
+<div class="flex-col mt-10">
+    <div class="text-2xl text-center mb-2 ">Użytkownicy</div>
+    <div class="text-xl text-center mb-2 text-green-500 hover:text-green-400"><a href="{{path('app_user_new')}}">Dodaj Nowego Użytkownika</a></div>
+    <table class="table w-11/12 border-1 shadow-xl mx-auto">
+        <thead lass="text-center">
             <tr>
-                <th>Id</th>
-                <th>Username</th>
-                <th>Roles</th>
-                <th>Password</th>
-                <th>Email</th>
-                <th>Description</th>
-                <th>FacebookProfile</th>
-                <th>PhoneNumber</th>
-                <th>ProfileImage</th>
-                <th>actions</th>
+                <th class=" border-2">Id</th>
+                <th class=" border-2">Nazwa Użytkownika</th>
+                <th class=" border-2">Role</th>
+                <th class=" border-2">Email</th>
+                <th class=" border-2">Description</th>
+                <th class=" border-2">FacebookProfile</th>
+                <th class=" border-2">PhoneNumber</th>
+                <th class=" border-2">ProfileImage</th>
+                <th class=" border-2">actions</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="text-center ">
         {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td>{{ user.password }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.description }}</td>
-                <td>{{ user.facebookProfile }}</td>
-                <td>{{ user.phoneNumber }}</td>
-                <td>{{ user.profileImage }}</td>
+            <tr class="align-top ">
+                <td class="border-2">{{ user.id }}</td>
+                <td class="border-2"><a href="{{path('app_user_show',{id:user.id})}}">{{ user.username }}</a></td>
+                <td class="border-2">{{ user.roles ? user.roles|json_encode : '' }}</td>
+                <td class="border-2">{{ user.email }}</td>
+                {% if user.description|length > 30  %}
+                    <td class="border-2">Opis Utworzony</td>
+                {% else %}
+                    <td class="border-2 text-red-500">Brak Opisu</td>
+                {% endif %}
+                <td class="border-2"><a href ="#">{{ user.facebookProfile }}</a></td>
+                <td class="border-2">{{ user.phoneNumber }}</td>
+                <td class="border-2"><a href="{{path('app_user_edit',{id:user.id})}}">{{include('user/_user_avatar.html.twig',{'height':20,'width':20, user:user})}}</a></td>
                 <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-                </td>
+                    <div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white"><a href="{{ path('app_user_show', {'id': user.id}) }}">Pokaż</a></div>
+                    <div class="border-x-2 border-b-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white"><a href="{{ path('app_user_edit', {'id': user.id}) }}">Edytuj</a></div>
+                    <div>{{ include('user/_delete_form.html.twig') }}</div>
+               </td>
             </tr>
         {% else %}
             <tr>
@@ -45,5 +49,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_user_new') }}">Create new</a>
 {% endblock %}
