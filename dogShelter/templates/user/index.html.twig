@@ -13,11 +13,11 @@
                 <th class=" border-2">Nazwa Użytkownika</th>
                 <th class=" border-2">Role</th>
                 <th class=" border-2">Email</th>
-                <th class=" border-2">Description</th>
-                <th class=" border-2">FacebookProfile</th>
-                <th class=" border-2">PhoneNumber</th>
-                <th class=" border-2">ProfileImage</th>
-                <th class=" border-2">actions</th>
+                <th class=" border-2">Opis</th>
+                <th class=" border-2">Profil Faceebok</th>
+                <th class=" border-2">Numer Telefonu</th>
+                <th class=" border-2">Zdjęcie Profilowe</th>
+                <th class=" border-2">Opcje</th>
             </tr>
         </thead>
         <tbody class="text-center ">
@@ -33,7 +33,11 @@
                     <td class="border-2 text-red-500">Brak Opisu</td>
                 {% endif %}
                 <td class="border-2"><a href ="#">{{ user.facebookProfile }}</a></td>
-                <td class="border-2">{{ user.phoneNumber }}</td>
+                {% if user.phoneNumber|length >= 9  %}
+                    <td class="border-2">{{user.phoneNumber}}</td>
+                {% else %}
+                    <td class="border-2 text-red-500">Brak Numeru</td>
+                {% endif %}
                 <td class="border-2"><a href="{{path('app_user_edit',{id:user.id})}}">{{include('user/_user_avatar.html.twig',{'height':20,'width':20, user:user})}}</a></td>
                 <td>
                     <div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white"><a href="{{ path('app_user_show', {'id': user.id}) }}">Pokaż</a></div>

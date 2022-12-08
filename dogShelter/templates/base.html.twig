@@ -18,15 +18,40 @@
                 darkMode: 'class'
             }
         </script>
-        
+        <script src="https://kit.fontawesome.com/48575c0b33.js" crossorigin="anonymous"></script>
     </head>
     <body>
+        <div class="flex h-20 justify-between">
+            <div class="text-2xl flex">
+                <img class="ml-2" src="{{pageimages~'logo.png'}}"/>
+                {# <div id = "logoplaceholder " class="rounded-full bg-gray-600 w-20 h-20 mr-2 "></div> #}
+                <a class = "ml-4 py-2"href="{{path('app_main_page')}}">Amstafy Niczyje <br/> Fundacja im. </a>
+            </div>
+            <div class="mr-1 ">
+                {% if is_granted('ROLE_USER') %}
+                    <div class = "hover:text-yellow-400"><a href="{{path('app_admin_panel')}}">Panel Administracyjny</a></div>
+                    <div class="flex justify-end hover:text-yellow-400"><a href="{{path('app_logout')}}">Wyloguj</a></div>
+                {% else %}
+                    <div><a href="{{path('app_login')}}">Zaloguj Się </a></div>
+                {% endif %}
+            </div>
+        </div>
+        <div class =" w-full flex items-center justify-center bg-gray-600 h-20">
+            <ul class="flex text-2xl ">
+                <li class="mx-2 text-yellow-300 hover:text-yellow-200" ><a href = "#">Zwierzęta</a></li>
+                <li class="mx-2 text-yellow-300 hover:text-yellow-200"><a href = "#">Darownizna</a></li>
+                <li class="mx-2 text-yellow-300 hover:text-yellow-200"><a href = "#">Aktualności</a></li>
+                <li class="mx-2 text-yellow-300 hover:text-yellow-200"><a href = "#">Kontakt</a></li>
+                <li class="mx-2 text-yellow-300 hover:text-yellow-200"><a href = "#">O Fundacji</a></li>
+            </ul>
+        </div>
         {% for message in app.flashes('failure') %}
             <div>{{message}}</div>
         {% endfor %}
         {% for message in app.flashes('success') %}
             <div>{{message}}</div>
         {% endfor %}
+
         {% block body %}
         {% endblock %}
     </body>

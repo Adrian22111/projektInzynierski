@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panel{% endblock %}
+
+{% block body %}
+
+
+<div class =" w-full flex items-top justify-center bg-gray-600 h-48">
+<ul class="flex text-2xl text-center ">
+    <li class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_adoption_case_index')}}"><p>Sprawy Adopcji</p><i class="fa-solid fa-briefcase  fa-4x mt-4 flex justify-center"></i></a></li>
+    <li class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_dog_index')}}"><p>Psy</p><i class="fa-solid fa-dog fa-4x mt-4 flex justify-center"></i></a></li>
+    {% if is_granted("ROLE_ADMIN") %}
+        <li class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_user_index')}}"><p>Użytkownicy</p><i class="fa-solid fa-user  fa-4x mt-4 flex justify-center"></i></a></li>
+    {% endif %}
+    <li class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_documents_index')}}"><p>Dokumenty</p><i class="fa-solid fa-folder-open fa-4x mt-4 flex justify-center"></i></a></li>
+    <li class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_post_index')}}"><p>Posty</p><i class="fa-solid fa-message fa-4x mt-4 flex justify-center"></i></a></li>
+</ul>
+</div>
+
+{% endblock %}

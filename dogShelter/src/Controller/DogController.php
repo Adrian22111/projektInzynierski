@@ -26,6 +26,14 @@ class DogController extends AbstractController
         ]);
     }
 
+    #[Route('/all', name: 'app_dog_all', methods: ['GET'])]
+    public function showAllDogs(DogRepository $dogRepository): Response
+    {
+        return $this->render('dog/all_dogs.html.twig', [
+            'dogs' => $dogRepository->findAll(),
+        ]);
+    }
+
     #[Route('/new', name: 'app_dog_new', methods: ['GET', 'POST'])]
     public function new(Request $request, DogRepository $dogRepository, SluggerInterface $slugger): Response
     {
