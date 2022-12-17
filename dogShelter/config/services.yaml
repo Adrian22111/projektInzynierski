@@ -8,6 +8,7 @@ parameters:
     pageimages: /uploads/pageimages/
     dogimages: /uploads/dogimages/
     profileimages: /uploads/profileimages/
+    mainslider: /uploads/mainslider/
     dogimages_directory: '%kernel.project_dir%/public%dogimages%'
     profileimages_directory: '%kernel.project_dir%/public%profileimages%'
     documents_directory: '%kernel.project_dir%/public%documents%'

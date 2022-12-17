@@ -9,7 +9,7 @@
         {% for dog in dogs %}
             <div class="flex flex-col items-center text-center"><a href="{{path('app_dog_show',{id:dog.id})}}">
                 <div>{{ include('dog/_dog_image.html.twig',{'width':80,'height':60,dog:dog})}}</div>
-                <div class="text-xl font-semibold">{{ dog.Name }}</div>
+                <div class="text-xl text-gray-600 font-semibold">{{ dog.Name }}</div>
             </a></div>
         {% endfor %}
     </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="scroll-smooth">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
@@ -25,7 +25,7 @@
             <div class="text-2xl flex">
                 <img class="ml-2" src="{{pageimages~'logo.png'}}"/>
                 {# <div id = "logoplaceholder " class="rounded-full bg-gray-600 w-20 h-20 mr-2 "></div> #}
-                <a class = "ml-4 py-2"href="{{path('app_main_page')}}">Amstafy Niczyje <br/> Fundacja im. </a>
+                <a class = "ml-4 py-2"href="{{path('app_main_page')}}">Amstaffy Niczyje <br/> Fundacja im. </a>
             </div>
             <div class="mr-1 ">
                 {% if is_granted('ROLE_USER') %}
@@ -38,7 +38,7 @@
         </div>
         <div class =" w-full flex items-center justify-center bg-gray-600 h-20">
             <ul class="flex text-2xl ">
-                <li class="mx-2 text-yellow-300 hover:text-yellow-200" ><a href = "#">Zwierzęta</a></li>
+                <li class="mx-2 text-yellow-300 hover:text-yellow-200" ><a href = "{{path('app_dog_all')}}">Zwierzęta</a></li>
                 <li class="mx-2 text-yellow-300 hover:text-yellow-200"><a href = "#">Darownizna</a></li>
                 <li class="mx-2 text-yellow-300 hover:text-yellow-200"><a href = "#">Aktualności</a></li>
                 <li class="mx-2 text-yellow-300 hover:text-yellow-200"><a href = "#">Kontakt</a></li>

@@ -1,11 +1,104 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Nazwa Schroniska{% endblock %}
+{% block head %}
 
+
+{% endblock %}
 {% block body %}
 
-<div id="miejsce na slajder " class="w-full h-10"></div>
-<div id="miejsce na posty" class="w-full  border-t-4 border-gray-600">
+
+
+
+
+    <div class="relative " data-carousel="static">
+            <ul id='slider'>
+                <li class="h-[50vh] ">
+                        <p class="absolute text-4xl text-yellow-300 hover:text-yellow-200 top-80 left-64 bg-gray-600 rounded-lg p-2 z-10"><a href="{{path('app_dog_all')}}" >Psy Do Adopcji</a></p>
+                        <img class="object-cover absolute block  h-full w-full  translate-x-{amount} " src="{{mainslider~'first.jpg'}}"/>  
+                </li>
+                <li class="h-[50vh] hidden ">
+                    <p class="absolute text-4xl text-yellow-300 hover:text-yellow-200 top-80 left-64 bg-gray-600 rounded-lg p-2 z-10"><a href="{{path('app_dog_all')}}" >Darowizna</a></p>
+                    <img class=" object-cover h-full w-full" src="{{mainslider~'second.jpg'}}"/>
+                </li>
+                <li class="h-[50vh] hidden">
+                    <p class="absolute text-4xl text-yellow-300 hover:text-yellow-200 top-80 left-64 bg-gray-600 rounded-lg p-2 z-10"><a href="{{path('app_dog_all')}}" >Aktualności</a></p>
+                    <img class=" object-cover h-full w-full" src="{{mainslider~'third.jpg'}}"/>
+                </li>
+            </ul>
+        <div class="absolute flex h-full w-full top-0 left-0 px-5">
+            <div class="my-auto  w-full flex justify-between">
+                <button id="prevbutton" onclick = "prev()" class="bg-white p-3 rounded-full bg-opacity-80 shadow-lg" >
+                    <i class="fa-solid fa-arrow-left "></i>
+                </button>
+                <button it="nextbutton" onclick ="next()" class="bg-white p-3 rounded-full bg-opacity-80 shadow-lg" >
+                    <i class="fa-solid fa-arrow-right "></i>
+                </button >
+            </div>
+        </div>
+    </div>
+    <div id="miejsce na posty" class="w-full  border-t-4 border-gray-600">
     <div class="text-2xl text-center">Posty</div>
 <div>
+
+{% block javascripts %}
+<script>
+currentSlideId = 1;
+sliderElement = document.getElementById('slider');
+console.log(sliderElement);
+totalSlides = sliderElement.childElementCount;
+slides = document.getElementById('slider').getElementsByTagName('li');
+function next()
+{
+    if(currentSlideId < totalSlides)
+    {
+        const element = slides[currentSlideId];
+        currentSlideId++;
+        showSlide();
+    }
+    else
+    {
+        currentSlideId = 1;
+        showSlide();
+    }
+
+}
+
+function prev()
+{
+    if(currentSlideId > 1)
+    {
+        currentSlideId--;
+        showSlide();
+    }
+    else
+    {
+        currentSlideId = totalSlides;
+        showSlide();
+    }
+}
+
+function showSlide()
+{
+
+    for(let index = 0; index < totalSlides; index++)
+    {
+        const element = slides[index];
+        if(currentSlideId===index+1)
+        {
+            element.classList.remove('hidden')
+        }
+        else
+        {
+            element.classList.add('hidden')
+        }
+    }
+}
+</script>
+
 {% endblock %}
+
+
+
+
+{% endblock %} 

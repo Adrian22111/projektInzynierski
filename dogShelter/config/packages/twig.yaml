@@ -5,6 +5,7 @@ twig:
             pageimages: '%pageimages%'
             dogimages: '%dogimages%'
             profileimages: '%profileimages%'
+            mainslider: '%mainslider%'
 
 when@test:
     twig:
