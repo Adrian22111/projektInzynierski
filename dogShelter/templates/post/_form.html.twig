@@ -1,4 +1,19 @@
 {{ form_start(form) }}
+    <div>
+        {{ form_label(form.title,'Tytuł',{'label_attr':{'class':'block'}}) }}
+        {{ form_widget(form.title,{'attr':{'class':'w-full shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+        {{ form_errors(form.title) }}
+    </div>
+    <div>
+        {{ form_label(form.image,'Zdjęcie',{'label_attr':{'class':'block'}}) }}
+        {{ form_widget(form.image,{'attr':{'class':'w-60   shadow-sm border border-gray-300 rounded-md  p-2 mt-2 mb-2 block  mx-auto text-sm mb-2 text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-500  focus:outline-none'}})}}
+        {{ form_errors(form.image) }}
+    </div>
+    <div>
+        {{ form_label(form.content,'Treść',{'label_attr':{'class':'block'}}) }}
+        {{ form_widget(form.content,{'attr':{'class':'w-full  h-32 shadow-sm border border-gray-300 rounded-md  p-2 mt-1 mb-2'}})}}
+        {{ form_errors(form.content) }}
+    </div>
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <button class="btn border-2 bg-green-500 w-full hover:bg-green-400 text-white">{{ button_label|default('Zapisz') }}</button>
 {{ form_end(form) }}

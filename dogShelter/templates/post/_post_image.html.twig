@@ -1,0 +1,6 @@
+{% if post and post.image %}
+    <img src="{{ postsimages~post.image }}" class="inline-block w-{{width}} h-{{height}} rounded-md align-middle object-cover "/>
+{% else %}
+    <img src="{{ pageimages~'iconplaceholder.png' }}" class="inline-block w-{{width}} h-{{height}} rounded-md align-middle object-cover  "/>
+{% endif %}
+

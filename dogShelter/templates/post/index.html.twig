@@ -3,28 +3,35 @@
 {% block title %}Post index{% endblock %}
 
 {% block body %}
-    <h1>Post index</h1>
-
-    <table class="table">
-        <thead>
+<div class="flex-col mt-10">
+    <div class="text-2xl text-center mb-2 ">Posty</div>
+    <div class="text-xl text-center mb-2 text-green-500 hover:text-green-400"><a href="{{path('app_post_new')}}">Dodaj Nowy Post</a></div>
+    <table class="table w-11/12 border-1 shadow-xl mx-auto">
+        <thead class="text-center">
             <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Content</th>
-                <th>Image</th>
-                <th>actions</th>
+                <th class=" border-2">Id</th>
+                <th class=" border-2">Tytuł</th>
+                <th class=" border-2">Treść</th>
+                <th class=" border-2">Zdjęcie</th>
+                <th class=" border-2">Opcje</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="text-center ">
         {% for post in posts %}
-            <tr>
-                <td>{{ post.id }}</td>
-                <td>{{ post.title }}</td>
-                <td>{{ post.content }}</td>
-                <td>{{ post.image }}</td>
-                <td>
-                    <a href="{{ path('app_post_show', {'id': post.id}) }}">show</a>
-                    <a href="{{ path('app_post_edit', {'id': post.id}) }}">edit</a>
+            <tr class="align-top">
+                <td class="border-2">{{ post.id }}</td>
+                <td class="border-2">{{ post.title|length > 30? post.title|slice(0,26)~post.title|slice(-4):post.title }}</td>
+                {% if post.content|length > 170  %}
+                    <td class="border-2">{{ post.content|slice(0,170) }}</td>
+                {% else %}
+                    <td class="border-2">{{ post.content }}</td>
+                {% endif %}
+                {# <td class="border-2">{{ post.image|length > 30? post.image|slice(0,26)~post.image|slice(-4):post.image}}</td> #}
+                <td><a href="{{path('app_post_show',{id:post.id})}}">{{include('post/_post_image.html.twig',{'height':24, 'width':24, 'fa':'6x' ,post:post})}}</a></td>
+                <td class="border-2">
+                    <div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white"><a href="{{ path('app_post_show', {'id': post.id}) }}">Pokaż</a></div>
+                    <div class="border-x-2 border-b-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white"><a href="{{ path('app_post_edit', {'id': post.id}) }}">Edytuj</a></div>
+                    <div>{{ include('post/_delete_form.html.twig') }}</div>
                 </td>
             </tr>
         {% else %}
@@ -34,6 +41,5 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_post_new') }}">Create new</a>
+</div>
 {% endblock %}

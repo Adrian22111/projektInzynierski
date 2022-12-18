@@ -1,5 +1,5 @@
 {% if dog and dog.image %}
-    <img src="{{ dogimages~dog.image }}" class="inline-block h-{{height}} w-{{width}} rounded-md ">
+    <img src="{{ dogimages~dog.image }}" class="inline-block h-{{height}} w-{{width}} rounded-md object-cover">
 {% else %}
     <img src="{{ pageimages~'dogavatarplaceholder.jpg' }}" class="inline-block h-{{height}} w-{{width}} rounded-md ">
     {# <div class="inline-block bg-gray-500 rounded-md h-{{height}} w-{{width}}"></div> #}

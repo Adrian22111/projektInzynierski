@@ -21,7 +21,9 @@
                 <tr>
                     <td class=" border-2">{{ document.id }}</td>
                     <td class=" border-2"><a href="{{ path('app_documents_show', {'id': document.id}) }}">{{ document.documentName}}</a></td>
-                    <td class=" border-2"><a href="{{ path('app_documents_show', {'id': document.id}) }}">{{ document.documentSource}}</a></td>
+                    <td class=" border-2"><a href="{{ path('app_documents_show', {'id': document.id}) }}">{{ document.documentSource|length > 30? document.documentSource|slice(0,26)~document.documentSource|slice(-4):document.documentSource}}</a></td>
+                    {# <td class=" border-2"><a href="{{ path('app_documents_show', {'id': document.id}) }}">{{ document.documentSource}}</a></td> #}
+
                     {% if document.AdoptionCase.id is defined %}
                     <td class=" border-2"> <a href="{{ path('app_adoption_case_show', {'id': document.AdoptionCase.id}) }}">{{document.AdoptionCase}}</a></td>
                     {% else %}

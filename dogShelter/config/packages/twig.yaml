@@ -6,6 +6,7 @@ twig:
             dogimages: '%dogimages%'
             profileimages: '%profileimages%'
             mainslider: '%mainslider%'
+            postsimages: '%posts%'
 
 when@test:
     twig:

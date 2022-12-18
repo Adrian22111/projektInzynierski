@@ -7,11 +7,16 @@
     <div class="text-3xl mb-4 text-gray-600">Psy do adopcji</div>
     <div class="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-6 lg:grid-cols-5 lg:gap-8 ">
         {% for dog in dogs %}
-            <div class="flex flex-col items-center text-center"><a href="{{path('app_dog_show',{id:dog.id})}}">
-                <div>{{ include('dog/_dog_image.html.twig',{'width':80,'height':60,dog:dog})}}</div>
-                <div class="text-xl text-gray-600 font-semibold">{{ dog.Name }}</div>
-            </a></div>
+        <div class="flex flex-col items-center text-center">
+            <div class="relative ">
+                <a href="{{path('app_dog_show',{id:dog.id})}}">
+                    <div class="">{{ include('dog/_dog_image.html.twig',{'width':80,'height':60,dog:dog})}}</div>
+                    <div class="text-xl w-full text-gray-600 font-semibold absolute bottom-0 text-white bg-gray-700 opacity-50 hover:opacity-75">{{ dog.Name }}</div>
+                </a>
+            </div>
+        </div>
         {% endfor %}
     </div>
 </div>
 {% endblock %}
+

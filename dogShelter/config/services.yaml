@@ -9,9 +9,11 @@ parameters:
     dogimages: /uploads/dogimages/
     profileimages: /uploads/profileimages/
     mainslider: /uploads/mainslider/
+    posts: /uploads/posts/
     dogimages_directory: '%kernel.project_dir%/public%dogimages%'
     profileimages_directory: '%kernel.project_dir%/public%profileimages%'
     documents_directory: '%kernel.project_dir%/public%documents%'
+    posts_directory: '%kernel.project_dir%/public%posts%'
 
 services:
     # default configuration for services in *this* file
