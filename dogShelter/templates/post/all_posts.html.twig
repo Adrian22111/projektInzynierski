@@ -3,6 +3,7 @@
 {% block title %}Aktualności{% endblock %}
 
 {% block body %}
+<section>
 <div class=" flex flex-col items-center mt-10 ">
     <div class="text-3xl mb-4 text-gray-600">Aktualności</div>
     <div class="grid grid-cols-1 gap-2 sm:gap-6 sm:grid-cols-2 md:grid-cols-3 md:gap-8 lg:grid-cols-4 lg:gap-10 ">
@@ -10,12 +11,13 @@
             <div class=" text-center border-2 border-gray-600 rounded-md p-0 m-0 ">
                 <a class="p-0 m-0 " href="{{path('app_post_show',{id:post.id})}}">
                     <div class="relative ">
-                        <div class="">{{ include('post/_post_image.html.twig',{'width':80,'height':60,post:post})}}</div>
-                        <div class="px-2 text-xl w-full h-[5vh] text-gray-500 font-semibold absolute bottom-0 text-white bg-gray-700 opacity-50 hover:opacity-75 ">{{ post.title|length > 60? post.title|slice(0,57)~'...':post.title|nl2br}}</div>
+                        <div class="">{{ include('post/_post_image.html.twig',{'width':96,'height':96,post:post})}}</div>
+                        <div class="px-2  text-2xl w-full  text-gray-500 font-semibold absolute bottom-0 text-white bg-gray-700 opacity-50 hover:opacity-75 ">{{ post.title|length > 60? post.title|slice(0,57)~'...':post.title|nl2br}}</div>
                     </div>
                 </a>
             </div>
         {% endfor %}
     </div>
 </div>
+</section>
 {% endblock %}

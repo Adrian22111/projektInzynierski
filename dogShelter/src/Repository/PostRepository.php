@@ -39,6 +39,34 @@ class PostRepository extends ServiceEntityRepository
         }
     }
 
+    public function findSixLatest(): array
+   {
+       return $this->createQueryBuilder('p')
+           ->orderBy('p.createdAt', 'DESC')
+           ->setMaxResults(6)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+   public function findAllByNewest(): array
+   {
+       return $this->createQueryBuilder('p')
+           ->orderBy('p.createdAt', 'DESC')
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+    public function findUserPosts($id): array
+   {
+       return $this->createQueryBuilder('p')
+           ->andWhere('p.postOwner = :id')
+           ->setParameter('id', $id)
+           ->orderBy('p.id', 'ASC')
+           ->getQuery() 
+           ->getResult()
+       ;
+   }
+
 //    /**
 //     * @return Post[] Returns an array of Post objects
 //     */

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+use App\Entity\User;
 use App\Entity\AdoptionCase;
 use App\Form\AdoptionCaseType;
 use App\Repository\UserRepository;
@@ -10,19 +10,38 @@ use App\Repository\AdoptionCaseRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 #[Route('/adoption/case')]
 class AdoptionCaseController extends AbstractController
 {
+
+
+    #[IsGranted('ROLE_PRACOWNIK')]
     #[Route('/', name: 'app_adoption_case_index', methods: ['GET'])]
     public function index(AdoptionCaseRepository $adoptionCaseRepository): Response
     {
-        return $this->render('adoption_case/index.html.twig', [
-            'adoption_cases' => $adoptionCaseRepository->findAll(),
-        ]);
+        if($this->isGranted('ROLE_ADMIN'))
+        {
+            return $this->render('adoption_case/index.html.twig', [
+                'adoption_cases' => $adoptionCaseRepository->findAll(),
+            ]);
+        }
+        elseif($this->isGranted('ROLE_PRACOWNIK'))
+        {
+            /** @var User $User */
+            $User = $this->getUser();
+            $id = $User->getId();
+            return $this->render('adoption_case/index.html.twig', [
+                'adoption_cases' => $adoptionCaseRepository->findEmployeeCases($id),
+            ]);
+        }
+
     }
 
+    #[IsGranted('ROLE_PRACOWNIK')]
     #[Route('/new', name: 'app_adoption_case_new', methods: ['GET', 'POST'])]
     public function new(Request $request, AdoptionCaseRepository $adoptionCaseRepository, UserRepository $users): Response
     {
@@ -49,6 +68,7 @@ class AdoptionCaseController extends AbstractController
         ]);
     }
 
+    #[IsGranted(AdoptionCase::VIEW,'adoptionCase')]
     #[Route('/{id}', name: 'app_adoption_case_show', methods: ['GET'])]
     public function show(AdoptionCase $adoptionCase): Response
     {
@@ -57,6 +77,7 @@ class AdoptionCaseController extends AbstractController
         ]);
     }
 
+    #[IsGranted(AdoptionCase::EDIT,'adoptionCase')]
     #[Route('/{id}/edit', name: 'app_adoption_case_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, AdoptionCase $adoptionCase, AdoptionCaseRepository $adoptionCaseRepository): Response
     {
@@ -88,7 +109,7 @@ class AdoptionCaseController extends AbstractController
         
 
     }
-
+    #[IsGranted(AdoptionCase::DELETE,'adoptionCase')]
     #[Route('/{id}', name: 'app_adoption_case_delete', methods: ['POST'])]
     public function delete(Request $request, AdoptionCase $adoptionCase, AdoptionCaseRepository $adoptionCaseRepository, DocumentsRepository $documentsRepository): Response
     {

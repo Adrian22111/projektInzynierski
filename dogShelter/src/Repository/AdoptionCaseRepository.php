@@ -38,6 +38,17 @@ class AdoptionCaseRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    
+    public function findEmployeeCases($id): array
+    {
+       return $this->createQueryBuilder('a')
+           ->andWhere('a.id = :id')
+           ->setParameter('id', $id)
+           ->orderBy('a.id', 'ASC')
+           ->getQuery()
+           ->getResult()
+        ;
+    }
 
 //    /**
 //     * @return AdoptionCase[] Returns an array of AdoptionCase objects

@@ -11,6 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: AdoptionCaseRepository::class)]
 class AdoptionCase
 {
+    public const EDIT = 'POST_EDIT';
+    public const VIEW = 'POST_VIEW';
+    public const DELETE = 'POST_DELETE';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

@@ -28,8 +28,13 @@
                 <a class = "ml-4 py-2"href="{{path('app_main_page')}}">Amstaffy Niczyje <br/> Fundacja im. </a>
             </div>
             <div class="mr-1 ">
-                {% if is_granted('ROLE_USER') %}
+                {% if is_granted('ROLE_PRACOWNIK') %}
                     <div class = "hover:text-yellow-400"><a href="{{path('app_admin_panel')}}">Panel Administracyjny</a></div>
+                    <div class = "flex justify-end hover:text-yellow-400"><a href="{{path('app_user_edit',{id:app.user.id})}}">Edytuj Profil</a></div>
+                    <div class="flex justify-end hover:text-yellow-400"><a href="{{path('app_logout')}}">Wyloguj</a></div>
+                {% elseif is_granted('ROLE_CLIENT') %}
+                    <div class = "hover:text-yellow-400"><a href="{{path('app_adoption_case_show',{id:app.user.clientAdoptionCases.id})}}">Moje Sprawy</a></div>
+                    <div class = "hover:text-yellow-400"><a href="{{path('app_user_change_password',{id:app.user.id})}}">Zmień Hasło</a></div>
                     <div class="flex justify-end hover:text-yellow-400"><a href="{{path('app_logout')}}">Wyloguj</a></div>
                 {% else %}
                     <div><a href="{{path('app_login')}}">Zaloguj Się </a></div>

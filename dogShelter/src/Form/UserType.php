@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class UserType extends AbstractType
 {
@@ -68,9 +69,12 @@ class UserType extends AbstractType
                 $roles = $user->getRoles();
                 foreach($roles as $role)
                 {
-                    if($role =="ROLE_PRACOWNIK" || $role == "ROLE_ADMIN")
+                    if($role =="ROLE_PRACOWNIK" )
                     {
                         $form
+                            ->add('username',TextType::class,[
+                                'disabled' => true,
+                            ])
                             ->add('description',TextareaType::class,[
                                 'required' => false,
                             ])
@@ -105,7 +109,13 @@ class UserType extends AbstractType
                             ]);
 
                     }
-
+                    elseif($role == 'ROLE_ADMIN')
+                    {
+                    $form
+                    ->add('username',TextType::class,[
+                        'disabled' => false,
+                    ]);
+                    }
                 }
                                    
             }

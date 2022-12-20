@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class = "flex-col text-center mt-10 w-9/12 border-1 shadow-xl mx-auto px-2">
-        <div class="mb-2 text-xl">Edytuj Psa</div>
+        <div class="mb-2 text-xl">Edytuj Post</div>
         <div>{{ include('post/_form.html.twig', {'button_label': 'Aktualizuj'}) }}</div>
         <a href="{{ path('app_post_index') }}"><div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white" >Lista Postów</div></a>
         <a href="{{ path('app_post_show',{id:post.id})}}"><div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white" >Podgląd</div></a>

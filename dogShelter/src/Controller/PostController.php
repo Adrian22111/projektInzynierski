@@ -6,6 +6,7 @@ use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\PostRepository;
 use DateTime;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,21 +19,35 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 #[Route('/post')]
 class PostController extends AbstractController
 {
+    #[IsGranted('ROLE_PRACOWNIK')]
     #[Route('/', name: 'app_post_index', methods: ['GET'])]
     public function index(PostRepository $postRepository): Response
     {
-        return $this->render('post/index.html.twig', [
-            'posts' => $postRepository->findAll(),
-        ]);
+        if($this->isGranted('ROLE_ADMIN'))
+        {
+            return $this->render('post/index.html.twig', [
+                'posts' => $postRepository->findAll(),
+            ]);
+        }
+        elseif($this->isGranted('ROLE_PRACOWNIK'))
+        {
+            /** @var User $User */
+            $User = $this->getUser();
+            $id = $User->getId();
+            return $this->render('post/index.html.twig', [
+                'posts' => $postRepository->findUserPosts($id),
+            ]);
+        }
+
     }
     #[Route('/all', name: 'app_post_all', methods: ['GET'])]
     public function showAllPosts(PostRepository $postRepository): Response
     {
         return $this->render('post/all_posts.html.twig', [
-            'posts' => $postRepository->findAll(),
+            'posts' => $postRepository->findAllByNewest(),
         ]);
     }
-
+    #[IsGranted('ROLE_PRACOWNIK')]
     #[Route('/new', name: 'app_post_new', methods: ['GET', 'POST'])]
     public function new(Request $request, PostRepository $postRepository, SluggerInterface $slugger): Response
     {
@@ -82,7 +97,7 @@ class PostController extends AbstractController
             'post' => $post,
         ]);
     }
-
+    #[IsGranted(POST::EDIT,'post')]
     #[Route('/{id}/edit', name: 'app_post_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Post $post, PostRepository $postRepository, SluggerInterface $slugger): Response
     {
@@ -131,7 +146,7 @@ class PostController extends AbstractController
             'form' => $form,
         ]);
     }
-
+    #[IsGranted(POST::DELETE,'post')]
     #[Route('/{id}', name: 'app_post_delete', methods: ['POST'])]
     public function delete(Request $request, Post $post, PostRepository $postRepository): Response
     {

@@ -15,10 +15,12 @@
             <th class="text-left border-2">Akronim</th>
             <td class="text-left border-2">{{ document.documentName }}</td>       
         </tr> 
+        {% if is_granted('ROLE_PRACOWNIK' )%}
         <tr >
             <th class="text-left border-2">Oryginalna Nazwa</th>
             <td class="text-left border-2">{{ document.documentSource }}</td>
         </tr> 
+        {% endif %}
         <tr >
             <th class="text-left border-2">Przypisany do sprawy</th>
             {% if document.AdoptionCase is defined %}
@@ -27,6 +29,7 @@
                 <td class="text-left border-2 ">Brak Sprawy</td>
             {% endif %}
         </tr> 
+        {% if is_granted('ROLE_PRACOWNIK' )%}
         <tr>
             <th class="text-left border-2">Opcje</th>
             <td class="text-left border-2">
@@ -35,6 +38,7 @@
                 <div>{{ include('documents/_delete_form.html.twig') }}</div>
             </td>
         </tr> 
+        {% endif %}
     </table>
 </div>
 {% endblock %}
