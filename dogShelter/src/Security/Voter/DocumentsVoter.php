@@ -22,7 +22,7 @@ class DocumentsVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [Documents::EDIT, Documents::VIEW])
+        return in_array($attribute, [Documents::EDIT, Documents::VIEW, Documents::DELETE])
             && $subject instanceof \App\Entity\Documents;
     }
 
@@ -129,47 +129,47 @@ class DocumentsVoter extends Voter
                         
                     }   
                 }
-                case Documents::DELETE:
+            case Documents::DELETE:
                     // logic to determine if the user can EDIT
                     // return true or 
                     // sprawdzić do jakiej sprawy jest przypisany dokument 
                     // potem sprawdzić czy id sprawy z dokumewntem odpowiada jakiemus id sprawy przypisanej do pracownika
-                    if($this->security->isGranted('ROLE_ADMIN'))
+                if($this->security->isGranted('ROLE_ADMIN'))
+                {
+                    return true;
+                }
+                elseif($subject->getAdoptionCase())
+                {
+                    $documentAdoptionCaseId = $subject->getAdoptionCase()->getId();// id sprawy adopcji przypisanej do dokumentu
+                    if($this->security->isGranted('ROLE_PRACOWNIK'))
                     {
-                        return true;
-                    }
-                    if($subject->getAdoptionCase())
-                    {
-                        $documentAdoptionCaseId = $subject->getAdoptionCase()->getId();// id sprawy adopcji przypisanej do dokumentu
-                        if($this->security->isGranted('ROLE_PRACOWNIK'))
+                        $employeeAdoptionCases = $user->getEmployeeAdoptionCases();
+                        foreach($employeeAdoptionCases as $employeeAdoptionCase)
                         {
-                            $employeeAdoptionCases = $user->getEmployeeAdoptionCases();
-                            foreach($employeeAdoptionCases as $employeeAdoptionCase)
+                            if($employeeAdoptionCase->getId() == $documentAdoptionCaseId)
                             {
-                                if($employeeAdoptionCase->getId() == $documentAdoptionCaseId)
-                                {
-                                    return true;
-                                    //$documentInUserCase = true;
-                                    // break;
-                                }
-                                else
-                                {
-                                    return false;
-                                    //$documentInUserCase = false; 
-                                }
-                                
+                                return true;
+                                //$documentInUserCase = true;
+                                // break;
                             }
-                        }
-                        else
-                        {
-                            return false;
+                            else
+                            {
+                                return false;
+                                //$documentInUserCase = false; 
+                            }
+                            
                         }
                     }
                     else
                     {
                         return false;
                     }
-            }
+                }
+                else
+                {
+                    return false;
+                }
+        }
 
         return false;
     }

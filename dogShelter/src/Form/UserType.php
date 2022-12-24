@@ -19,9 +19,14 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Security\Core\Security;
 
 class UserType extends AbstractType
 {
+    public function __construct(private Security $security)
+    {
+        
+    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -69,7 +74,7 @@ class UserType extends AbstractType
                 $roles = $user->getRoles();
                 foreach($roles as $role)
                 {
-                    if($role =="ROLE_PRACOWNIK" )
+                    if($role =="ROLE_PRACOWNIK" || $role == 'ROLE_ADMIN')
                     {
                         $form
                             ->add('username',TextType::class,[
@@ -82,16 +87,18 @@ class UserType extends AbstractType
                                 'required' => false,
                             ])
                             ->add('guardianOf')
-                            ->add('available',ChoiceType::class,[
-                                'label' => 'Dostępność',
-                                'mapped' => true,
-                                'required' => true,
-                                'choices' => [
-                                    'Dostępny/a' => 1,
-                                    'Niedostępny/a' => 0,
-                                ],
-                
-                            ])
+                            ->add('roles',ChoiceType::class,array(
+                                'choices' => array(
+                                    'Uprawnienia' =>array(
+                                        'admin'=>'ROLE_ADMIN',
+                                        'pracownik'=>'ROLE_PRACOWNIK',
+                                        'klient' =>'ROLE_CLIENT'
+                                    )
+                                    ),
+                                    'multiple'=>true,
+                                    'required'=>true,
+                                    'disabled'=>true
+                            ))
                             ->add('profileImage',FileType::class,[
                                 'label' => 'Zdjęcie profilowe jpg/png',
                                 'mapped' => false,
@@ -107,15 +114,44 @@ class UserType extends AbstractType
                                     ])
                                 ]
                             ]);
+                            if($this->security->isGranted('ROLE_ADMIN'))
+                            {
+                                $form
+                                ->add('username',TextType::class,[
+                                    'disabled' => false,
+                                ])
+                                ->add('available',ChoiceType::class,[
+                                    'label' => 'Dostępność',
+                                    'mapped' => true,
+                                    'required' => true,
+                                    'choices' => [
+                                        'Dostępny/a' => 1,
+                                        'Niedostępny/a' => 0,
+                                    ],
+                    
+                                ])
+                                ->add('roles',ChoiceType::class,array(
+                                    'choices' => array(
+                                        'Uprawnienia' =>array(
+                                            'admin'=>'ROLE_ADMIN',
+                                            'pracownik'=>'ROLE_PRACOWNIK',
+                                            'klient' =>'ROLE_CLIENT'
+                                        )
+                                        ),
+                                        'multiple'=>true,
+                                        'required'=>true,
+                                        'disabled'=>false,
+                                ));
+                            }
 
                     }
-                    elseif($role == 'ROLE_ADMIN')
-                    {
-                    $form
-                    ->add('username',TextType::class,[
-                        'disabled' => false,
-                    ]);
-                    }
+                    // elseif($role == 'ROLE_ADMIN')
+                    // {
+                    // $form
+                    // ->add('username',TextType::class,[
+                    //     'disabled' => false,
+                    // ]);
+                    // }
                 }
                                    
             }

@@ -20,7 +20,7 @@ class PostVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [Post::EDIT, Post::VIEW])
+        return in_array($attribute, [Post::EDIT, Post::VIEW, Post::DELETE])
             && $subject instanceof \App\Entity\Post;
     }
 

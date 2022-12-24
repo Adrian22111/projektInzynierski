@@ -131,7 +131,7 @@ class DocumentsController extends AbstractController
             'form' => $form,
         ]);
     }
-
+   
     #[IsGranted(Documents::DELETE,'document')]
     #[Route('/{id}', name: 'app_documents_delete', methods: ['POST'])]
     public function delete(Request $request, Documents $document, DocumentsRepository $documentsRepository): Response

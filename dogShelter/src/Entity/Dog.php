@@ -6,6 +6,8 @@ use App\Repository\DogRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: DogRepository::class)]
 class Dog
@@ -16,24 +18,33 @@ class Dog
     private ?int $id = null;
 
     #[ORM\Column(length: 30)]
+    #[Assert\NotBlank(message:'To pole nie może być puste')]
+    #[Assert\Length(max:30, maxMessage:'Imie jest zbyt długie (max 30 zanków)')]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $age = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max:255,maxMessage:'Nazwa Rasy jest zbyt długa (max 255 zanków)')]
     private ?string $race = null;
 
     #[ORM\Column(length: 30, nullable: true)]
+    #[Assert\Length(max:30)]
     private ?string $sex = null;
 
     #[ORM\Column(length: 1000, nullable: true)]
+    #[Assert\Length(max:1000,maxMessage:'Opis jest zbyt długi (max 1000 znaków)')]
     private ?string $description = null;
 
+    #[Assert\Length(max:255)]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'guardianOf')]
+    #[Assert\Collection([
+        new Assert\NotBlank(),
+    ],missingFieldsMessage:'Wybierz Opiekunów')]
     private Collection $guardian;
 
 
@@ -62,7 +73,7 @@ class Dog
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -137,7 +148,7 @@ class Dog
         return $this->guardian;
     }
 
-    public function addGuardian(User $guardian): self
+    public function addGuardian(?User $guardian): self
     {
         if (!$this->guardian->contains($guardian)) {
             $this->guardian->add($guardian);
@@ -161,7 +172,7 @@ class Dog
         return $this->adoptionCase;
     }
 
-    public function setAdoptionCase(AdoptionCase $adoptionCase): self
+    public function setAdoptionCase(?AdoptionCase $adoptionCase): self
     {
         // set the owning side of the relation if necessary
         if ($adoptionCase->getDog() !== $this) {
@@ -178,7 +189,7 @@ class Dog
         return $this->inAdoption;
     }
 
-    public function setInAdoption(bool $inAdoption): self
+    public function setInAdoption(?bool $inAdoption): self
     {
         $this->inAdoption = $inAdoption;
 

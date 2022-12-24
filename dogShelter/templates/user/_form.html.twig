@@ -1,4 +1,4 @@
-{{ form_start(form) }}
+{{ form_start(form,{'attr':{'novalidate':'novalidate'}}) }}
         <div>        
             {{ form_label(form.username,'Nazwa Użytkownika (Login)',{'label_attr':{'class':'block'}}) }}
             {{ form_widget(form.username,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}} )}}

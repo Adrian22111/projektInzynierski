@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\PostRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
@@ -18,12 +20,17 @@ class Post
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:'Tytuł nie może być pusty')]
+    #[Assert\Length(max:255, maxMessage:'Tytuł zbyt długi (max 255 znaków)')]
     private ?string $title = null;
 
     #[ORM\Column(length: 5400)]
+    #[Assert\NotBlank(message:'Brak treści')]
+    #[Assert\Length(max:5400, maxMessage:'Tekst zbyd długi (max 5400 znaków)')]
     private ?string $content = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max:255)]
     private ?string $image = null;
 
     #[ORM\ManyToOne(inversedBy: 'posts')]
@@ -47,7 +54,7 @@ class Post
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
@@ -59,7 +66,7 @@ class Post
         return $this->content;
     }
 
-    public function setContent(string $content): self
+    public function setContent(?string $content): self
     {
         $this->content = $content;
 

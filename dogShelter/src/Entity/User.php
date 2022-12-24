@@ -10,6 +10,8 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 
 #[UniqueEntity(fields: ['username'], message: 'Istnieje już konto z tym loginem ')]
 #[UniqueEntity(fields: ['email'], message: 'Istnieje już konto z tym emailem')]
@@ -19,35 +21,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public const EDIT = 'POST_EDIT';
     public const VIEW = 'POST_VIEW';
     public const DELETE = 'POST_DELETE';
+    public const CHANGE_PASSWORD = 'POST_CHANGE_PASSWORD';
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank(message:'Brak loginu')]
+    #[Assert\Length(max:180,maxMessage:'Wykorzystano maksymalną liczbe znaków')]
     private ?string $username = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message:'Wybierz Uprawnienia')]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
-    #[ORM\Column]
+    #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message:'Brak Hasła')]
+    #[Assert\Length(max:100,maxMessage:'Wykorzystano maksymalną liczbe znaków')]
     private ?string $password = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\Email(message:'Niepoprawny adres Email')]
+    #[Assert\NotBlank(message:'Brak Emaila')]
+    #[Assert\Length(max:100,maxMessage:'Wykorzystano maksymalną liczbe znaków')]
     private ?string $email = null;
 
+    #[Assert\Length(max:1000,maxMessage:'Wykorzystano maksymalną liczbe znaków')]
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $description = null;
 
+    #[Assert\Length(max:255,maxMessage:'Wykorzystano maksymalną liczbe znaków')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $facebookProfile = null;
 
-    #[ORM\Column(nullable: true)]
+    #[Assert\Length(max:20,maxMessage:'Wykorzystano maksymalną liczbe znaków')]
+    #[ORM\Column(nullable: true,length:20)]
     private ?int $phoneNumber = null;
 
+    #[Assert\Length(max:255,maxMessage:'Wykorzystano maksymalną liczbe znaków')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $profileImage = null;
 
@@ -92,7 +107,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->username;
     }
 
-    public function setUsername(string $username): self
+    public function setUsername(?string $username): self
     {
         $this->username = $username;
 
@@ -121,7 +136,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): self
+    public function setRoles(?array $roles): self
     {
         $this->roles = $roles;
 
@@ -136,7 +151,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
@@ -157,7 +172,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
@@ -315,7 +330,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->available;
     }
 
-    public function setAvailable(bool $available): self
+    public function setAvailable(?bool $available): self
     {
         $this->available = $available;
 

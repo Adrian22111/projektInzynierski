@@ -6,13 +6,15 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Form\ChangePasswordType;
 use App\Repository\UserRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Filesystem\Filesystem;
+
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -142,36 +144,56 @@ class UserController extends AbstractController
             'isEdit' => true,
         ]);
     }
-    #[IsGranted('ROLE_USER')]
+
+    #[IsGranted(User::CHANGE_PASSWORD,'user')]
     #[Route('/{id}/changepassword', 'app_user_change_password')]
-    public function changePassword(Request $request,User $user, UserRepository $users, UserPasswordHasherInterface $userPasswordHasher ): Response
+    public function changePassword(Request $request,User $user, UserRepository $users, UserPasswordHasherInterface $userPasswordHasher, Security $security ): Response
     {
-        $form = $this->createForm(ChangePasswordType::class);
+
+        $form = $this->createForm(ChangePasswordType::class,$user, array(
+            'editedUserId' => $user->getId()));
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
         {
-            $oldPassword = $form->get('oldPassword')->getData();
-            $password = $form->get('password')->getData();
-            // $oldPasswordHashed = $userPasswordHasher->hashPassword($user,$oldPassword);
-            
-            if($userPasswordHasher->isPasswordValid($user, $oldPassword))
+            $id = $user->getId();
+            if($form->get('oldPassword')->getData())
             {
-                
+                $oldPassword = $form->get('oldPassword')->getData();
+                $password = $form->get('password')->getData();
+                if($userPasswordHasher->isPasswordValid($user, $oldPassword))
+                {
+                    $user->setPassword(
+                        $userPasswordHasher->hashPassword(
+                            $user,
+                            $password
+                    ));
+                    $users->save($user,true);
+                    $this->addFlash('success','poprawnie zmieniono hasło');
+                }
+                else
+                {
+                    $this->addFlash('failure','nie udało sie zmienić hasła');
+                }
+            }
+            elseif($security->isGranted('ROLE_ADMIN') && $user->getId() != $security->getUser()->getId())
+            {
+                $password = $form->get('password')->getData();
                 $user->setPassword(
                     $userPasswordHasher->hashPassword(
                         $user,
                         $password
                 ));
-                $id = $user->getId();
                 $users->save($user,true);
                 $this->addFlash('success','poprawnie zmieniono hasło');
-                return $this->redirectToRoute('app_user_edit',['id'=>$id],Response::HTTP_SEE_OTHER);
             }
             else
             {
                 $this->addFlash('failure','nie udało sie zmienić hasła');
             }
-
+            
+            // $oldPasswordHashed = $userPasswordHasher->hashPassword($user,$oldPassword);
+            return $this->redirectToRoute('app_user_show',['id'=>$id],Response::HTTP_SEE_OTHER);
+            
         }
         return $this->renderForm('user/_change_password.html.twig',[
             'form' => $form,
