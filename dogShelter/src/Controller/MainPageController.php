@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MainPageController extends AbstractController
 {
-    #[Route('/main/page', name: 'app_main_page')]
+    #[Route('/', name: 'app_main_page')]
     public function index(PostRepository $postRepository): Response
     {
         $posts = $postRepository->findSixLatest();
