@@ -14,7 +14,7 @@
         {% if error %}
             <div class="text-red-500">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
-        <input type="hidden" name="_target_path" value="/main/page"/>
+        <input type="hidden" name="_target_path" value="/"/>
         <button type="submit" class="w-32 my-2 bg-green-500 hover:bg-green-400 rounded-md text-white">Zaloguj się</button>
 </form>
 {% endblock %}

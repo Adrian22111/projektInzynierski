@@ -11,6 +11,7 @@
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
+
         {% endblock %}
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
@@ -22,43 +23,76 @@
         <script src="https://kit.fontawesome.com/48575c0b33.js" crossorigin="anonymous"></script>
     </head>
     <body>
-        <div class="flex h-20 justify-between">
-            <div class="text-2xl flex">
-                <img class="ml-2" src="{{pageimages~'logo.png'}}"/>
-                {# <div id = "logoplaceholder " class="rounded-full bg-gray-600 w-20 h-20 mr-2 "></div> #}
-                <a class = "ml-4 py-2"href="{{path('app_main_page')}}">Amstaffy Niczyje <br/> Fundacja im. </a>
+    <div class="relative">
+        <div id="sideBar" class="fixed top-20 w-44 bg-gray-600 left-full h-screen z-30">
+            <div id="close-btn" class="flex justify-end mr-2" onclick="closeMenu()">
+                <i class="fas fa-times text-yellow-300 hover:cursor-pointer hover:text-yellow-200 mt-1"></i>
             </div>
-            <div class="mr-1 ">
-                {% if is_granted('ROLE_PRACOWNIK') %}
-                    <div class = "hover:text-yellow-400"><a href="{{path('app_admin_panel')}}">Panel Administracyjny</a></div>
-                    <div class = "flex justify-end hover:text-yellow-400"><a href="{{path('app_user_edit',{id:app.user.id})}}">Edytuj Profil</a></div>
-                    <div class="flex justify-end hover:text-yellow-400"><a href="{{path('app_logout')}}">Wyloguj</a></div>
-                {% elseif is_granted('ROLE_CLIENT') %}
-                    <div class = "hover:text-yellow-400"><a href="{{path('app_adoption_case_show',{id:app.user.clientAdoptionCases.id})}}">Moje Sprawy</a></div>
-                    <div class = "hover:text-yellow-400"><a href="{{path('app_user_change_password',{id:app.user.id})}}">Zmień Hasło</a></div>
-                    <div class="flex justify-end hover:text-yellow-400"><a href="{{path('app_logout')}}">Wyloguj</a></div>
-                {% else %}
-                    <div><a href="{{path('app_login')}}">Zaloguj Się </a></div>
+            <div id="menu" class="bg-gray-600 text-center ">
+                <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_adoption_case_index')}}"><p>Sprawy Adopcji</p><i class="fa-solid fa-briefcase  fa-4x mt-4 flex justify-center"></i></a></div>
+                <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_dog_index')}}"><p>Psy</p><i class="fa-solid fa-dog fa-4x mt-4 flex justify-center"></i></a></div>
+                {% if is_granted("ROLE_ADMIN") %}
+                    <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_user_index')}}"><p>Użytkownicy</p><i class="fa-solid fa-user  fa-4x mt-4 flex justify-center"></i></a></div>
                 {% endif %}
+                <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_documents_index')}}"><p>Dokumenty</p><i class="fa-solid fa-folder-open fa-4x mt-4 flex justify-center"></i></a></div>
+                <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_post_index')}}"><p>Posty</p><i class="fa-solid fa-message fa-4x mt-4 flex justify-center"></i></a></div>
             </div>
         </div>
-        <div class =" w-full flex items-center justify-center bg-gray-600 h-20 sticky top-0 z-20">
-            <ul class="flex text-2xl ">
-                <li class="mx-2 text-yellow-300 hover:text-yellow-200" ><a href = "{{path('app_dog_all')}}">Zwierzęta</a></li>
-                <li class="mx-2 text-yellow-300 hover:text-yellow-200"><a href = "#">Darownizna</a></li>
-                <li class="mx-2 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_post_all')}}">Aktualności</a></li>
-                <li class="mx-2 text-yellow-300 hover:text-yellow-200"><a href = "#">Kontakt</a></li>
-                <li class="mx-2 text-yellow-300 hover:text-yellow-200"><a href = "#">O Fundacji</a></li>
-            </ul>
-        </div>
-        {% for message in app.flashes('failure') %}
-            <div>{{message}}</div>
-        {% endfor %}
-        {% for message in app.flashes('success') %}
-            <div>{{message}}</div>
-        {% endfor %}
+        <div id="mainContent" class="w-full">
+            <div id="topWhiteBar" class="flex h-20 justify-between">
+                <div class="text-2xl flex">
+                    <img class="ml-2" src="{{pageimages~'logo.png'}}"/>
+                    {# <div id = "logoplaceholder " class="rounded-full bg-gray-600 w-20 h-20 mr-2 "></div> #}
+                    <a class = "ml-4 py-2"href="{{path('app_main_page')}}">Amstaffy Niczyje <br/> Fundacja im. </a>
+                </div>
+                <div class="mr-1 ">
+                    {% if is_granted('ROLE_PRACOWNIK') %}
+                        <div class = "hover:text-yellow-400"><a href="{{path('app_admin_panel')}}">Panel Administracyjny</a></div>
+                        <div class = "flex justify-end hover:text-yellow-400"><a href="{{path('app_user_edit',{id:app.user.id})}}">Edytuj Profil</a></div>
+                        <div class="flex justify-end hover:text-yellow-400"><a href="{{path('app_logout')}}">Wyloguj</a></div>
+                    {% elseif is_granted('ROLE_CLIENT') %}
+                        <div class = "hover:text-yellow-400"><a href="{{path('app_adoption_case_show',{id:app.user.clientAdoptionCases.id})}}">Moje Sprawy</a></div>
+                        <div class = "hover:text-yellow-400"><a href="{{path('app_user_change_password',{id:app.user.id})}}">Zmień Hasło</a></div>
+                        <div class="flex justify-end hover:text-yellow-400"><a href="{{path('app_logout')}}">Wyloguj</a></div>
+                    {% else %}
+                        <div><a href="{{path('app_login')}}">Zaloguj Się </a></div>
+                    {% endif %}
+                </div>
+            </div>
+            <div id="mainMenu" class =" w-full flex items-center justify-center bg-gray-600 h-20 sticky top-0 z-20">
+                {% if is_granted("ROLE_PRACOWNIK")%}
+                <span class="absolute text-white text-4xl top-5 left-5 cursor-pointer " onclick="openMenu()">
+                    <i class="fa-solid fa-bars text-yellow-300 hover:text-yellow-200 "></i>
+                </span>
+                {% endif %}
+                <ul class="flex text-2xl ">
+                    <li class="mx-2 text-yellow-300 hover:text-yellow-200" ><a href = "{{path('app_dog_all')}}">Zwierzęta</a></li>
+                    <li class="mx-2 text-yellow-300 hover:text-yellow-200"><a href = "#">Darownizna</a></li>
+                    <li class="mx-2 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_post_all')}}">Aktualności</a></li>
+                    <li class="mx-2 text-yellow-300 hover:text-yellow-200"><a href = "#">Kontakt</a></li>
+                    <li class="mx-2 text-yellow-300 hover:text-yellow-200"><a href = "#">O Fundacji</a></li>
+                </ul>
+            </div>
+            {% block body %}
 
-        {% block body %}
-        {% endblock %}
+            {% endblock %}
+            {% for message in app.flashes('failure') %}
+                <div>{{message}}</div>
+            {% endfor %}
+            {% for message in app.flashes('success') %}
+                <div>{{message}}</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function openMenu(){
+            document.querySelector('#sideBar').classList.toggle('left-0');
+        }
+        function closeMenu(){
+            document.querySelector('#sideBar').classList.remove('left-0');
+        }
+    </script>
+
     </body>
 </html>
