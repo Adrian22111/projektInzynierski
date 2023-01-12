@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PaymentController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+
+    {# <div onclick="window.open('https://buy.stripe.com/test_bIYcOvcwLcQSf96aEE') " class="hover:cursor-pointer">10 zyla</div> #}
+<div class="w-10/12 grid 2xl:grid-cols-5 2xl:gap-8 xl:grid-cols-4 xl:gap-8 lg:grid-cols-3 lg:gap-6 md:gap-4 md:grid-cols-2 sm:gap-2 sm-grid-cols-1 mx-auto ">
+<div onclick="window.open('https://donate.stripe.com/test_bIYcOvcwLcQSf96aEE')" class=" rounded-md w-80 h-56 text-9xl relative cursor-pointer mt-8">
+    <p class="absolute top-16 left-10 z-10 text-yellow-600  opacity-75 text-center">10zł</p>
+    <img src="{{pageimages~'donation.png'}}" class="z-0 absolute  top-0 left-0 " />
+    <div class="absolute top-0 left-0 bg-gray-600  w-full h-full opacity-0 hover:opacity-50 z-20"></div>
+</div>
+<div onclick="window.open('https://donate.stripe.com/test_28oeWDbsHg344uscMN')"class=" rounded-md w-80 h-56 text-9xl relative cursor-pointer mt-8">
+    <p class="absolute top-16 left-10 z-10 text-yellow-600  opacity-75">20zł</p>
+    <img src="{{pageimages~'donation.png'}}" class="z-0 absolute  top-0 left-0 " />
+    <div class="absolute top-0 left-0 bg-gray-600  w-full h-full opacity-0 hover:opacity-50 z-20"></div>
+</div>
+<div onclick="window.open('https://donate.stripe.com/test_14k6q70O3bMO0ecbIK')"class=" rounded-md w-80 h-56 text-9xl relative cursor-pointer mt-8">
+    <p class="absolute top-16 left-10 z-10 text-yellow-600  opacity-75">50zł</p>
+    <img src="{{pageimages~'donation.png'}}" class="z-0 absolute  top-0 left-0 " />
+    <div class="absolute top-0 left-0 bg-gray-600  w-full h-full opacity-0 hover:opacity-50 z-20"></div>
+</div>
+<div onclick="window.open('https://donate.stripe.com/test_28odSz9kzcQSd0Y5kn')"class=" rounded-md w-80 h-56 text-9xl relative cursor-pointer mt-8">
+    <p class="absolute top-16 left-0 z-10 text-yellow-600  opacity-75">100zł</p>
+    <img src="{{pageimages~'donation.png'}}" class="z-0 absolute  top-0 left-0 " />
+    <div class="absolute top-0 left-0 bg-gray-600  w-full h-full opacity-0 hover:opacity-50 z-20"></div>
+</div>
+<div onclick="window.open('https://donate.stripe.com/test_6oE9Cj0O39EGaSQfZ2')"class=" rounded-md w-80 h-56 text-6xl relative cursor-pointer mt-8">
+    <p class="absolute top-28 left-4 z-10 text-yellow-600  opacity-75 text-center">Inna Kwota</p>
+    <img src="{{pageimages~'donation.png'}}" class="z-0 absolute  top-0 left-0 " />
+    <div class="absolute top-0 left-0 bg-gray-600  w-full h-full opacity-0 hover:opacity-50 z-20"></div>
+</div>
+</div>
+
+{% endblock %}

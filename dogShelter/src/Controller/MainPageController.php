@@ -18,13 +18,5 @@ class MainPageController extends AbstractController
             'posts' => $posts
         ]);
     }
-    #[Route('/sidebar', name: 'app_side_bar')]
-    public function sidebartesting(PostRepository $postRepository): Response
-    {
-        $posts = $postRepository->findSixLatest();
 
-        return $this->render('main_page/sidebar.html.twig', [
-            'posts' => $posts
-        ]);
-    }
 }
