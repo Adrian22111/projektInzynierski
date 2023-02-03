@@ -9,10 +9,7 @@
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
 
-        {% endblock %}
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
             tailwind.config {
@@ -23,19 +20,19 @@
         <script src="https://kit.fontawesome.com/48575c0b33.js" crossorigin="anonymous"></script>
     </head>
     <body>
-    <div class="relative">
-        <div id="sideBar" class="fixed top-20 w-44 bg-gray-600 left-full h-screen z-30">
-            <div id="close-btn" class="flex justify-end mr-2" onclick="closeMenu()">
+    <div class="relative " >
+        <div id="sideBar" class="fixed top-20 w-44 bg-gray-600 -left-full h-screen z-30 transition-all duration-500  ">
+            <div id="close-btn" class="flex justify-end mr-2 " onclick="closeMenu()">
                 <i class="fas fa-times text-yellow-300 hover:cursor-pointer hover:text-yellow-200 mt-1"></i>
             </div>
             <div id="menu" class="bg-gray-600 text-center ">
-                <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_adoption_case_index')}}"><p>Sprawy Adopcji</p><i class="fa-solid fa-briefcase  fa-4x mt-4 flex justify-center"></i></a></div>
-                <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_dog_index')}}"><p>Psy</p><i class="fa-solid fa-dog fa-4x mt-4 flex justify-center"></i></a></div>
+                <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_adoption_case_index')}}"><i class="fa-solid fa-briefcase  fa-4x mt-4 flex justify-center"></i><p>Sprawy Adopcji</p></a></div>
+                <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_dog_index')}}"><i class="fa-solid fa-dog fa-4x mt-4 flex justify-center"></i><p>Psy</p></a></div>
                 {% if is_granted("ROLE_ADMIN") %}
-                    <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_user_index')}}"><p>Użytkownicy</p><i class="fa-solid fa-user  fa-4x mt-4 flex justify-center"></i></a></div>
+                    <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_user_index')}}"><i class="fa-solid fa-user  fa-4x mt-4 flex justify-center"></i><p>Użytkownicy</p></a></div>
                 {% endif %}
-                <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_documents_index')}}"><p>Dokumenty</p><i class="fa-solid fa-folder-open fa-4x mt-4 flex justify-center"></i></a></div>
-                <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_post_index')}}"><p>Posty</p><i class="fa-solid fa-message fa-4x mt-4 flex justify-center"></i></a></div>
+                <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_documents_index')}}"><i class="fa-solid fa-folder-open fa-4x mt-4 flex justify-center"></i><p>Dokumenty</p></a></div>
+                <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_post_index')}}"><i class="fa-solid fa-message fa-4x mt-4 flex justify-center"></i><p>Posty</p></a></div>
             </div>
         </div>
         <div id="mainContent" class="w-full">
@@ -61,7 +58,7 @@
             </div>
             <div id="mainMenu" class =" w-full flex items-center justify-center bg-gray-600 h-20 sticky top-0 z-20">
                 {% if is_granted("ROLE_PRACOWNIK")%}
-                <span class="absolute text-white text-4xl top-5 left-5 cursor-pointer " onclick="openMenu()">
+                <span id="menuIcon" class="absolute text-white text-4xl top-5 left-5 cursor-pointer " onclick="openMenu()">
                     <i class="fa-solid fa-bars text-yellow-300 hover:text-yellow-200 "></i>
                 </span>
                 {% endif %}
@@ -87,12 +84,18 @@
 
     <script>
         function openMenu(){
-            document.querySelector('#sideBar').classList.toggle('left-0');
+            document.querySelector('#sideBar').classList.add('left-0');
+            document.querySelector('#menuIcon').classList.add('invisible');
         }
         function closeMenu(){
             document.querySelector('#sideBar').classList.remove('left-0');
+            document.querySelector('#menuIcon').classList.remove('invisible');
         }
     </script>
+    {% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+
+    {% endblock %}
 
     </body>
 </html>

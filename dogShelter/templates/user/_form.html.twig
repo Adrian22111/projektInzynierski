@@ -1,51 +1,51 @@
 {{ form_start(form,{'attr':{'novalidate':'novalidate'}}) }}
         <div>        
             {{ form_label(form.username,'Nazwa Użytkownika (Login)',{'label_attr':{'class':'block'}}) }}
-            {{ form_widget(form.username,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}} )}}
+            {{ form_widget(form.username,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}} )}}
             {{ form_errors(form.username) }}
         </div>
         <div>
         {% if form.password.first is defined %}
             {{ form_label(form.password.first,'Hasło',{'label_attr':{'class':'block'}}) }}
-            {{ form_widget(form.password.first,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+            {{ form_widget(form.password.first,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
             {{ form_errors(form.password.first) }}
         {% endif %}
         </div>
         <div>
         {% if form.password.second is defined %}
             {{ form_label(form.password.second,'Powtórz Hasło',{'label_attr':{'class':'block'}}) }}
-            {{ form_widget(form.password.second,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+            {{ form_widget(form.password.second,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
             {{ form_errors(form.password.second) }}
         {% endif %}
         </div>
         <div>
             {{ form_label(form.email,'Podaj Email',{'label_attr':{'class':'block'}}) }}
-            {{ form_widget(form.email,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+            {{ form_widget(form.email,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
             {{ form_errors(form.email) }}
         </div>
         {% if  form.phoneNumber is defined %}
         <div>
             {{ form_label(form.phoneNumber,'Numer Telefonu',{'label_attr':{'class':'block'}}) }}
-            {{ form_widget(form.phoneNumber,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+            {{ form_widget(form.phoneNumber,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
             {{ form_errors(form.phoneNumber) }}
         </div>
         {% endif %}
         {% if  form.available is defined %}
         <div>
             {{ form_label(form.available,'Dostępność',{'label_attr':{'class':'block'}}) }}
-            {{ form_widget(form.available,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+            {{ form_widget(form.available,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
             {{ form_errors(form.available) }}
         </div>
         {% endif %}
         <div>
             {{ form_label(form.roles,'Uprawnienia',{'label_attr':{'class':'block'}}) }}
-            {{ form_widget(form.roles,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+            {{ form_widget(form.roles,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
             {{ form_errors(form.roles) }}
         </div>
         {% if  form.facebookProfile is defined %}
         <div>
             {{ form_label(form.facebookProfile,'Profil Facebook',{'label_attr':{'class':'block'}}) }}
-            {{ form_widget(form.facebookProfile,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+            {{ form_widget(form.facebookProfile,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
             {{ form_errors(form.facebookProfile) }}
         </div>
         {% endif %}
@@ -53,7 +53,7 @@
             {% if  is_granted('ROLE_ADMIN') %}
             <div>
                 {{ form_label(form.guardianOf,'Opiekun',{'label_attr':{'class':'block'}}) }}
-                {{ form_widget(form.guardianOf,{'attr':{'class':'w-60 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+                {{ form_widget(form.guardianOf,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
                 {{ form_errors(form.guardianOf) }}
             </div>
             {% else %}

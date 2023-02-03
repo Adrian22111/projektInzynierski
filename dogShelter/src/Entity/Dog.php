@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Webmozart\Assert\Assert as AssertAssert;
 
 #[ORM\Entity(repositoryClass: DogRepository::class)]
 class Dog
@@ -42,9 +42,7 @@ class Dog
     private ?string $image = null;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'guardianOf')]
-    #[Assert\Collection([
-        new Assert\NotBlank(),
-    ],missingFieldsMessage:'Wybierz Opiekunów')]
+    #[Assert\Count(min:1,minMessage:"Wybierz chociaż 1 opiekuna")]
     private Collection $guardian;
 
 

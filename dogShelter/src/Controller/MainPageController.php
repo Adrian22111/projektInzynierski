@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\DogRepository;
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,15 @@ class MainPageController extends AbstractController
 
         return $this->render('main_page/index.html.twig', [
             'posts' => $posts
+        ]);
+    }
+    #[Route('/newslider', name: 'app_new_slideer')]
+    public function newSlider(DogRepository $dogRepository): Response
+    {
+        $dogs = $dogRepository->findAll();
+
+        return $this->render('main_page/newslider.html.twig', [
+            'dogs'=>$dogs,
         ]);
     }
 

@@ -158,7 +158,7 @@ class DogController extends AbstractController
             if($dog->getAdoptionCase()!= null)
             {
                 $this->addFlash('failure','rozstrzygnij najpierw sprawę adopcji');
-                return $this->redirectToRoute('app_dog_edit',['id'=>$dog->getId()]);
+                return $this->redirectToRoute('app_adoption_case_show',['id'=>$dog->getAdoptionCase()->getId()]);
             }
             else
             {
