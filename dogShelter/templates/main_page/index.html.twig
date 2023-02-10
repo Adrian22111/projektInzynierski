@@ -37,11 +37,11 @@
 </section>
 <section>
     <h2 class= "text-6xl  justify-center flex items-center text-gray-600  pt-10 pb-10">---Nasi Podopieczni<img class="w-10 h-10 ml-5" src="{{pageimages~'paw.png'}}"/>---</h2>
-    <div class="slider w-full h-[200px] relative m-auto overflow-x-hidden overflow-y-hidden "  id="slider">
+    <div class="slider w-full h-[200px] relative m-auto overflow-x-hidden overflow-y-hidden border border-t-2 "  id="slider">
         <div class="slide flex absolute left-0 transition-left duration-300" id="slide">
             <img class="item mr-0 bg-white w-[100px]" src="">
             {% for dog in dogs %}
-                <div class="item mr-[10px] w-[300px] ">{{ include('dog/_dog_image.html.twig',{'width':64, 'height':64, dog:dog})}}</div>
+                <div class="item mr-[10px] w-[300px] "><a href="{{path("app_dog_show", {id:dog.id})}}">{{ include('dog/_dog_image.html.twig',{'width':64, 'height':64, dog:dog})}}</a></div>
             {% endfor %}
             <img class="item mr-0 bg-white w-[100px]" src="">
             </div>

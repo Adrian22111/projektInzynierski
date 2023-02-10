@@ -30,7 +30,9 @@
                 <td class="border-2">{{ dog.race }}</td>
                 <td class="border-2">{{ dog.sex }}</td>
                 {% if dog.description|length > 30  %}
-                    <td class="border-2">Opis Utworzony</td>
+                    <td class="border-2">{{ dog.description|slice(0,100)~"..."}}</td>
+                {% elseif dog.description|length  > 0 %}
+                    <td class="border-2 ">{{dog.description}}</td>
                 {% else %}
                     <td class="border-2 text-red-500">Brak Opisu</td>
                 {% endif %}
