@@ -11,15 +11,15 @@
     <div  class="relative " >
             <ul id='slider' class="transition-all duration-500">
                 <li class="h-[60vh] opacity-100 ">
-                        <p class="absolute text-4xl text-yellow-300 hover:text-yellow-200 top-80 left-64 bg-gray-600 rounded-lg p-2 z-10"><a href="{{path('app_dog_all')}}" >Psy Do Adopcji</a></p>
-                        <img class="object-cover absolute block  h-full w-full  translate-x-{amount} " src="{{mainslider~'first.jpg'}}"/>  
+                        <p class="absolute text-4xl text-yellow-300 hover:text-yellow-200 top-[35vh] left-[20vh] bg-gray-600 rounded-lg p-2 z-10"><a href="{{path('app_dog_all')}}" >Psy Do Adopcji</a></p>
+                        <img class="object-cover absolute block  h-full w-full   " src="{{mainslider~'first.jpg'}}"/>  
                 </li>
-                <li class="h-[60vh]  hidden opacity-0">
-                    <p class="absolute text-4xl text-yellow-300 hover:text-yellow-200 top-80 left-64 bg-gray-600 rounded-lg p-2 z-10"><a href="{{path('app_payment')}}" >Darowizna</a></p>
+                <li class="h-[60vh]  hidden opacity-0 ">
+                    <p class="absolute text-4xl text-yellow-300 hover:text-yellow-200 top-[35vh] left-[20vh] bg-gray-600 rounded-lg p-2 z-10"><a href="{{path('app_payment')}}" >Darowizna</a></p>
                     <img class=" object-cover h-full w-full" src="{{mainslider~'second.jpg'}}"/>
                 </li>
-                <li class="h-[60vh]  hidden opacity-0">
-                    <p class="absolute text-4xl text-yellow-300 hover:text-yellow-200 top-80 left-64 bg-gray-600 rounded-lg p-2 z-10"><a href="{{path('app_post_all')}}" >Aktualności</a></p>
+                <li class="h-[60vh]  hidden opacity-0 ">
+                    <p class="absolute text-4xl text-yellow-300 hover:text-yellow-200 top-[35vh] left-[20vh] bg-gray-600 rounded-lg p-2 z-10"><a href="{{path('app_post_all')}}" >Aktualności</a></p>
                     <img class=" object-cover h-full w-full" src="{{mainslider~'third.jpg'}}"/>
                 </li>
             </ul>
@@ -28,16 +28,31 @@
                 <button id="prevbutton" onclick = "prev()" class="bg-white p-3 rounded-full bg-opacity-80 shadow-lg" >
                     <i class="fa-solid fa-arrow-left "></i>
                 </button>
-                <button it="nextbutton" onclick ="next()" class="bg-white p-3 rounded-full bg-opacity-80 shadow-lg" >
+                <button id="nextbutton" onclick ="next()" class="bg-white p-3 rounded-full bg-opacity-80 shadow-lg" >
                     <i class="fa-solid fa-arrow-right "></i>
                 </button >
             </div>
         </div>
     </div>
 </section>
+<section>
+    <h2 class= "text-6xl  justify-center flex items-center text-gray-600  pt-10 pb-10">---Nasi Podopieczni<img class="w-10 h-10 ml-5" src="{{pageimages~'paw.png'}}"/>---</h2>
+    <div class="slider w-full h-[200px] relative m-auto overflow-x-hidden overflow-y-hidden "  id="slider">
+        <div class="slide flex absolute left-0 transition-left duration-300" id="slide">
+            <img class="item mr-0 bg-white w-[100px]" src="">
+            {% for dog in dogs %}
+                <div class="item mr-[10px] w-[300px] ">{{ include('dog/_dog_image.html.twig',{'width':64, 'height':64, dog:dog})}}</div>
+            {% endfor %}
+            <img class="item mr-0 bg-white w-[100px]" src="">
+            </div>
+            <button class="ctrl-btn pro-prev hover:bg-gray-600 hover:text-white transition border border-2  border-gray-600 rounded-md p-[20px] w-[100px] bg-white text-center outline-0 absolute top-1/2 mt-[-27.5px] left-0">Wstecz</button>
+            <button class="ctrl-btn pro-next hover:bg-gray-600 hover:text-white transition border border-2  border-gray-600 rounded-md p-[20px] w-[100px] bg-white text-center outline-0 absolute top-1/2 mt-[-27.5px] right-0">Dalej</button>
+        </div>
+    </div>
+</section>
 <section id= "posts">
 <div class=" flex flex-col items-center mt-10 ">
-    <div class="text-3xl mb-4 text-gray-600">Aktualności</div>
+    <h2 class= "text-6xl  justify-center flex items-center text-gray-600  pt-10 pb-10">---Aktualności<img class="w-10 h-10 ml-5" src="{{pageimages~'paw.png'}}"/>---</h2>
     <div class="grid grid-cols-1 gap-2 sm:gap-6 sm:grid-cols-2 md:grid-cols-3 md:gap-8 lg:grid-cols-4 lg:gap-10 ">
         {% for post in posts %}
             <div class=" text-center border-2 border-gray-600 rounded-md p-0 m-0 ">
@@ -130,6 +145,68 @@ function showSlide()
 }
 
 
+</script>
+<script>
+        "use strict";
+
+productScroll();
+
+function productScroll() {
+  let slider = document.getElementById("slider");
+  let next = document.getElementsByClassName("pro-next");
+  let prev = document.getElementsByClassName("pro-prev");
+  let slide = document.getElementById("slide");
+  let item = document.getElementById("slide");
+
+  for (let i = 0; i < next.length; i++) {
+    //refer elements by class name
+
+    let position = 0; //slider postion
+
+    prev[i].addEventListener("click", function() {
+      //click previos button
+      if (position > 0) {
+        //avoid slide left beyond the first item
+        position -= 1;
+        translateX(position); //translate items
+      }
+    });
+
+    next[i].addEventListener("click", function() {
+      if (position >= 0 && position < hiddenItems()) {
+        //avoid slide right beyond the last item
+        position += 1;
+        translateX(position); //translate items
+      }
+    });
+  }
+
+  function hiddenItems() {
+    //get hidden items
+    let items = getCount(item, false);
+    let visibleItems = slider.offsetWidth / 310;
+    return items - Math.ceil(visibleItems);
+  }
+}
+
+function translateX(position) {
+  //translate items
+  slide.style.left = position * -310 + "px";
+}
+
+function getCount(parent, getChildrensChildren) {
+  //count no of items
+  let relevantChildren = 0;
+  let children = parent.childNodes.length;
+  for (let i = 0; i < children; i++) {
+    if (parent.childNodes[i].nodeType != 3) {
+      if (getChildrensChildren)
+        relevantChildren += getCount(parent.childNodes[i], true);
+      relevantChildren++;
+    }
+  }
+  return relevantChildren;
+}
 </script>
 
 {% endblock %}

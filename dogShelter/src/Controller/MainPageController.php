@@ -11,12 +11,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainPageController extends AbstractController
 {
     #[Route('/', name: 'app_main_page')]
-    public function index(PostRepository $postRepository): Response
+    public function index(PostRepository $postRepository,DogRepository $dogRepository): Response
     {
         $posts = $postRepository->findSixLatest();
+        $dogs = $dogRepository->findAll();
 
         return $this->render('main_page/index.html.twig', [
-            'posts' => $posts
+            'posts' => $posts,
+            'dogs' => $dogs,
         ]);
     }
     #[Route('/newslider', name: 'app_new_slideer')]
