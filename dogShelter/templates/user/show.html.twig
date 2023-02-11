@@ -28,7 +28,23 @@
             {% if is_granted('ROLE_PRACOWNIK')%}
             <tr>
                 <th class="text-left ">Role</th>
-                <td class="text-left ">{{ user.roles ? user.roles|json_encode : '' }}</td>
+                <td class="text-left ">
+                    {% if user.roles %}
+                        {% for role in user.roles %}
+                            {% if role == "ROLE_ADMIN" %}
+                                {{"Admin"}}
+                            {% elseif role == "ROLE_PRACOWNIK" %}
+                                {{"Pracownik"}}
+                            {% elseif  role == "ROLE_CLIENT" %}
+                                {{"Klient"}}
+                            {% endif %}
+                        {% endfor %}
+                        {# {{user.roles|json_encode}} #}
+                    {% else %}
+                        {{"dane niedostępne"}}
+                    {% endif %}
+                    {# {{ user.roles ? user.roles|json_encode : '' }} #}
+                </td>
             </tr>
             {% endif %}
             {% if isEmployee == true %}
@@ -38,7 +54,7 @@
                 </tr>
             {% endif %}
             {% if isEmployee == true %}
-                {% if user.facebookProfile|length > 5 %}
+                {% if user.facebookProfile %}
                 <tr>
                     <th class="text-left ">Profil Facebook</th>
                     <td class="text-left ">{{ user.facebookProfile }}</td>
@@ -50,11 +66,11 @@
                 </tr>
                 {% endif %}
             {% endif %}
-            {% if is_granted('ROLE_PRACOWNIK')%}
-                {% if user.phoneNumber|length >= 9 %}
+            {% if isEmployee == true %}
+                {% if user.phoneNumber %}
                 <tr>
                     <th class="text-left ">Numer Telefonu</th>
-                    <td class="text-left ">{{ user.phoneNumber }}</td>
+                    <td class="text-left ">{{ user.phoneNumber|slice(0,3)~" "~user.phoneNumber|slice(3,3)~" "~user.phoneNumber|slice(6,3)}}</td>
                 </tr>
                 {% else %}
                 <tr>
@@ -64,10 +80,10 @@
                 {% endif %}
             {% endif %}
             {% if isEmployee == true %}
-            <tr>
+            {# <tr>
                 <th class="text-left ">Zdjęcie Profilowe</th>
                 <td class="text-left ">{{ user.profileImage|length > 17 ? user.profileImage|slice(0,13) ~ user.profileImage|slice(-4):user.profileImage}}</td>
-            </tr>
+            </tr> #}
             {% endif %}
  
 
@@ -92,9 +108,11 @@
     </div>
     <div class="w-1/6  mx-auto mt-4">
         {% if is_granted('ROLE_PRACOWNIK') %}
-            <a href="{{ path('app_user_edit', {'id': user.id}) }}"><div class ="border-2 bg-green-500 w-full hover:bg-green-400 text-white text-center">Edytuj</div></a>
             <a href="{{ path('app_user_index') }}"><div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white text-center">Lista Użytkowników</div></a>
-            {{ include('user/_delete_form.html.twig') }}
+            {% if "ROLE_ADMIN" not in user.roles or user.id == app.user.id  %}
+                <a href="{{ path('app_user_edit', {'id': user.id}) }}"><div class ="border-2 bg-green-500 w-full hover:bg-green-400 text-white text-center">Edytuj</div></a>
+                {{ include('user/_delete_form.html.twig') }}
+            {% endif %}
         {% endif %}
     </div>
 </div>

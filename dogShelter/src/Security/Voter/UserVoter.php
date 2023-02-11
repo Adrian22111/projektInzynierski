@@ -2,6 +2,7 @@
 
 namespace App\Security\Voter;
 
+use Exception;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -32,8 +33,6 @@ class UserVoter extends Voter
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case User::EDIT:
-
-                // dd($targetIsAdmin);
                 if($this->security->isGranted('ROLE_ADMIN'))
                 {
                     $roles = $subject->getRoles();

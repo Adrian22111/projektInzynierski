@@ -211,7 +211,7 @@ class UserController extends AbstractController
 
 
     }
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted(User::EDIT,'user')]
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, UserRepository $userRepository): Response
     {

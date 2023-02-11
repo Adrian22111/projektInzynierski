@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -59,6 +60,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $facebookProfile = null;
 
     #[Assert\Length(max:20,maxMessage:'Wykorzystano maksymalną liczbe znaków')]
+    #[Assert\Type(type:"numeric",message:"podaj numer w odpowiednim formacie")]
     #[ORM\Column(nullable: true,length:20)]
     private ?int $phoneNumber = null;
 
