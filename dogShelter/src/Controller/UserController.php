@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use PDOException;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Form\ChangePasswordType;
@@ -14,6 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+// use Symfony\Component\Config\Definition\Exception\Exception;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -94,21 +97,27 @@ class UserController extends AbstractController
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, UserRepository $userRepository, SluggerInterface $slugger): Response
     {
-        
-
+    
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             if($form->get('profileImage')->getData() != null)
             {
-                if($user->getProfileImage()!= null)
+                if($user->getProfileImage()!= null )
                 {
-                    $user->setProfileImage(
-                        new File($this->getParameter('profileimages_directory').'/'.$user->getProfileImage())
-                    );
-                    $filesystem = new Filesystem();
-                    $filesystem->remove($user->getProfileImage());
+                    try
+                    {
+                        $user->setProfileImage(
+                            new File($this->getParameter('profileimages_directory').'/'.$user->getProfileImage())
+                        );
+                        $filesystem = new Filesystem();
+                        $filesystem->remove($user->getProfileImage());
+                    }
+                    catch(Exception $e)
+                    {
+                        
+                    }
                 }
                 $file = $form->get('profileImage')->getData();
                 if($file)

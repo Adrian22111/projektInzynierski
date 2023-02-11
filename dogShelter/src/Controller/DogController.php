@@ -6,6 +6,7 @@ use App\Entity\Dog;
 use App\Form\DogType;
 use App\Repository\DogRepository;
 use App\Repository\UserRepository;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
@@ -103,11 +104,19 @@ class DogController extends AbstractController
             {
                 if($dog->getImage() != null)
                 {
-                    $dog->setImage(
-                        new File($this->getParameter('dogimages_directory').'/'.$dog->getImage())
-                    );
-                    $filesystem = new Filesystem();
-                    $filesystem->remove($dog->getImage());
+                    try
+                    {
+                        $dog->setImage(
+                            new File($this->getParameter('dogimages_directory').'/'.$dog->getImage())
+                        );
+                        $filesystem = new Filesystem();
+                        $filesystem->remove($dog->getImage());
+                    }
+                    catch(Exception $e)
+                    {
+
+                    }
+
                 }
                  $file = $form->get('image')->getData();
                 $originalFileName = pathinfo(
