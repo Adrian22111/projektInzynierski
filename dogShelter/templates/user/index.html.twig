@@ -47,7 +47,12 @@
                 {% else %}
                     <td class="border-2 text-red-500">Brak Opisu</td>
                 {% endif %}
-                <td class="border-2"><a href ="#">{{ user.facebookProfile }}</a></td>
+                {% if user.facebookProfile %}
+                    <td class="border-2 align-middle"><a href ="{{user.facebookProfile}}" class = "" target='_blank'><i class="fa-brands fa-facebook-f fa-3x bg-[#4267B2] hover:bg-[#3156B1] rounded-md px-5 py-2 text-white"></i></a></td>
+                {% else %}
+                    <td class="border-2 align-middle"><i class="fa-brands fa-facebook-f fa-3x bg-[#94918A] rounded-md px-5 py-2 text-white"></i></td>
+                {% endif %}
+                
                 {% if user.phoneNumber  %}
                     <td class="border-2">{{user.phoneNumber|slice(0,3)~'-'~user.phoneNumber|slice(3,3)~'-'~user.phoneNumber|slice(6,3)}}</td>
                 {% else %}

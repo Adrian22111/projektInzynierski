@@ -57,6 +57,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $description = null;
 
     #[Assert\Length(max:255,maxMessage:'Wykorzystano maksymalną liczbe znaków')]
+    #[Assert\Url(message:'nieprawidłowy adres Url')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $facebookProfile = null;
 

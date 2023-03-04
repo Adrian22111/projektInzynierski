@@ -1,119 +1,125 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{user.username}}{% endblock %}
+{% block title %}{{user.name}}{% endblock %}
 
 {% block body %}
 <div class="flex-col justify-center  mt-10 ">
-    <div class="w-64 mx-auto mb-4">{{ include('user/_user_avatar.html.twig',{user:user,'width':64,'height':64})}}</div>
-    <table class="table w-96  mx-auto">
-        <tbody class="table mx-auto ">
+    <div class="w-fit mx-auto px-20 shadow-lg">
+        <div class="w-64 mx-auto mb-4">{{ include('user/_user_avatar.html.twig',{user:user,'width':64,'height':64})}}</div>
+        <table class="table w-96  mx-auto">
+            <tbody class="table mx-auto ">
 
-            {% if user.roles[0] == "ROLE_ADMIN" or user.roles[1] =="ROLE_PRACOWNIK" %}
-                {% set isEmployee = true %}
-            {% else %}
-                {% set isEmployee = false %}
-            {% endif %}
+                {% if user.roles[0] == "ROLE_ADMIN" or user.roles[1] =="ROLE_PRACOWNIK" %}
+                    {% set isEmployee = true %}
+                {% else %}
+                    {% set isEmployee = false %}
+                {% endif %}
 
-            
-            {% if is_granted('ROLE_PRACOWNIK')%}
-            <tr>
-                <th class="text-left ">Id</th>
-                <td class="text-left ">{{ user.id }}</td>
-            </tr>
-            {% endif %}
-            <tr>
-                <th class="text-left w-72 ">Nazwa Użytkownika</th>
-                <td class="text-left ">{{ user.username }}</td>
-            </tr>
-            {% if is_granted('ROLE_PRACOWNIK')%}
-            <tr>
-                <th class="text-left ">Role</th>
-                <td class="text-left ">
-                    {% if user.roles %}
-                        {% for role in user.roles %}
-                            {% if role == "ROLE_ADMIN" %}
-                                {{"Admin"}}
-                            {% elseif role == "ROLE_PRACOWNIK" %}
-                                {{"Pracownik"}}
-                            {% elseif  role == "ROLE_CLIENT" %}
-                                {{"Klient"}}
-                            {% endif %}
-                        {% endfor %}
-                        {# {{user.roles|json_encode}} #}
+                
+                {% if is_granted('ROLE_PRACOWNIK')%}
+                <tr>
+                    <th class="text-left ">Id</th>
+                    <td class="text-left ">{{ user.id }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th class="text-left w-72 ">Imie</th>
+                    <td class="text-left ">{{ user.name }}</td>
+                </tr>
+                <tr>
+                    <th class="text-left w-72 ">Nazwisko</th>
+                    <td class="text-left ">{{ user.surname }}</td>
+                </tr>
+                {% if is_granted('ROLE_PRACOWNIK')%}
+                <tr>
+                    <th class="text-left ">Role</th>
+                    <td class="text-left ">
+                        {% if user.roles %}
+                            {% for role in user.roles %}
+                                {% if role == "ROLE_ADMIN" %}
+                                    {{"Admin"}}
+                                {% elseif role == "ROLE_PRACOWNIK" %}
+                                    {{"Pracownik"}}
+                                {% elseif  role == "ROLE_CLIENT" %}
+                                    {{"Klient"}}
+                                {% endif %}
+                            {% endfor %}
+                            {# {{user.roles|json_encode}} #}
+                        {% else %}
+                            {{"dane niedostępne"}}
+                        {% endif %}
+                        {# {{ user.roles ? user.roles|json_encode : '' }} #}
+                    </td>
+                </tr>
+                {% endif %}
+                {% if isEmployee == true %}
+                    <tr>
+                        <th class="text-left ">Email</th>
+                        <td class="text-left ">{{ user.email }}</td>
+                    </tr>
+                {% endif %}
+                {% if isEmployee == true %}
+                    {% if user.facebookProfile %}
+                    <tr>
+                        <th class="text-left ">Profil Facebook</th>
+                        <td class="text-left "><i class="fa-brands fa-square-facebook"></i><a href="{{user.facebookProfile}}">{{ user.name }}</a></td>
+                    </tr>
                     {% else %}
-                        {{"dane niedostępne"}}
+                    <tr>
+                        <th class="text-left ">Profil Facebook</th>
+                        <td class="text-left ">Brak</td>
+                    </tr>
                     {% endif %}
-                    {# {{ user.roles ? user.roles|json_encode : '' }} #}
-                </td>
-            </tr>
-            {% endif %}
-            {% if isEmployee == true %}
-                <tr>
-                    <th class="text-left ">Email</th>
-                    <td class="text-left ">{{ user.email }}</td>
-                </tr>
-            {% endif %}
-            {% if isEmployee == true %}
-                {% if user.facebookProfile %}
-                <tr>
-                    <th class="text-left ">Profil Facebook</th>
-                    <td class="text-left ">{{ user.facebookProfile }}</td>
-                </tr>
-                {% else %}
-                <tr>
-                    <th class="text-left ">Profil Facebook</th>
-                    <td class="text-left ">Brak</td>
-                </tr>
                 {% endif %}
-            {% endif %}
-            {% if isEmployee == true %}
-                {% if user.phoneNumber %}
-                <tr>
-                    <th class="text-left ">Numer Telefonu</th>
-                    <td class="text-left ">{{ user.phoneNumber|slice(0,3)~" "~user.phoneNumber|slice(3,3)~" "~user.phoneNumber|slice(6,3)}}</td>
-                </tr>
-                {% else %}
-                <tr>
-                    <th class="text-left ">Numer Telefonu</th>
-                    <td class="text-left ">Brak</td>
-                </tr>
+                {% if isEmployee == true %}
+                    {% if user.phoneNumber %}
+                    <tr>
+                        <th class="text-left ">Numer Telefonu</th>
+                        <td class="text-left ">{{ user.phoneNumber|slice(0,3)~"-"~user.phoneNumber|slice(3,3)~"-"~user.phoneNumber|slice(6,3)}}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <th class="text-left ">Numer Telefonu</th>
+                        <td class="text-left ">Brak</td>
+                    </tr>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
-            {% if isEmployee == true %}
-            {# <tr>
-                <th class="text-left ">Zdjęcie Profilowe</th>
-                <td class="text-left ">{{ user.profileImage|length > 17 ? user.profileImage|slice(0,13) ~ user.profileImage|slice(-4):user.profileImage}}</td>
-            </tr> #}
-            {% endif %}
- 
+                {% if isEmployee == true %}
+                {# <tr>
+                    <th class="text-left ">Zdjęcie Profilowe</th>
+                    <td class="text-left ">{{ user.profileImage|length > 17 ? user.profileImage|slice(0,13) ~ user.profileImage|slice(-4):user.profileImage}}</td>
+                </tr> #}
+                {% endif %}
+    
 
-        </tbody>
-    </table>
-    <div class="flex-col  w-96 mx-auto mt-2 ">
-            {% if isEmployee == true %}
-                <div class="font-bold text-center mb-2">Psy Pod Opieką</div>
-                <div class="flex justify-center"> 
-                {# grid grid-cols-4 place-items-center #}
-                    {% for dog in user.guardianOf %}
-                        <div class="w-22 mr-2 text-center"><a class="text-center" href="{{path('app_dog_show',{id:dog.id})}}">{{ include('dog/_dog_image.html.twig',{'width':20 , 'height':20, dog:dog})}}{{dog}}</a></div>
-                    {% endfor %}
-                </div>
-                <div class="font-bold text-center">Opis</div>
-                {% if user.description|length > 5 %}
-                    <div class="text-center">{{ user.description }}</div>
-                {% else %}
-                    <div class="text-center">Brak</div>
+            </tbody>
+        </table>
+        <div class="flex-col  w-96 mx-auto mt-2 ">
+                {% if isEmployee == true %}
+                    <div class="font-bold text-center mb-2">Psy Pod Opieką</div>
+                    <div class="flex justify-center"> 
+                    {# grid grid-cols-4 place-items-center #}
+                        {% for dog in user.guardianOf %}
+                            <div class="w-22 mr-2 text-center"><a class="text-center" href="{{path('app_dog_show',{id:dog.id})}}">{{ include('dog/_dog_image.html.twig',{'width':20 , 'height':20, dog:dog})}}{{dog}}</a></div>
+                        {% endfor %}
+                    </div>
+                    <div class="font-bold text-center">Opis</div>
+                    {% if user.description|length > 5 %}
+                        <div class="text-center">{{ user.description }}</div>
+                    {% else %}
+                        <div class="text-center">Brak</div>
+                    {% endif %}
+                {% endif %}
+        </div>
+        <div class="w-full  mx-auto mt-4">
+            {% if is_granted('ROLE_PRACOWNIK') %}
+                <a href="{{ path('app_user_index') }}"><div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white text-center">Lista Użytkowników</div></a>
+                {% if "ROLE_ADMIN" not in user.roles or user.id == app.user.id  %}
+                    <a href="{{ path('app_user_edit', {'id': user.id}) }}"><div class ="border-2 bg-green-500 w-full hover:bg-green-400 text-white text-center">Edytuj</div></a>
+                    {{ include('user/_delete_form.html.twig') }}
                 {% endif %}
             {% endif %}
-    </div>
-    <div class="w-1/6  mx-auto mt-4">
-        {% if is_granted('ROLE_PRACOWNIK') %}
-            <a href="{{ path('app_user_index') }}"><div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white text-center">Lista Użytkowników</div></a>
-            {% if "ROLE_ADMIN" not in user.roles or user.id == app.user.id  %}
-                <a href="{{ path('app_user_edit', {'id': user.id}) }}"><div class ="border-2 bg-green-500 w-full hover:bg-green-400 text-white text-center">Edytuj</div></a>
-                {{ include('user/_delete_form.html.twig') }}
-            {% endif %}
-        {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}
