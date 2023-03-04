@@ -91,10 +91,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     #[Assert\Type(type:'string', message:'Używaj jedynie liter')]
     #[Assert\NotBlank(message:'Wpisz Imie')]
+    #[Assert\Regex(pattern:"/^[A-Z a-z]*$/", message:"Pole może zawierać jedynie litery")]
     private ?string $name = null;
 
     #[Assert\NotBlank(message:'Wpisz Nazwisko')]
     #[Assert\Type(type:'string', message:'Używaj jedynie liter')]
+    #[Assert\Regex(pattern:"/^[A-Z a-z]*$/", message:"Pole może zawierać jedynie litery")]
     #[ORM\Column(length: 255)]
     private ?string $surname = null;
 
