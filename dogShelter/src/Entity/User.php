@@ -6,13 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
+
 
 #[UniqueEntity(fields: ['username'], message: 'Istnieje już konto z tym loginem ')]
 #[UniqueEntity(fields: ['email'], message: 'Istnieje już konto z tym emailem')]
@@ -59,12 +60,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $facebookProfile = null;
 
-    #[Assert\Length(max:20,maxMessage:'Wykorzystano maksymalną liczbe znaków')]
-    #[Assert\Type(type:"numeric",message:"podaj numer w odpowiednim formacie")]
-    #[ORM\Column(nullable: true,length:20)]
-    private ?int $phoneNumber = null;
 
-    #[Assert\Length(max:255,maxMessage:'Wykorzystano maksymalną liczbe znaków')]
+  
+
+    #[ORM\Column(nullable: true,length:20)]
+    #[Assert\Regex(pattern:"/^[0-9]*$/", message:"Pole może zawierać jedynie cyfry")]
+    #[Assert\Length(min:9, minMessage:'za mało znaków', max:9, maxMessage:'za dużo znaków', exactMessage:'pole musi zawierać dokładnie 9 cyfr')]
+    private ?string $phoneNumber = null;
+
+    #[Assert\Length(max:255,maxMessage : 'Wykorzystano maksymalną liczbe znaków')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $profileImage = null;
 
@@ -82,6 +86,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?bool $available = true;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\Type(type:'string', message:'Używaj jedynie liter')]
+    #[Assert\NotBlank(message:'Wpisz Imie')]
+    private ?string $name = null;
+
+    #[Assert\NotBlank(message:'Wpisz Nazwisko')]
+    #[Assert\Type(type:'string', message:'Używaj jedynie liter')]
+    #[ORM\Column(length: 255)]
+    private ?string $surname = null;
 
 
 
@@ -205,12 +219,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPhoneNumber(): ?int
+    public function getPhoneNumber(): ?string
     {
         return $this->phoneNumber;
     }
 
-    public function setPhoneNumber(?int $phoneNumber): self
+    public function setPhoneNumber(?string $phoneNumber): self
     {
         $this->phoneNumber = $phoneNumber;
 
@@ -335,6 +349,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAvailable(?bool $available): self
     {
         $this->available = $available;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSurname(): ?string
+    {
+        return $this->surname;
+    }
+
+    public function setSurname(?string $surname): self
+    {
+        $this->surname = $surname;
 
         return $this;
     }

@@ -23,6 +23,16 @@
             {{ form_widget(form.email,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
             {{ form_errors(form.email) }}
         </div>
+        <div>
+            {{ form_label(form.name,'Podaj Imie',{'label_attr':{'class':'block'}}) }}
+            {{ form_widget(form.name,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+            {{ form_errors(form.name) }}
+        </div>
+        <div>
+            {{ form_label(form.surname,'Podaj Nazwisko',{'label_attr':{'class':'block'}}) }}
+            {{ form_widget(form.surname,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md p-2 mt-1 mb-2'}})}}
+            {{ form_errors(form.surname) }}
+        </div>
         {% if  form.phoneNumber is defined %}
         <div>
             {{ form_label(form.phoneNumber,'Numer Telefonu',{'label_attr':{'class':'block'}}) }}

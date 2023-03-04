@@ -10,7 +10,7 @@
         <thead lass="text-center">
             <tr>
                 <th class=" border-2">Id</th>
-                <th class=" border-2">Nazwa Użytkownika</th>
+                <th class=" border-2">Imie i Nazwisko</th>
                 <th class=" border-2">Role</th>
                 <th class=" border-2">Email</th>
                 <th class=" border-2">Opis</th>
@@ -24,7 +24,7 @@
         {% for user in users %}
             <tr class="align-top ">
                 <td class="border-2">{{ user.id }}</td>
-                <td class="border-2"><a href="{{path('app_user_show',{id:user.id})}}">{{ user.username }}</a></td>
+                <td class="border-2"><a href="{{path('app_user_show',{id:user.id})}}">{{ user.name~" "~user.surname }}</a></td>
                 <td class="border-2">
                 {# {{ user.roles ? user.roles|json_encode : '' }} #}
                 {% if user.roles %}
@@ -48,8 +48,8 @@
                     <td class="border-2 text-red-500">Brak Opisu</td>
                 {% endif %}
                 <td class="border-2"><a href ="#">{{ user.facebookProfile }}</a></td>
-                {% if user.phoneNumber|length >= 9  %}
-                    <td class="border-2">{{user.phoneNumber}}</td>
+                {% if user.phoneNumber  %}
+                    <td class="border-2">{{user.phoneNumber|slice(0,3)~'-'~user.phoneNumber|slice(3,3)~'-'~user.phoneNumber|slice(6,3)}}</td>
                 {% else %}
                     <td class="border-2 text-red-500">Brak Numeru</td>
                 {% endif %}
