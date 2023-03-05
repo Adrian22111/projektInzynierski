@@ -52,6 +52,10 @@ class Dog
     #[ORM\Column]
     private ?bool $inAdoption = false;
 
+    #[ORM\ManyToOne(inversedBy: 'DogStatus')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Status $status = null;
+
     public function __construct()
     {
         $this->guardian = new ArrayCollection();
@@ -190,6 +194,18 @@ class Dog
     public function setInAdoption(?bool $inAdoption): self
     {
         $this->inAdoption = $inAdoption;
+
+        return $this;
+    }
+
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?Status $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

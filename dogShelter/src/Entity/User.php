@@ -100,6 +100,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $surname = null;
 
+    #[ORM\ManyToOne(inversedBy: 'UserStatus')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Status $status = null;
+
 
 
 
@@ -376,6 +380,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSurname(?string $surname): self
     {
         $this->surname = $surname;
+
+        return $this;
+    }
+
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?Status $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

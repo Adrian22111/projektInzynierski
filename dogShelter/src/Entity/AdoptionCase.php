@@ -35,6 +35,10 @@ class AdoptionCase
     #[Assert\NotNull]
     private ?User $client = null;
 
+    #[ORM\ManyToOne(inversedBy: 'CaseStatus')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Status $status = null;
+
 
     public function __construct()
     {
@@ -128,6 +132,18 @@ class AdoptionCase
     public function setClient(User $client): self
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?Status $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

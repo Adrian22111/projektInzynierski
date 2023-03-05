@@ -25,6 +25,10 @@ class Documents
     #[ORM\Column(length: 255)]
     private ?string $documentSource = null;
 
+    #[ORM\ManyToOne(inversedBy: 'DocumentStatus')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Status $status = null;
+
     public function __toString()
     {
         return $this->documentName;
@@ -66,6 +70,18 @@ class Documents
     public function setDocumentSource(string $documentSource): self
     {
         $this->documentSource = $documentSource;
+
+        return $this;
+    }
+
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?Status $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }
