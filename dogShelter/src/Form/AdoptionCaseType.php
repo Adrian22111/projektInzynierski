@@ -102,6 +102,7 @@ class AdoptionCaseType extends AbstractType
                         ;
                 }
             ])
+            ->add('status')
             
             
         ;

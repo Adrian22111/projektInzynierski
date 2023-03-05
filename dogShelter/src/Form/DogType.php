@@ -73,9 +73,8 @@ class DogType extends AbstractType
                     ->setParameter('condition', $condition)
                     ->orderBy('u.username','ASC'); 
                 }
-    
-
             ])
+            ->add('status')
         ;
     }
 

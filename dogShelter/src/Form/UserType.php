@@ -60,7 +60,7 @@ class UserType extends AbstractType
                 'required' => true,
                 'disabled'=>true,
             ]) 
-
+            
 
         ;
         $builder->addEventListener(FormEvents::PRE_SET_DATA,function(FormEvent $event){
@@ -86,6 +86,7 @@ class UserType extends AbstractType
                         'disabled'=>false,
                         'empty_data' => '',
                     ])
+                    ->add('status')
               
                 ;
                 
@@ -174,7 +175,7 @@ class UserType extends AbstractType
                                     'disabled'=>false,
                                     'empty_data' => '',
                                     ])
-
+                                ->add('status')
                                 ;
                             }
 
@@ -194,6 +195,7 @@ class UserType extends AbstractType
                                 'disabled'=>false,
                                 'empty_data' => '',
                             ])
+                            ->add('status')
                             ;
                         }
                     }

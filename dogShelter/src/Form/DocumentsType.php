@@ -32,6 +32,7 @@ class DocumentsType extends AbstractType
                 
             ])
             ->add('adoptionCase')
+            ->add('status')
         ;
     }
 

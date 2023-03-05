@@ -39,6 +39,7 @@ class PostType extends AbstractType
                 ],
 
             ])
+            ->add('status')
         ;
     }
 

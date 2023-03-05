@@ -42,6 +42,11 @@ class Status
         $this->PostStatus = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->StatusName;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
