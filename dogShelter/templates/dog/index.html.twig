@@ -14,6 +14,7 @@
                 <th class=" border-2">Wiek</th>
                 <th class=" border-2">Rasa</th>
                 <th class=" border-2">Płeć</th>
+                <th class=" border-2">Status</th>
                 <th class=" border-2">Opis</th>
                 <th class=" border-2">Opiekunowie</th>
                 <th class=" border-2">Sprawa Adopcji</th>
@@ -29,6 +30,13 @@
                 <td class="border-2">{{ dog.age }}</td>
                 <td class="border-2">{{ dog.race }}</td>
                 <td class="border-2">{{ dog.sex }}</td>
+                <td class="border-2">
+                {% if is_granted("ROLE_ADMIN") %}
+                    <a href="{{ path('app_status_show', {'id': dog.status.id}) }}">{{dog.status}}
+                {% else %}
+                    {{dog.status}}
+                {% endif %}
+                </td>
                 {% if dog.description|length > 30  %}
                     <td class="border-2">{{ dog.description|slice(0,100)~"..."}}</td>
                 {% elseif dog.description|length  > 0 %}

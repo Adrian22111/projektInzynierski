@@ -3,12 +3,15 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Entity\Status;
 use Doctrine\DBAL\Types\StringType;
+use App\Repository\StatusRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
@@ -18,8 +21,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -86,7 +89,21 @@ class UserType extends AbstractType
                         'disabled'=>false,
                         'empty_data' => '',
                     ])
-                    ->add('status')
+                    ->add('status',EntityType::class,[
+                        'class' => Status::class,
+                        'choice_label' => 'StatusName',
+                        'mapped' => true,
+                        'multiple' => false,
+                        'required' => true,
+                        'query_builder' => function(StatusRepository $statuses) 
+                        {
+                            return $statuses->createQueryBuilder('s')
+                                ->where('s.refersTo LIKE :status')
+                                ->setParameter('status', "%user%")
+                                ->orderBy('s.StatusName','ASC')              
+                                ;
+                        }
+                    ])
               
                 ;
                 
@@ -175,7 +192,21 @@ class UserType extends AbstractType
                                     'disabled'=>false,
                                     'empty_data' => '',
                                     ])
-                                ->add('status')
+                                ->add('status',EntityType::class,[
+                                    'class' => Status::class,
+                                    'choice_label' => 'StatusName',
+                                    'mapped' => true,
+                                    'multiple' => false,
+                                    'required' => true,
+                                    'query_builder' => function(StatusRepository $statuses) 
+                                    {
+                                        return $statuses->createQueryBuilder('s')
+                                            ->where('s.refersTo LIKE :status')
+                                            ->setParameter('status', "%user%")
+                                            ->orderBy('s.StatusName','ASC')              
+                                            ;
+                                    }
+                                ])
                                 ;
                             }
 
@@ -195,7 +226,21 @@ class UserType extends AbstractType
                                 'disabled'=>false,
                                 'empty_data' => '',
                             ])
-                            ->add('status')
+                            ->add('status',EntityType::class,[
+                                'class' => Status::class,
+                                'choice_label' => 'StatusName',
+                                'mapped' => true,
+                                'multiple' => false,
+                                'required' => true,
+                                'query_builder' => function(StatusRepository $statuses) 
+                                {
+                                    return $statuses->createQueryBuilder('s')
+                                        ->where('s.refersTo LIKE :status')
+                                        ->setParameter('status', "%user%")
+                                        ->orderBy('s.StatusName','ASC')              
+                                        ;
+                                }
+                            ])
                             ;
                         }
                     }

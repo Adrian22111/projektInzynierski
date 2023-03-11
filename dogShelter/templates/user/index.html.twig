@@ -11,6 +11,7 @@
             <tr>
                 <th class=" border-2">Id</th>
                 <th class=" border-2">Imie i Nazwisko</th>
+                <th class=" border-2">Status</th>
                 <th class=" border-2">Role</th>
                 <th class=" border-2">Email</th>
                 <th class=" border-2">Opis</th>
@@ -25,6 +26,13 @@
             <tr class="align-top ">
                 <td class="border-2">{{ user.id }}</td>
                 <td class="border-2"><a href="{{path('app_user_show',{id:user.id})}}">{{ user.name~" "~user.surname }}</a></td>
+                <td class="border-2">
+                {% if is_granted("ROLE_ADMIN") %}
+                    <a href="{{ path('app_status_show', {'id': user.status.id}) }}">{{user.status}}
+                {% else %}
+                    {{user.status}}
+                {% endif %}
+                </td>
                 <td class="border-2">
                 {# {{ user.roles ? user.roles|json_encode : '' }} #}
                 {% if user.roles %}

@@ -2,9 +2,12 @@
 
 namespace App\Form;
 
+use App\Entity\Status;
 use App\Entity\Documents;
+use App\Repository\StatusRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -32,7 +35,21 @@ class DocumentsType extends AbstractType
                 
             ])
             ->add('adoptionCase')
-            ->add('status')
+            ->add('status',EntityType::class,[
+                'class' => Status::class,
+                'choice_label' => 'StatusName',
+                'mapped' => true,
+                'multiple' => false,
+                'required' => true,
+                'query_builder' => function(StatusRepository $statuses) 
+                {
+                    return $statuses->createQueryBuilder('s')
+                        ->where('s.refersTo LIKE :status')
+                        ->setParameter('status', "%document%")
+                        ->orderBy('s.StatusName','ASC')              
+                        ;
+                }
+            ])
         ;
     }
 

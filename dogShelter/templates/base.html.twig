@@ -30,6 +30,7 @@
                 <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_dog_index')}}"><i class="fa-solid fa-dog fa-4x mt-4 flex justify-center"></i><p>Psy</p></a></div>
                 {% if is_granted("ROLE_ADMIN") %}
                     <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_user_index')}}"><i class="fa-solid fa-user  fa-4x mt-4 flex justify-center"></i><p>Użytkownicy</p></a></div>
+                    <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_status_index')}}"><i class="fa-solid fa-stamp  fa-4x mt-4 flex justify-center"></i><p>Statusy</p></a></div>
                 {% endif %}
                 <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_documents_index')}}"><i class="fa-solid fa-folder-open fa-4x mt-4 flex justify-center"></i><p>Dokumenty</p></a></div>
                 <div class="mx-8 text-yellow-300 hover:text-yellow-200"><a href = "{{path('app_post_index')}}"><i class="fa-solid fa-message fa-4x mt-4 flex justify-center"></i><p>Posty</p></a></div>

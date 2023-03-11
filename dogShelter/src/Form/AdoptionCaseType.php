@@ -4,9 +4,11 @@ namespace App\Form;
 
 use App\Entity\Dog;
 use App\Entity\User;
+use App\Entity\Status;
 use App\Entity\AdoptionCase;
 use App\Repository\DogRepository;
 use App\Repository\UserRepository;
+use App\Repository\StatusRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -102,7 +104,21 @@ class AdoptionCaseType extends AbstractType
                         ;
                 }
             ])
-            ->add('status')
+            ->add('status',EntityType::class,[
+                'class' => Status::class,
+                'choice_label' => 'StatusName',
+                'mapped' => true,
+                'multiple' => false,
+                'required' => true,
+                'query_builder' => function(StatusRepository $statuses) 
+                {
+                    return $statuses->createQueryBuilder('s')
+                        ->where('s.refersTo LIKE :status')
+                        ->setParameter('status', "%case%")
+                        ->orderBy('s.StatusName','ASC')              
+                        ;
+                }
+            ])
             
             
         ;

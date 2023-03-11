@@ -5,12 +5,13 @@
 {% block body %}
     <div class="flex-col   mt-10 ">
         <div class="text-2xl text-center mb-2 ">Dokumenty</div>
-        <div class="text-xl text-center mb-2 text-green-500 hover:text-green-400"><a href="{{path('app_adoption_case_new')}}">Dodaj Nowy Dokument</a></div>
+        <div class="text-xl text-center mb-2 text-green-500 hover:text-green-400"><a href="{{path('app_documents_new')}}">Dodaj Nowy Dokument</a></div>
         <table class="w-1/2 border-1 shadow-xl mx-auto">
             <thead class="text-center" >
                 <tr>
                     <th class=" border-2">Id</th>
                     <th class=" border-2">Akronim Dokumentu</th>
+                    <th class= "border-2">Status Dokumentu</th>
                     <th class=" border-2">Plik</th>
                     <th class=" border-2">Przypisany do sprawy</th>
                     <th class=" border-2">Opcje</th>
@@ -23,7 +24,13 @@
                     <td class=" border-2"><a href="{{ path('app_documents_show', {'id': document.id}) }}">{{ document.documentName}}</a></td>
                     <td class=" border-2"><a href="{{ path('app_documents_show', {'id': document.id}) }}">{{ document.documentSource|length > 30? document.documentSource|slice(0,26)~document.documentSource|slice(-4):document.documentSource}}</a></td>
                     {# <td class=" border-2"><a href="{{ path('app_documents_show', {'id': document.id}) }}">{{ document.documentSource}}</a></td> #}
-
+                    <td>
+                    {% if is_granted("ROLE_ADMIN") %}
+                        <a href="{{ path('app_status_show', {'id': document.status.id}) }}">{{document.status}}
+                    {% else %}
+                        {{document.status}}
+                    {% endif %}
+                    </td>
                     {% if document.AdoptionCase.id is defined %}
                     <td class=" border-2"> <a href="{{ path('app_adoption_case_show', {'id': document.AdoptionCase.id}) }}">{{document.AdoptionCase}}</a></td>
                     {% else %}

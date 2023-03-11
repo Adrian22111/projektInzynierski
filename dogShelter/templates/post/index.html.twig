@@ -11,6 +11,7 @@
             <tr>
                 <th class=" border-2">Id</th>
                 <th class=" border-2">Tytuł</th>
+                <th class= "border-2">Status Posta</th>
                 <th class=" border-2">Autor</th>
                 <th class=" border-2">Treść</th>
                 <th class=" border-2">Zdjęcie</th>
@@ -22,6 +23,13 @@
             <tr class="align-top">
                 <td class="border-2">{{ post.id }}</td>
                 <td class="border-2">{{ post.title|length > 30? post.title|slice(0,26)~post.title|slice(-4):post.title }}</td>
+                <td>
+                {% if is_granted("ROLE_ADMIN") %}
+                    <a href="{{ path('app_status_show', {'id': post.status.id}) }}">{{post.status}}
+                {% else %}
+                    {{post.status}}
+                {% endif %}
+                </td>
                 <td class="border-2"><a href="{{path('app_user_show',{id:post.postOwner.id})}}">{{ post.postOwner }}</a></td>
                 {% if post.content|length > 170  %}
                     <td class="border-2">{{ post.content|slice(0,170) }}</td>

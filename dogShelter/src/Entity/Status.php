@@ -4,7 +4,9 @@ namespace App\Entity;
 
 use App\Repository\StatusRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StatusRepository::class)]
@@ -16,6 +18,7 @@ class Status
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:'Podaj Nazwe Statusu')]
     private ?string $StatusName = null;
 
     #[ORM\OneToMany(mappedBy: 'status', targetEntity: AdoptionCase::class)]
@@ -32,6 +35,10 @@ class Status
 
     #[ORM\OneToMany(mappedBy: 'status', targetEntity: Post::class)]
     private Collection $PostStatus;
+
+    #[ORM\Column(type: Types::SIMPLE_ARRAY)]
+    #[Assert\NotBlank(message:'Wybierz czego może dotyczyć status')]
+    private array $refersTo = [];
 
     public function __construct()
     {
@@ -210,6 +217,18 @@ class Status
                 $postStatus->setStatus(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRefersTo(): array
+    {
+        return $this->refersTo;
+    }
+
+    public function setRefersTo(array $refersTo): self
+    {
+        $this->refersTo = $refersTo;
 
         return $this;
     }

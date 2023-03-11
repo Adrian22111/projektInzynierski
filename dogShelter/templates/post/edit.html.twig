@@ -6,9 +6,9 @@
     <div class = "flex-col text-center mt-10 w-9/12 border-1 shadow-xl mx-auto px-2">
         <div class="mb-2 text-xl">Edytuj Post</div>
         <div>{{ include('post/_form.html.twig', {'button_label': 'Aktualizuj'}) }}</div>
-        <a href="{{ path('app_post_index') }}"><div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white" >Lista Postów</div></a>
-        <a href="{{ path('app_post_show',{id:post.id})}}"><div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white" >Podgląd</div></a>
-        <div>{{ include('post/_delete_form.html.twig') }}</div>
+        <a href="{{ path('app_post_index') }}"><div class="border-2 bg-yellow-500 w-4/12 hover:bg-yellow-400 text-white mx-auto" >Lista Postów</div></a>
+        <a href="{{ path('app_post_show',{id:post.id})}}" ><div class="border-2 bg-yellow-500 w-4/12 hover:bg-yellow-400 text-white mx-auto" >Podgląd</div></a>
+        <div class="w-4/12 mx-auto">{{ include('post/_delete_form.html.twig') }}</div>
     </div>
 {% endblock %}
 

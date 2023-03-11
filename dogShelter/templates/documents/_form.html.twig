@@ -14,6 +14,11 @@
         {{ form_widget(form.documentSource,{'attr':{'class':'block w-3/4   mx-auto text-sm mb-2 text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-500  focus:outline-none   '}})}}
         {{ form_errors(form.documentSource) }}
     </div> 
+    <div>
+        {{ form_label(form.status,'Status Dokumentu',{'label_attr':{'class':'block'}}) }}
+        {{ form_widget(form.status,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md  p-2 mt-1 mb-2'}})}}
+        {{ form_errors(form.status) }}
+    </div>
 
     <button class="btn border-2 bg-green-500 w-full hover:bg-green-400 text-white">{{ button_label|default('Zapisz') }}</button>
 {{ form_end(form) }}
