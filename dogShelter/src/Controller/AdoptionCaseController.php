@@ -26,7 +26,7 @@ class AdoptionCaseController extends AbstractController
         if($this->isGranted('ROLE_ADMIN'))
         {
             return $this->render('adoption_case/index.html.twig', [
-                'adoption_cases' => $adoptionCaseRepository->findAll(),
+                'adoption_cases' => $adoptionCaseRepository->findBy(['archived'=>false]),
             ]);
         }
         elseif($this->isGranted('ROLE_PRACOWNIK'))
@@ -126,6 +126,14 @@ class AdoptionCaseController extends AbstractController
             $adoptionCaseRepository->remove($adoptionCase, true);
         }
 
+        return $this->redirectToRoute('app_adoption_case_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[IsGranted('ROLE_PRACOWNIK')]
+    #[Route('/{id}/archive', name: 'app_adoption_case_archive', methods: ['GET', 'POST'])]
+    public function archieve(AdoptionCase $adoptionCase, AdoptionCaseRepository $adoptionCaseRepository,): Response
+    {
+        $adoptionCase->setarchived(true);
+        $adoptionCaseRepository->save($adoptionCase,true);
         return $this->redirectToRoute('app_adoption_case_index', [], Response::HTTP_SEE_OTHER);
     }
 }

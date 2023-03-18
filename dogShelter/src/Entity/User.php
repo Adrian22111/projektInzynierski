@@ -104,6 +104,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Status $status = null;
 
+    #[ORM\Column]
+    private ?bool $archived = false;
+
 
 
 
@@ -392,6 +395,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setStatus(?Status $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function isarchived(): ?bool
+    {
+        return $this->archived;
+    }
+
+    public function setarchived(bool $archived): self
+    {
+        $this->archived = $archived;
 
         return $this;
     }

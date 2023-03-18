@@ -59,7 +59,9 @@
                 <td class="border-2">
                     <div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white"><a href="{{ path('app_dog_show', {'id': dog.id}) }}">Pokaż</a></div>
                     <div class="border-x-2 border-b-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white"><a href="{{ path('app_dog_edit', {'id': dog.id}) }}">Edytuj</a></div>
+                    <div class="border-x-2 border-b-2 bg-blue-500 w-full hover:bg-blue-400 text-white"><a href="{{ path('app_dog_archive', {'id': dog.id}) }}">Archiwizuj</a></div>
                     <div>{{ include('dog/_delete_form.html.twig') }}</div>
+                    
                 </td>
             </tr>
         {% else %}

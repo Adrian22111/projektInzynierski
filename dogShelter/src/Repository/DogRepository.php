@@ -50,8 +50,8 @@ class DogRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute()    
         ;
-
     }
+
         // public function getGuardians($id)
     // {
     //     return $this->createQueryBuilder('u')

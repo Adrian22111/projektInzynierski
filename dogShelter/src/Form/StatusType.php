@@ -14,7 +14,6 @@ class StatusType extends AbstractType
     {
         $builder
             ->add('StatusName')
-            ->add('refersTo')
             ->add('refersTo',ChoiceType::class,array(
                 'choices' => array(
                     'Dotyczy' =>array(

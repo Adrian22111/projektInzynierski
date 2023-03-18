@@ -44,6 +44,8 @@ class AdoptionCaseRepository extends ServiceEntityRepository
        return $this->createQueryBuilder('a')
            ->andWhere('a.id = :id')
            ->setParameter('id', $id)
+           ->andWhere('a.archived =:archived')
+           ->setParameter('archived',false)
            ->orderBy('a.id', 'ASC')
            ->getQuery()
            ->getResult()

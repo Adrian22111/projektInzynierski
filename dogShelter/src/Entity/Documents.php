@@ -29,6 +29,9 @@ class Documents
     #[ORM\JoinColumn(nullable: false)]
     private ?Status $status = null;
 
+    #[ORM\Column]
+    private ?bool $archived = false;
+
     public function __toString()
     {
         return $this->documentName;
@@ -82,6 +85,18 @@ class Documents
     public function setStatus(?Status $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function isarchived(): ?bool
+    {
+        return $this->archived;
+    }
+
+    public function setarchived(bool $archived): self
+    {
+        $this->archived = $archived;
 
         return $this;
     }

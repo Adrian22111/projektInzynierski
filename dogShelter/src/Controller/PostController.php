@@ -26,7 +26,7 @@ class PostController extends AbstractController
         if($this->isGranted('ROLE_ADMIN'))
         {
             return $this->render('post/index.html.twig', [
-                'posts' => $postRepository->findAll(),
+                'posts' => $postRepository->findBy(['archived'=>false]),
             ]);
         }
         elseif($this->isGranted('ROLE_PRACOWNIK'))
@@ -44,7 +44,8 @@ class PostController extends AbstractController
     public function showAllPosts(PostRepository $postRepository): Response
     {
         return $this->render('post/all_posts.html.twig', [
-            'posts' => $postRepository->findAllByNewest(),
+            // 'posts' => $postRepository->findAllByNewest(),
+            'posts' => $postRepository->findBy(['archived'=> false],['createdAt'=>'DESC'])
         ]);
     }
     #[IsGranted('ROLE_PRACOWNIK')]
@@ -166,4 +167,13 @@ class PostController extends AbstractController
 
         return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[IsGranted(POST::EDIT,'post')]
+    #[Route('/{id}/archive', name: 'app_post_archive', methods: ['GET', 'POST'])]
+    public function archive(Post $post, PostRepository $postRepository): Response
+    {
+        $post->setarchived(true);
+        $postRepository->save($post,true);
+        return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
+    }
+    
 }

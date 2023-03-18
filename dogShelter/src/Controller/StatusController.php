@@ -17,7 +17,7 @@ class StatusController extends AbstractController
     public function index(StatusRepository $statusRepository): Response
     {
         return $this->render('status/index.html.twig', [
-            'statuses' => $statusRepository->findAll(),
+            'statuses' => $statusRepository->findBy(['archived'=> false]),
         ]);
     }
 
@@ -74,5 +74,13 @@ class StatusController extends AbstractController
         }
 
         return $this->redirectToRoute('app_status_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/archive', name: 'app_status_archive', methods: ['GET', 'POST'])]
+    public function archive(Status $status, StatusRepository $statusRepository): Response
+    {
+        $status->setarchived(true);
+        $statusRepository->save($status,true);
+        return $this->redirectToRoute('app_status_index',[],Response::HTTP_SEE_OTHER);
     }
 }

@@ -48,14 +48,14 @@ class PostRepository extends ServiceEntityRepository
            ->getResult()
        ;
    }
-   public function findAllByNewest(): array
-   {
-       return $this->createQueryBuilder('p')
-           ->orderBy('p.createdAt', 'DESC')
-           ->getQuery()
-           ->getResult()
-       ;
-   }
+//    public function findAllByNewest(): array
+//    {
+//        return $this->createQueryBuilder('p')
+//            ->orderBy('p.createdAt', 'DESC')
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
     public function findUserPosts($id): array
    {
        return $this->createQueryBuilder('p')

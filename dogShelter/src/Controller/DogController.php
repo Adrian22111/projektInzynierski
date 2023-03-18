@@ -25,7 +25,7 @@ class DogController extends AbstractController
     public function index(DogRepository $dogRepository): Response
     {
         return $this->render('dog/index.html.twig', [
-            'dogs' => $dogRepository->findAll(),
+            'dogs' => $dogRepository->findBy(['archived'=>false]),
         ]);
     }
 
@@ -33,7 +33,7 @@ class DogController extends AbstractController
     public function showAllDogs(DogRepository $dogRepository): Response
     {
         return $this->render('dog/all_dogs.html.twig', [
-            'dogs' => $dogRepository->findAll(),
+            'dogs' => $dogRepository->findBy(['archived'=> false]),
         ]);
     }
     #[IsGranted('ROLE_PRACOWNIK')]
@@ -186,6 +186,15 @@ class DogController extends AbstractController
 
         }
 
+        return $this->redirectToRoute('app_dog_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[IsGranted('ROLE_PRACOWNIK')]
+    #[Route('/{id}/archive', name: 'app_dog_archive', methods: ['GET', 'POST'])]
+    public function archieve(Dog $dog, DogRepository $dogRepository): Response
+    {
+        $dog->setarchived(true);
+        $dogRepository->save($dog,true);
         return $this->redirectToRoute('app_dog_index', [], Response::HTTP_SEE_OTHER);
     }
 }

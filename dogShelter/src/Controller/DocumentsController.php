@@ -25,7 +25,7 @@ class DocumentsController extends AbstractController
     {
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->render('documents/index.html.twig', [
-                'documents' => $documentsRepository->findAll(),
+                'documents' => $documentsRepository->findBy(['archived'=>false]),
             ]);
         } 
         elseif ($this->isGranted('ROLE_PRACOWNIK')) {
@@ -148,6 +148,14 @@ class DocumentsController extends AbstractController
             }
         }
 
+        return $this->redirectToRoute('app_documents_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[IsGranted('ROLE_PRACOWNIK')]
+    #[Route('/{id}/archive', name: 'app_documents_archive', methods: ['GET', 'POST'])]
+    public function archive( Documents $document, DocumentsRepository $documentsRepository): Response
+    {
+        $document->setarchived(true);
+        $documentsRepository->save($document,true);
         return $this->redirectToRoute('app_documents_index', [], Response::HTTP_SEE_OTHER);
     }
 }

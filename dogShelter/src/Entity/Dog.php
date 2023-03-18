@@ -56,6 +56,9 @@ class Dog
     #[ORM\JoinColumn(nullable: false)]
     private ?Status $status = null;
 
+    #[ORM\Column]
+    private ?bool $archived = false;
+
     public function __construct()
     {
         $this->guardian = new ArrayCollection();
@@ -206,6 +209,18 @@ class Dog
     public function setStatus(?Status $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function isarchived(): ?bool
+    {
+        return $this->archived;
+    }
+
+    public function setarchived(bool $archived): self
+    {
+        $this->archived = $archived;
 
         return $this;
     }

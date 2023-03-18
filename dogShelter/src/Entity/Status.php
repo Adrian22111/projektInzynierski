@@ -40,6 +40,11 @@ class Status
     #[Assert\NotBlank(message:'Wybierz czego może dotyczyć status')]
     private array $refersTo = [];
 
+    #[ORM\Column]
+    private ?bool $archived = false;
+
+
+
     public function __construct()
     {
         $this->CaseStatus = new ArrayCollection();
@@ -232,4 +237,18 @@ class Status
 
         return $this;
     }
+
+    public function isarchived(): ?bool
+    {
+        return $this->archived;
+    }
+
+    public function setarchived(bool $archived): self
+    {
+        $this->archived = $archived;
+
+        return $this;
+    }
+
+
 }
