@@ -30,7 +30,7 @@ class UserController extends AbstractController
     public function index(UserRepository $userRepository): Response
     {
         return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'users' => $userRepository->findBy(['archived'=>false]),
         ]);
     }
 
@@ -228,6 +228,14 @@ class UserController extends AbstractController
             $userRepository->remove($user, true);
         }
 
+        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[IsGranted(User::EDIT,'user')]
+    #[Route('/{id}/archive', name: 'app_user_archive', methods: ['GET', 'POST'])]
+    public function archive(User $user, UserRepository $userRepository): Response
+    {
+        $user->setarchived(true);
+        $userRepository->save($user,true);
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 }
