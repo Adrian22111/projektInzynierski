@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Archiwum{% endblock %}
+
+{% block body %}
+
+<div class =" w-full  text-center justify-center bg-gray-600 min-h-48 pb-5  border-t-2 border-blue-200">
+<h1 class="text-center text-2xl text-blue-300 pt-5 pb-5">Wybierz Kategorię Archiwum</h1>
+<ul class="flex text-2xl text-center justify-center">
+    <li class="mx-8 text-blue-300 hover:text-blue-200"><a href = "{{path('app_archives_adoption_cases')}}"><p>Sprawy Adopcji</p><i class="fa-solid fa-briefcase  fa-4x mt-4 flex justify-center"></i></a></li>
+    <li class="mx-8 text-blue-300 hover:text-blue-200"><a href = "{{path('app_archives_dogs')}}"><p>Psy</p><i class="fa-solid fa-dog fa-4x mt-4 flex justify-center"></i></a></li>
+    {% if is_granted("ROLE_ADMIN") %}
+        <li class="mx-8 text-blue-300 hover:text-blue-200"><a href = "{{path('app_archives_users')}}"><p>Użytkownicy</p><i class="fa-solid fa-user  fa-4x mt-4 flex justify-center"></i></a></li>
+        <div class="mx-8 text-blue-300 hover:text-blue-200"><a href = "{{path('app_archives_statuses')}}"><p>Statusy</p><i class="fa-solid fa-stamp  fa-4x mt-4 flex justify-center"></i></a></div>
+    {% endif %}
+    <li class="mx-8 text-blue-300 hover:text-blue-200"><a href = "{{path('app_archives_documents')}}"><p>Dokumenty</p><i class="fa-solid fa-folder-open fa-4x mt-4 flex justify-center"></i></a></li>
+    <li class="mx-8 text-blue-300 hover:text-blue-200"><a href = "{{path('app_archives_posts')}}"><p>Posty</p><i class="fa-solid fa-message fa-4x mt-4 flex justify-center"></i></a></li>
+</ul>
+</div>
+{% endblock %}

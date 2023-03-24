@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Użytkownicy{% endblock %}
+
+{% block body %}
+<div class="flex-col mt-10">
+    <div class="text-2xl text-center mb-2 ">Zarchiwizowani Użytkownicy</div>
+    <table class="table w-11/12 border-1 shadow-xl mx-auto">
+        <thead lass="text-center">
+            <tr>
+                <th class=" border-2">Id</th>
+                <th class=" border-2">Imie i Nazwisko</th>
+                <th class=" border-2">Status</th>
+                <th class=" border-2">Role</th>
+                <th class=" border-2">Email</th>
+                <th class=" border-2">Opis</th>
+                <th class=" border-2">Profil Faceebok</th>
+                <th class=" border-2">Numer Telefonu</th>
+                <th class=" border-2">Zdjęcie Profilowe</th>
+                <th class=" border-2">Opcje</th>
+            </tr>
+        </thead>
+        <tbody class="text-center ">
+        {% for user in users %}
+            <tr class="align-top ">
+                <td class="border-2">{{ user.id }}</td>
+                <td class="border-2"><a href="{{path('app_user_show',{id:user.id})}}">{{ user.name~" "~user.surname }}</a></td>
+                <td class="border-2">
+                {% if is_granted("ROLE_ADMIN") %}
+                    <a href="{{ path('app_status_show', {'id': user.status.id}) }}">{{user.status}}
+                {% else %}
+                    {{user.status}}
+                {% endif %}
+                </td>
+                <td class="border-2">
+                {# {{ user.roles ? user.roles|json_encode : '' }} #}
+                {% if user.roles %}
+                    {% for role in user.roles %}
+                        {% if role == "ROLE_ADMIN" %}
+                            {{"Admin"}}
+                        {% elseif role == "ROLE_PRACOWNIK" %}
+                            {{"Pracownik"}}
+                        {% elseif  role == "ROLE_CLIENT" %}
+                            {{"Klient"}}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                </td>
+                <td class="border-2">{{ user.email }}</td>
+                {% if user.description|length > 30  %}
+                    <td class="border-2">{{ user.description|slice(0,100)~"..."}}</td>
+                {% elseif user.description|length  > 0 %}
+                    <td class="border-2 ">{{user.description}}</td>
+                {% else %}
+                    <td class="border-2 text-red-500">Brak Opisu</td>
+                {% endif %}
+                {% if user.facebookProfile %}
+                    <td class="border-2 align-middle"><a href ="{{user.facebookProfile}}" class = "" target='_blank'><i class="fa-brands fa-facebook-f fa-3x bg-[#4267B2] hover:bg-[#3156B1] rounded-md px-5 py-2 text-white"></i></a></td>
+                {% else %}
+                    <td class="border-2 align-middle"><i class="fa-brands fa-facebook-f fa-3x bg-[#94918A] rounded-md px-5 py-2 text-white"></i></td>
+                {% endif %}
+                
+                {% if user.phoneNumber  %}
+                    <td class="border-2">{{user.phoneNumber|slice(0,3)~'-'~user.phoneNumber|slice(3,3)~'-'~user.phoneNumber|slice(6,3)}}</td>
+                {% else %}
+                    <td class="border-2 text-red-500">Brak Numeru</td>
+                {% endif %}
+                <td class="border-2"><a href="{{path('app_user_show',{id:user.id})}}">{{include('user/_user_avatar.html.twig',{'height':20,'width':20, user:user})}}</a></td>
+                <td>
+                    <div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white"><a href="{{ path('app_user_show', {'id': user.id}) }}">Pokaż</a></div>
+                    {% if "ROLE_ADMIN" not in user.roles or user.id == app.user.id %}
+                        <div>{{ include('user/_delete_form.html.twig') }}</div>
+                    {% endif %}
+                    
+                    
+                    
+               </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
