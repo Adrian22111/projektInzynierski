@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CasesList{% endblock %}
+
+{% block body %}
+<div class="flex mt-10 justify-center">
+    {% for adoption_case in adoption_cases%}
+    <a href="{{path('app_adoption_case_show',{id:adoption_case.id})}}">
+        <div class="text-center p-10 bg-gray-600 rounded-md hover:bg-gray-500 ">
+            <div class="w-64 mx-auto mb-4">{{ include('dog/_dog_image.html.twig',{'width':64 , 'height':64, dog:adoption_case.dog})}}</div>
+            <p class="text-2xl font-bold text-yellow-300 hover:text-yellow-200">Adopcja Psa {{adoption_case.dog.name}}</p>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

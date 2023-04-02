@@ -82,8 +82,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: AdoptionCase::class, mappedBy: 'employee')]
     private Collection $employeeAdoptionCases;
 
-    #[ORM\OneToOne(mappedBy: 'client', cascade: ['persist', 'remove'])]
-    private ?AdoptionCase $clientAdoptionCases = null;
+    // #[ORM\JoinColumn(nullable: true)]
+    #[ORM\OneToMany(mappedBy: 'client',targetEntity: AdoptionCase::class, cascade: ['persist', 'remove'],orphanRemoval: true)]
+    private ?Collection $clientAdoptionCases = null;
 
     #[ORM\Column]
     private ?bool $available = true;
@@ -113,6 +114,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+        $this->clientAdoptionCases = new ArrayCollection();
         $this->guardianOf = new ArrayCollection();
         $this->employeeAdoptionCases = new ArrayCollection();
 
@@ -333,23 +335,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
-    public function getClientAdoptionCases(): ?AdoptionCase
+        /**
+     * @return Collection<int, Post>
+     */
+    public function getClientAdoptionCases(): Collection
     {
         return $this->clientAdoptionCases;
     }
 
-    public function setClientAdoptionCases(AdoptionCase $clientAdoptionCases): self
+    public function addClientAdoptionCases(AdoptionCase $adoptionCase): self
     {
-        // set the owning side of the relation if necessary
-        if ($clientAdoptionCases->getClient() !== $this) {
-            $clientAdoptionCases->setClient($this);
+        if (!$this->clientAdoptionCases->contains($adoptionCase)) {
+            $this->clientAdoptionCases->add($adoptionCase);
+            $adoptionCase->setClient($this);
         }
-
-        $this->clientAdoptionCases = $clientAdoptionCases;
 
         return $this;
     }
+
+    public function removeClientAdoptionCases(AdoptionCase $adoptionCase): self
+    {
+        if ($this->clientAdoptionCases->removeElement($adoptionCase)) {
+            // set the owning side to null (unless already changed)
+            if ($adoptionCase->getClient() === $this) {
+                $adoptionCase->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 
     public function isAvailable(): ?bool
     {

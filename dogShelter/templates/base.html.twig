@@ -51,7 +51,7 @@
                     {% elseif is_granted('ROLE_CLIENT') %}
                         <div class = "hover:text-yellow-400">
                         {% if app.user.clientAdoptionCases %}
-                            <a href="{{path('app_adoption_case_show',{id:app.user.clientAdoptionCases.id})}}">Moje Sprawy</a>
+                            <a href="{{path('app_adoption_case_show_client_cases',{id:app.user.id})}}">Moje Sprawy</a>
                         {% endif %}
                         </div>
                         <div class = "hover:text-yellow-400"><a href="{{path('app_user_change_password',{id:app.user.id})}}">Zmień Hasło</a></div>

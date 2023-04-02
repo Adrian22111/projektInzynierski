@@ -30,7 +30,8 @@ class AdoptionCase
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'employeeAdoptionCases')]
     private Collection $employee;
 
-    #[ORM\OneToOne(inversedBy: 'clientAdoptionCases', cascade: ['persist'])]
+    // #[ORM\OneToMany(mappedBy: 'clientAdoptionCases', cascade: ['persist'])]
+    #[ORM\ManyToOne(inversedBy: 'clientAdoptionCases')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
     private ?User $client = null;
@@ -126,18 +127,20 @@ class AdoptionCase
 
         return $this;
     }
-
     public function getClient(): ?User
     {
         return $this->client;
     }
 
-    public function setClient(User $client): self
+    public function setClient(?User $client): self
     {
         $this->client = $client;
 
         return $this;
     }
+
+
+
 
     public function getStatus(): ?Status
     {

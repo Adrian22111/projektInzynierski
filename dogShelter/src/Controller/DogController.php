@@ -33,7 +33,7 @@ class DogController extends AbstractController
     public function showAllDogs(DogRepository $dogRepository): Response
     {
         return $this->render('dog/all_dogs.html.twig', [
-            'dogs' => $dogRepository->findBy(['archived'=> false]),
+            'dogs' => $dogRepository->findBy(['archived'=> false, 'inAdoption' => false]),
         ]);
     }
     #[IsGranted('ROLE_PRACOWNIK')]

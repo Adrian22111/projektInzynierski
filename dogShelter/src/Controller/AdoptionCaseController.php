@@ -132,8 +132,28 @@ class AdoptionCaseController extends AbstractController
     #[Route('/{id}/archive', name: 'app_adoption_case_archive', methods: ['GET', 'POST'])]
     public function archieve(AdoptionCase $adoptionCase, AdoptionCaseRepository $adoptionCaseRepository,): Response
     {
+        $dog = $adoptionCase->getDog();
+        $documents = $adoptionCase->getDocuments();
+        $dog->setarchived(true);
+        foreach($documents as $document)
+        {
+            $document->setarchived(true);
+            
+        }
         $adoptionCase->setarchived(true);
         $adoptionCaseRepository->save($adoptionCase,true);
+        // dump($documents);die;
+        // $adoptionCase->setarchived(true);
+        // $adoptionCaseRepository->save($adoptionCase,true);
         return $this->redirectToRoute('app_adoption_case_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[IsGranted('ROLE_CLIENT')]
+    #[Route('/{id}/client-cases', name: 'app_adoption_case_show_client_cases', methods: ['GET'])]
+    public function showClientCases(AdoptionCaseRepository $adoptionCaseRepository, $id): Response
+    {
+            return $this->render('adoption_case/client_cases_list.html.twig', [
+                'adoption_cases' => $adoptionCaseRepository->findBy(['archived'=>false, 'client'=> $id]),
+            ]);
+    }
+        
 }
