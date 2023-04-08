@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ArchivesController extends AbstractController
 {
-    #[Route('/archives', name: 'app_archives')]
+    #[Route('/archives', name: 'app_archives_index')]
     public function index(): Response
     {
         return $this->render('archives/index.html.twig', [

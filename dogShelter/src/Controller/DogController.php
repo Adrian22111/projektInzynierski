@@ -6,6 +6,7 @@ use App\Entity\Dog;
 use App\Form\DogType;
 use App\Repository\DogRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\Mapping\Id;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Filesystem\Filesystem;
@@ -33,7 +34,8 @@ class DogController extends AbstractController
     public function showAllDogs(DogRepository $dogRepository): Response
     {
         return $this->render('dog/all_dogs.html.twig', [
-            'dogs' => $dogRepository->findBy(['archived'=> false, 'inAdoption' => false]),
+            'dogs' => $dogRepository->findBy(['archived'=> false, 'inAdoption' => false,]),
+            // 'guardians' => $dogRepository->getGuardians();
         ]);
     }
     #[IsGranted('ROLE_PRACOWNIK')]
@@ -87,10 +89,11 @@ class DogController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_dog_show', methods: ['GET'])]
-    public function show(Dog $dog): Response
+    public function show(Dog $dog, UserRepository $userRepository, $id): Response
     {
         return $this->render('dog/show.html.twig', [
             'dog' => $dog,
+            'guardians' => $userRepository->findActiveGuardians($id),
         ]);
     }
     #[IsGranted('ROLE_PRACOWNIK')]

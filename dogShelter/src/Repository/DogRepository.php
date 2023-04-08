@@ -47,6 +47,8 @@ class DogRepository extends ServiceEntityRepository
             ->join('app\Entity\User','u')
             ->Select('u')
             ->andWhere('u.id = g.id')
+            ->andWhere('u.archived = :archived')
+            ->setParameter('archived',false)
             ->getQuery()
             ->execute()    
         ;

@@ -46,7 +46,9 @@
                 {% endif %}
                 <td class="border-2">
                     {% for guardian in dog.guardian %}
-                        <div><a href="{{path('app_user_show',{id:guardian.id})}}">{{guardian}}</a></div>
+                        {% if guardian.archived == false %}
+                            <div><a href="{{path('app_user_show',{id:guardian.id})}}">{{guardian}}</a></div>
+                        {% endif %}
                     {% endfor %}
                 </td>
                 {% if dog.AdoptionCase.id is defined%}

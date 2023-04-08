@@ -11,6 +11,8 @@
             <p class="text-2xl font-bold text-yellow-300 hover:text-yellow-200">Adopcja Psa {{adoption_case.dog.name}}</p>
         </div>
     </a>
+    {% else %}
+        <div class="text-center text-5xl p-10 bg-gray-600 rounded-md text-yellow-300 ">Nie masz żadnych spraw w toku</div>
     {% endfor %}
 </div>
 {% endblock %}

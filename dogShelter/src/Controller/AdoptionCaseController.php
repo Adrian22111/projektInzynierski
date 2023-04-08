@@ -142,9 +142,7 @@ class AdoptionCaseController extends AbstractController
         }
         $adoptionCase->setarchived(true);
         $adoptionCaseRepository->save($adoptionCase,true);
-        // dump($documents);die;
-        // $adoptionCase->setarchived(true);
-        // $adoptionCaseRepository->save($adoptionCase,true);
+
         return $this->redirectToRoute('app_adoption_case_index', [], Response::HTTP_SEE_OTHER);
     }
     #[IsGranted('ROLE_CLIENT')]

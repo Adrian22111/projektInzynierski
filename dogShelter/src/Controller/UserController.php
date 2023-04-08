@@ -6,6 +6,7 @@ use PDOException;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Form\ChangePasswordType;
+use App\Repository\DogRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -87,10 +88,11 @@ class UserController extends AbstractController
     }
     #[IsGranted(User::VIEW,'user')]
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
-    public function show(User $user): Response
+    public function show(User $user, DogRepository $dogRepository): Response
     {
         return $this->render('user/show.html.twig', [
             'user' => $user,
+            'dogs' => $dogRepository->findBy(['archived'=>false]),
         ]);
     }
     #[IsGranted(User::EDIT,'user')]
