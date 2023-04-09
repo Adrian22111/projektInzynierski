@@ -135,6 +135,8 @@ class AdoptionCaseController extends AbstractController
         $dog = $adoptionCase->getDog();
         $documents = $adoptionCase->getDocuments();
         $dog->setarchived(true);
+        $client = $adoptionCase->getClient();
+        $client->setAvailable(true);
         foreach($documents as $document)
         {
             $document->setarchived(true);

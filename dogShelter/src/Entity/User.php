@@ -316,6 +316,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->employeeAdoptionCases;
     }
+    //     /**
+    //  * @return Collection<int, AdoptionCase>
+    //  */
+    // public function getEmployeeActiveAdoptionCases(): Collection
+    // {
+
+    //     return $this->employeeAdoptionCases;
+    // }
+
+
 
     public function addEmployeeAdoptionCase(AdoptionCase $employeeAdoptionCase): self
     {

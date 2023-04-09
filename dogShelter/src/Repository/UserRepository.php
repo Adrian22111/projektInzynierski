@@ -70,6 +70,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
            ->getResult()
        ;
    }
+
+
 //    public function findActiveGuardians($dogId): array
 //    {
 //        return $this->createQueryBuilder('u')

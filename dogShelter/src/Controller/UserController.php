@@ -6,6 +6,7 @@ use PDOException;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Form\ChangePasswordType;
+use App\Repository\AdoptionCaseRepository;
 use App\Repository\DogRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\Filesystem\Filesystem;
@@ -18,10 +19,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 // use Symfony\Component\Config\Definition\Exception\Exception;
 use Exception;
+use Laminas\Code\Generator\EnumGenerator\Name;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Validator\Constraints\Length;
 
 #[Route('/user')]
 class UserController extends AbstractController
@@ -234,10 +237,41 @@ class UserController extends AbstractController
     }
     #[IsGranted(User::EDIT,'user')]
     #[Route('/{id}/archive', name: 'app_user_archive', methods: ['GET', 'POST'])]
-    public function archive(User $user, UserRepository $userRepository): Response
-    {
-        $user->setarchived(true);
-        $userRepository->save($user,true);
+    public function archive(User $user, UserRepository $userRepository, AdoptionCaseRepository $adoptionCaseRepository): Response
+    {   
+        $userRoles = $user->getRoles();
+        // dd($userRoles);
+        if(in_array('ROLE_PRACOWNIK',$userRoles) ||in_array('ROLE_ADMIN',$userRoles))
+        {
+           
+            $letArchive = true; 
+            $casesToCorrect = []; 
+            $adoptionCases = $adoptionCaseRepository->findEmployeeCases($user->getId());
+            foreach($adoptionCases as $adoptionCase)
+            {
+                if(count($adoptionCase->getEmployee()) < 2 ) //poprawic metode zeby zwracala tylko niezarchiwizowanych
+                {
+                    $letArchive = false;
+                    $casesToCorrect[] = $adoptionCase->getId()." ".$adoptionCase->getDog()->getName();
+                }
+            }
+            if($letArchive == true)
+            {
+                dd('mozna archiwizowac');
+            }
+            else
+            {
+                dd($casesToCorrect);
+            }
+
+        }
+        else
+        {
+            dd('klient');
+        }
+        // if()
+        // $user->setarchived(true);
+        // $userRepository->save($user,true);
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 }

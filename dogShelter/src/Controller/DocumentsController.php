@@ -32,8 +32,10 @@ class DocumentsController extends AbstractController
             $user = $this->getUser();
             /** @var User $user */
             $id = $user->getId();
-            return $this->render('adoption_case/index.html.twig', [
-                'adoption_cases' => $adoptionCaseRepository->findEmployeeCases($id),
+            $adoptionCases = $adoptionCaseRepository->findEmployeeCases($id);
+            
+            return $this->render('documents/index.html.twig', [
+                'documents' => $documentsRepository->findBy(['adoptionCase'=>$adoptionCases]),
             ]);
         }
         //
@@ -66,7 +68,11 @@ class DocumentsController extends AbstractController
                 }
                 $document->setDocumentSource($newName);
             }
-
+            if($adoptionCase = $form->get('adoptionCase')->getData())
+            {
+                $adoptionCase->addDocument($document);   
+            }
+            //wstawic tutaj dodawanie dokumentu do sprawy adoptionCase addDocument 
             $documentsRepository->save($document, true);
             $this->addFlash('success', 'Pomyślnie dodano plik');
             return $this->redirectToRoute('app_documents_index', [], Response::HTTP_SEE_OTHER);

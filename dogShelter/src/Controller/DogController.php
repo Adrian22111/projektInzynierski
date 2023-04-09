@@ -2,19 +2,21 @@
 
 namespace App\Controller;
 
+use Exception;
 use App\Entity\Dog;
 use App\Form\DogType;
+use App\Entity\AdoptionCase;
+use Doctrine\ORM\Mapping\Id;
 use App\Repository\DogRepository;
 use App\Repository\UserRepository;
-use Doctrine\ORM\Mapping\Id;
-use Exception;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Repository\AdoptionCaseRepository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
@@ -196,6 +198,20 @@ class DogController extends AbstractController
     #[Route('/{id}/archive', name: 'app_dog_archive', methods: ['GET', 'POST'])]
     public function archieve(Dog $dog, DogRepository $dogRepository): Response
     {
+        if($adoptionCase = $dog->getAdoptionCase())
+        {
+            
+            $client = $adoptionCase->getClient();
+            $adoptionCase->setarchived(true);
+            $client->setAvailable(true);
+            if($documents = $adoptionCase->getDocuments())
+            {
+                foreach($documents as $document)
+                {
+                    $document->setarchived(true);
+                }
+            }
+        }
         $dog->setarchived(true);
         $dogRepository->save($dog,true);
         return $this->redirectToRoute('app_dog_index', [], Response::HTTP_SEE_OTHER);
