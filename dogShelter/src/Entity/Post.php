@@ -34,7 +34,7 @@ class Post
     private ?string $image = null;
 
     #[ORM\ManyToOne(inversedBy: 'posts')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $postOwner = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

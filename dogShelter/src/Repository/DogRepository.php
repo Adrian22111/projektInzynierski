@@ -53,6 +53,18 @@ class DogRepository extends ServiceEntityRepository
             ->execute()    
         ;
     }
+    public function findDogsByGuardian($guardianId)
+    {
+        return $this->createQueryBuilder('d')
+            ->innerJoin('d.guardian','g')
+            ->andWhere('g.id = :guardianId')
+            ->setParameter('guardianId',$guardianId)
+            ->andWhere('d.archived = :archived')
+            ->setParameter('archived',false)
+            ->getQuery()
+            ->execute()    
+            ;
+    }
 
         // public function getGuardians($id)
     // {

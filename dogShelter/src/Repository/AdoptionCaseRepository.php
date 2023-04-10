@@ -46,24 +46,14 @@ class AdoptionCaseRepository extends ServiceEntityRepository
            ->innerJoin('a.documents','d')
            ->andWhere('e.id = :id')
            ->setParameter('id',$employeeId)
+           ->andWhere('a.archived = :archived')
+           ->setParameter('archived',false)
            ->orderBy('a.id', 'ASC')
            ->getQuery()
            ->getResult()
         ;
     }
-    
-    // public function findEmployeeCases($id): array
-    // {
-    //    return $this->createQueryBuilder('a')
-    //        ->andWhere('a.employee = :id')
-    //        ->setParameter('id', $id)
-    //        ->andWhere('a.archived =:archived')
-    //        ->setParameter('archived',false)
-    //        ->orderBy('a.id', 'ASC')
-    //        ->getQuery()
-    //        ->getResult()
-    //     ;
-    // }
+
 
 
 

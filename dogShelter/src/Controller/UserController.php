@@ -237,7 +237,7 @@ class UserController extends AbstractController
     }
     #[IsGranted(User::EDIT,'user')]
     #[Route('/{id}/archive', name: 'app_user_archive', methods: ['GET', 'POST'])]
-    public function archive(User $user, UserRepository $userRepository, AdoptionCaseRepository $adoptionCaseRepository): Response
+    public function archive(User $user, UserRepository $userRepository, AdoptionCaseRepository $adoptionCaseRepository, DogRepository $dogRepository): Response
     {   
         $userRoles = $user->getRoles();
         // dd($userRoles);
@@ -247,21 +247,40 @@ class UserController extends AbstractController
             $letArchive = true; 
             $casesToCorrect = []; 
             $adoptionCases = $adoptionCaseRepository->findEmployeeCases($user->getId());
+            $dogs = $dogRepository->findDogsByGuardian($user->getId());
+            $posts = $user->getPosts();
+            // dd($dogs);
+            //sprawdzam czy wszystkie aktywne sprawy mają drugiego pracownika, który może sie dalej nimi zajmować
             foreach($adoptionCases as $adoptionCase)
             {
-                if(count($adoptionCase->getEmployee()) < 2 ) //poprawic metode zeby zwracala tylko niezarchiwizowanych
+                if(count($userRepository->findEmployeeByCaseId($adoptionCase->getId())) < 2 ) //poprawic metode zeby zwracala tylko niezarchiwizowanych
                 {
                     $letArchive = false;
-                    $casesToCorrect[] = $adoptionCase->getId()." ".$adoptionCase->getDog()->getName();
+                    $casesToCorrect[] = $adoptionCase;
                 }
             }
+            foreach($dogs as $dog)
+            {
+                // dd($dogRepository->getGuardians($dog->getId()));
+                if(count($dogRepository->getGuardians($dog->getId())) < 2 )
+                {
+                    $letArchive = false;
+                    $dogsToCorrect[] = $dog;
+                }
+            }
+            //sprawdzam czy wszystkie psy mają drugiego opiekuna 
             if($letArchive == true)
             {
-                dd('mozna archiwizowac');
+                // archiwizacja usera
+                // $user->setarchived(true);
+                // foreach($posts as $post)
+                // {
+                //     $post->setPostOwner(NULL);
+                // }
             }
             else
             {
-                dd($casesToCorrect);
+                // dd($dogsToCorrect);
             }
 
         }
@@ -272,6 +291,12 @@ class UserController extends AbstractController
         // if()
         // $user->setarchived(true);
         // $userRepository->save($user,true);
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        // return $this->redirectToRoute('app_user_index', ['dogsToCorrect' => $dogsToCorrect,'casesToCorrect'=>$casesToCorrect,'letArchive'=>$letArchive], Response::HTTP_SEE_OTHER);
+        return $this->render('user/index.html.twig', [
+            'users' => $userRepository->findBy(['archived'=>false]),
+            'dogsToCorrect' => $dogsToCorrect,
+            'casesToCorrect'=>$casesToCorrect,
+            'letArchive'=>$letArchive
+        ]);
     }
 }

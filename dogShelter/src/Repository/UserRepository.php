@@ -70,6 +70,19 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
            ->getResult()
        ;
    }
+   public function findEmployeeByCaseId($caseId): array
+   {
+       return $this->createQueryBuilder('u')
+           ->innerJoin('u.employeeAdoptionCases','c')
+           ->andWhere('c.id = :caseId')
+           ->setParameter('caseId',$caseId)
+           ->andWhere('u.archived = :archived')
+           ->setParameter('archived',false)
+           ->orderBy('u.id', 'ASC')
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 
 
 //    public function findActiveGuardians($dogId): array
