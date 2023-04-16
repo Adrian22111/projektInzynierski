@@ -104,13 +104,13 @@
                     <div class="flex flex-col w-1/2 text-white">
                     <p>Przekaż sprawy pracownika</p>
                         {% for case in casesToCorrect %}
-                            <a href="{{path('app_adoption_case_show',{id:case.id})}}" target="_blank" class="hover:text-gray-200">{{case.id}}{{case}}
+                            <a href="{{path('app_adoption_case_show',{id:case.id})}}" target="_blank" class="hover:text-gray-200">{{case}}
                         {% endfor %}
                     </div>
                     <div class="flex flex-col w-1/2 text-white">
                     <p>Przekaż opieke nad psami</p>
                         {% for dog in dogsToCorrect %}
-                            <a href="{{path('app_dog_show',{id:dog.id})}}" target="_blank" class="hover:text-gray-200  ">{{dog.id}}{{" "}}{{dog}}</a>
+                            <a href="{{path('app_dog_show',{id:dog.id})}}" target="_blank" class="hover:text-gray-200  ">{{dog.id}}{{". "}}{{dog}}</a>
                         {% endfor %}
                     </div>
                 {% endif %}

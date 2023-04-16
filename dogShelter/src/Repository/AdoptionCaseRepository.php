@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\AdoptionCase;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\AST\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,15 +40,48 @@ class AdoptionCaseRepository extends ServiceEntityRepository
         }
     }
 
+    // public function findEmployeeCases($employeeId): array
+    // {
+    //    return $this->createQueryBuilder('a')
+    //        ->innerJoin('a.employee', 'e')
+    //        ->addSelect('e')
+    //        ->innerJoin('a.documents','d')
+    //        ->addSelect('d')
+    //        ->andWhere('e.id = :id')
+    //        ->setParameter('id',$employeeId)
+    //        ->andWhere('a.archived = :archived')
+    //        ->andWhere('e.archived = :archived')
+    //        ->andWhere('d.archived = :archived')
+    //        ->setParameter('archived',false)
+    //        ->orderBy('a.id', 'ASC')
+    //        ->getQuery()
+    //        ->getResult()
+    //     ;
+    // }
     public function findEmployeeCases($employeeId): array
     {
        return $this->createQueryBuilder('a')
-           ->innerJoin('a.employee', 'e')
-           ->innerJoin('a.documents','d')
-           ->andWhere('e.id = :id')
-           ->setParameter('id',$employeeId)
+           ->addSelect('a')
+           ->join('a.employee','e')
            ->andWhere('a.archived = :archived')
            ->setParameter('archived',false)
+           ->andWhere('e.id = :employeeId')
+           ->setParameter('employeeId',$employeeId)
+           ->orderBy('a.id', 'ASC')
+           ->getQuery()
+           ->getResult()
+        ;
+    }
+
+    public function findClientCases($clientId): array
+    {
+       return $this->createQueryBuilder('a')
+           ->addSelect('a')
+           ->join('a.client','c')
+           ->andWhere('a.archived = :archived')
+           ->setParameter('archived',false)
+           ->andWhere('c.id = :clientId')
+           ->setParameter('clientId',$clientId)
            ->orderBy('a.id', 'ASC')
            ->getQuery()
            ->getResult()

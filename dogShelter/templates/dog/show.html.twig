@@ -42,12 +42,14 @@
             <div class="font-bold text-center mb-2">Opiekunowie</div>
                 <div class="flex justify-center"> 
             {% for guardian in guardians %}
+                {% if guardian.archived == false %}
                 <div class=" w-22 mr-2 text-center ">
                     <a class="text-center"  href="{{path('app_user_show',{id:guardian.id})}}">
                     {{ include('user/_user_avatar.html.twig',{'width':20 , 'height':20, user:guardian})}} 
                     <div>{{guardian|length > 10 ? guardian|slice(0,10):guardian}}</div>
                     </a>
                 </div>
+                {% endif %}
             {% endfor %}
         </div>
         <div class="font-bold text-center">Opis</div>

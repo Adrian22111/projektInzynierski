@@ -33,7 +33,9 @@
                     <td class=" border-2"><a href="{{ path('app_user_show', {'id': adoption_case.client.id}) }}">{{ adoption_case.client}}</a></td>
                     <td class=" border-2"> 
                         {% for employee in adoption_case.employee %}
-                            <div><a href="{{ path('app_user_show', {'id': employee.id}) }}">{{ employee.username }}</a></div>
+                            {% if employee.archived == false %}
+                                <div><a href="{{ path('app_user_show', {'id': employee.id}) }}">{{ employee.username }}</a></div>
+                            {% endif %}
                         {% endfor %}
                     </td>
                     <td class=" border-2">

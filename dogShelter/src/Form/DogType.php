@@ -67,12 +67,16 @@ class DogType extends AbstractType
                     $admin = "ROLE_ADMIN";
                     $employee = "ROLE_PRACOWNIK";
                    return $users->createQueryBuilder('u')
+                    ->andWhere('u.archived = :archived')
+                    ->setParameter('archived',false)
                     ->andWhere('u.roles LIKE :admin')
                     ->setParameter('admin',"%$admin%") 
                     ->orWhere('u.roles LIKE :employee')
                     ->setParameter('employee',"%$employee%")
                     ->andWhere('u.available = :condition')
                     ->setParameter('condition', $condition)
+                    ->andWhere('u.archived = :archived')
+                    ->setParameter('archived',false)
                     ->orderBy('u.username','ASC'); 
                 }
             ])

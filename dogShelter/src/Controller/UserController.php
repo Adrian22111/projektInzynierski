@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Form\ChangePasswordType;
 use App\Repository\AdoptionCaseRepository;
+use App\Repository\DocumentsRepository;
 use App\Repository\DogRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\Filesystem\Filesystem;
@@ -237,28 +238,29 @@ class UserController extends AbstractController
     }
     #[IsGranted(User::EDIT,'user')]
     #[Route('/{id}/archive', name: 'app_user_archive', methods: ['GET', 'POST'])]
-    public function archive(User $user, UserRepository $userRepository, AdoptionCaseRepository $adoptionCaseRepository, DogRepository $dogRepository): Response
+    public function archive(Request $request,User $user, UserRepository $userRepository, AdoptionCaseRepository $adoptionCaseRepository, DogRepository $dogRepository, DocumentsRepository $documentsRepository): Response
     {   
+        $casesToCorrect = []; 
+        $dogsToCorrect = []; 
+        $letArchive = true; 
         $userRoles = $user->getRoles();
         // dd($userRoles);
         if(in_array('ROLE_PRACOWNIK',$userRoles) ||in_array('ROLE_ADMIN',$userRoles))
         {
-           
-            $letArchive = true; 
-            $casesToCorrect = []; 
             $adoptionCases = $adoptionCaseRepository->findEmployeeCases($user->getId());
             $dogs = $dogRepository->findDogsByGuardian($user->getId());
             $posts = $user->getPosts();
-            // dd($dogs);
             //sprawdzam czy wszystkie aktywne sprawy mają drugiego pracownika, który może sie dalej nimi zajmować
             foreach($adoptionCases as $adoptionCase)
             {
+                // dump($userRepository->findEmployeeByCaseId($adoptionCase->getId()));
                 if(count($userRepository->findEmployeeByCaseId($adoptionCase->getId())) < 2 ) //poprawic metode zeby zwracala tylko niezarchiwizowanych
                 {
                     $letArchive = false;
                     $casesToCorrect[] = $adoptionCase;
                 }
             }
+            //sprawdzam czy wszystkie psy mają drugiego opiekuna 
             foreach($dogs as $dog)
             {
                 // dd($dogRepository->getGuardians($dog->getId()));
@@ -268,30 +270,44 @@ class UserController extends AbstractController
                     $dogsToCorrect[] = $dog;
                 }
             }
-            //sprawdzam czy wszystkie psy mają drugiego opiekuna 
             if($letArchive == true)
             {
                 // archiwizacja usera
-                // $user->setarchived(true);
-                // foreach($posts as $post)
-                // {
-                //     $post->setPostOwner(NULL);
-                // }
-            }
-            else
-            {
-                // dd($dogsToCorrect);
+                // dd(123);
+                $user->setarchived(true);
+                foreach($posts as $post)
+                {
+                    $post->setPostOwner(NULL);
+                }
+                $userRepository->save($user,true);
             }
 
         }
         else
         {
-            dd('klient');
+            //jeśli klient
+            $adoptionCases = $adoptionCaseRepository->findClientCases($user->getId());
+            foreach($adoptionCases as $adoptionCase)
+            {
+                $dog = $adoptionCase->getDog();
+                $documents = $adoptionCase->getDocuments();
+                $dog->setInAdoption(false);
+                foreach($documents as $document)
+                {
+                        $document->setDocumentSource(
+                            new File($this->getParameter('documents_directory') . '/' . $document->getDocumentSource())
+                        );
+        
+                        $filesystem = new Filesystem();
+                        $filesystem->remove($document->getDocumentSource());
+                        $documentsRepository->remove($document, true);
+                }
+                $adoptionCaseRepository->remove($adoptionCase,true);
+            }
+            $user->setarchived(true);
+            $userRepository->save($user,true);
         }
-        // if()
-        // $user->setarchived(true);
-        // $userRepository->save($user,true);
-        // return $this->redirectToRoute('app_user_index', ['dogsToCorrect' => $dogsToCorrect,'casesToCorrect'=>$casesToCorrect,'letArchive'=>$letArchive], Response::HTTP_SEE_OTHER);
+        
         return $this->render('user/index.html.twig', [
             'users' => $userRepository->findBy(['archived'=>false]),
             'dogsToCorrect' => $dogsToCorrect,

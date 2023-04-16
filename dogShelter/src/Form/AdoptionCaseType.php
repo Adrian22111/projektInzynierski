@@ -44,6 +44,8 @@ class AdoptionCaseType extends AbstractType
                     return $dogs->createQueryBuilder('d')
                         ->andWhere('d.inAdoption = :condition')
                         ->setParameter('condition', $condition)
+                        ->andWhere('d.archived = :archived')
+                        ->setParameter('archived',false)
                         ->orWhere('d.id = :id')
                         ->setParameter('id', $dogId)
                         ->orderBy('d.name','ASC')
@@ -65,6 +67,8 @@ class AdoptionCaseType extends AbstractType
                         ->setParameter('role', "%$role%")
                         ->andWhere('u.available = :condition')
                         ->setParameter('condition', $condition)
+                        ->andWhere('u.archived = :archived')
+                        ->setParameter('archived',false)
                         ->orderBy('u.username','ASC')
                         ;
 
@@ -100,6 +104,8 @@ class AdoptionCaseType extends AbstractType
                         ->setParameter('condition', $condition)
                         ->orWhere('u.id = :id')
                         ->setParameter('id', $clientId) // ogarnąć sposób przekazywanie id z kontrolera tutaj
+                        ->andWhere('u.archived = :archived')
+                        ->setParameter('archived',false)
                         ->orderBy('u.username','ASC')              
                         ;
                 }
