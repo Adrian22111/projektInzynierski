@@ -27,7 +27,7 @@
                 {% if is_granted("ROLE_ADMIN") %}
                     <a href="{{ path('app_status_show', {'id': post.status.id}) }}">{{post.status}}
                 {% else %}
-                    {{post.status}}
+                    <td class="border-2">{{ post.status }}</td>
                 {% endif %}
                 </td>
                 <td class="border-2"><a href="{{path('app_user_show',{id:post.postOwner.id})}}">{{ post.postOwner }}</a></td>

@@ -54,7 +54,9 @@ class AdoptionCaseType extends AbstractType
             ])
             ->add('employee',EntityType::class,[
                 'class' => User::class,
-                'choice_label' => 'username',
+                'choice_label' => function(User $user) {
+                    return $user->getName() . ' ' . $user->getSurname();
+                },
                 'required' => true,
                 'mapped' => true,
                 'multiple' => true,
@@ -83,7 +85,9 @@ class AdoptionCaseType extends AbstractType
             ])
             ->add('client',EntityType::class,[
                 'class' => User::class,
-                'choice_label' => 'username',
+                'choice_label' => function(User $user) {
+                    return $user->getName() . ' ' . $user->getSurname();
+                },
                 'mapped' => true,
                 'multiple' => false,
                 'required' => true,
@@ -119,8 +123,10 @@ class AdoptionCaseType extends AbstractType
                 'query_builder' => function(StatusRepository $statuses) 
                 {
                     return $statuses->createQueryBuilder('s')
-                        ->where('s.refersTo LIKE :status')
+                        ->andwhere('s.refersTo LIKE :status')
                         ->setParameter('status', "%case%")
+                        ->andWhere('s.archived = :archived')
+                        ->setParameter('archived',false)
                         ->orderBy('s.StatusName','ASC')              
                         ;
                 }

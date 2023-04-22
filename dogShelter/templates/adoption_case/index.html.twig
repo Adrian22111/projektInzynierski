@@ -40,7 +40,9 @@
                     </td>
                     <td class=" border-2">
                         {% for document in adoption_case.documents %}
-                            <div><a href="{{ path('app_documents_show', {'id': document.id}) }}">{{ document.documentName }}</a></div>
+                            {% if document.archived == false %}
+                                <div><a href="{{ path('app_documents_show', {'id': document.id}) }}">{{ document.documentName }}</a></div>
+                            {% endif %}
                         {% endfor %}
                     </td>
                     

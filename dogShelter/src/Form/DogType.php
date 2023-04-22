@@ -57,7 +57,9 @@ class DogType extends AbstractType
             ])
             ->add('guardian',EntityType::class,[
                 'class' => User::class,
-                'choice_label' => 'username',
+                'choice_label' => function(User $user) {
+                    return $user->getName() . ' ' . $user->getSurname();
+                },
                 'mapped' => true,
                 'multiple' => true,
                 'required' => true,
@@ -89,8 +91,10 @@ class DogType extends AbstractType
                 'query_builder' => function(StatusRepository $statuses) 
                 {
                     return $statuses->createQueryBuilder('s')
-                        ->where('s.refersTo LIKE :status')
+                        ->andwhere('s.refersTo LIKE :status')
                         ->setParameter('status', "%dog%")
+                        ->andWhere('s.archived = :archived')
+                        ->setParameter('archived',false)
                         ->orderBy('s.StatusName','ASC')              
                         ;
                 }

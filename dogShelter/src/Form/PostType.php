@@ -51,12 +51,15 @@ class PostType extends AbstractType
                 'query_builder' => function(StatusRepository $statuses) 
                 {
                     return $statuses->createQueryBuilder('s')
-                        ->where('s.refersTo LIKE :status')
+                        ->andwhere('s.refersTo LIKE :status')
                         ->setParameter('status', "%post%")
+                        ->andWhere('s.archived = :archived')
+                        ->setParameter('archived',false)
                         ->orderBy('s.StatusName','ASC')              
                         ;
                 }
             ])
+
         ;
     }
 
