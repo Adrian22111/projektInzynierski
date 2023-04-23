@@ -104,7 +104,7 @@
                     <div class="flex flex-col w-1/2 text-white">
                     <p>Przekaż sprawy pracownika</p>
                         {% for case in casesToCorrect %}
-                            <a href="{{path('app_adoption_case_show',{id:case.id})}}" target="_blank" class="hover:text-gray-200">{{case}}
+                            <a href="{{path('app_adoption_case_show',{id:case.id})}}" target="_blank" class="hover:text-gray-200">{{case}}</a>
                         {% endfor %}
                     </div>
                     <div class="flex flex-col w-1/2 text-white">

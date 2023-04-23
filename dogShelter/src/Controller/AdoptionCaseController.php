@@ -155,6 +155,67 @@ class AdoptionCaseController extends AbstractController
                 'adoption_cases' => $adoptionCaseRepository->findBy(['archived'=>false, 'client'=> $id]),
             ]);
     }
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/{id}/restore', name: 'app_adoption_case_restore', methods: ['GET', 'POST'])]
+    public function restore(AdoptionCase $adoptionCase, AdoptionCaseRepository $adoptionCaseRepository,): Response
+    {
+        $dog = $adoptionCase->getDog();
+        $adoptionCases = $adoptionCaseRepository->findBy(['dog'=>$dog->getId(), 'archived'=>false]);
+        $clientNotAvailable = false;
+        $allEmployeesArchived = true;
+        // dd($adoptionCasesCount);
+        //sprawdzam czy pies nie ma już jakiejś aktywnej sprawy
+        if(count($adoptionCases) == 0)
+        {
+            
+            $client = $adoptionCase->getClient();
+            $employees = $adoptionCase->getEmployee();
+            if($client->isarchived() == true || $client->isAvailable() == false)
+            {
+                $clientNotAvailable = true;
+            }
+            foreach($employees as $employee)
+            {
+                if($employee->isarchived() == false and $employee->isAvailable() == true)
+                {
+                    $allEmployeesArchived = false;
+                }
+            }
+            if($clientNotAvailable == true or $allEmployeesArchived == true)
+            {
+                
+                // przekierowanie do błedu
+                return $this->render('archives/adoption_cases.html.twig', [
+                    'adoption_cases' => $adoptionCaseRepository->findBy(['archived'=>true]),
+                    'adoptionCaseToRestore' => $adoptionCase,
+                    'clientNotAvailable' => $clientNotAvailable,
+                    'allEmployeesArchived'=> $allEmployeesArchived,
+                ]);
+            }
+            else
+            {
+                //przywracanie
+                $dog->setarchived(false);
+                $dog->setInAdoption(true);
+                $adoptionCase->setarchived(false);
+                $documents = $adoptionCase->getDocuments();
+                foreach($documents as $document)
+                {
+                    $document->setarchived(false);
+                }
+                $adoptionCaseRepository->save($adoptionCase,true);
+            }
+        }
+        else
+        {
+            return $this->render('archives/adoption_cases.html.twig', [
+                'adoption_cases' => $adoptionCaseRepository->findBy(['archived'=>true]),
+                'activeAdoptionCases' => $adoptionCases,
+                'dogHasActiveAdoptionCase'=> true,
+            ]);
+        }
+        return $this->redirectToRoute('app_adoption_case_index', [], Response::HTTP_SEE_OTHER);
+    }
     
         
 }
