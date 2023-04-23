@@ -46,8 +46,8 @@ class Dog
     private Collection $guardian;
 
 
-    #[ORM\OneToOne(mappedBy: 'dog', cascade: ['persist', 'remove'])]
-    private ?AdoptionCase $adoptionCase = null;
+    #[ORM\OneToMany(mappedBy: 'dog',targetEntity: AdoptionCase::class, cascade: ['persist', 'remove'],orphanRemoval: true)]
+    private ?Collection $adoptionCase = null;
 
     #[ORM\Column]
     private ?bool $inAdoption = false;
@@ -62,6 +62,7 @@ class Dog
     public function __construct()
     {
         $this->guardian = new ArrayCollection();
+        $this->adoptionCase = new ArrayCollection();
     }
     public function __toString()
     {
@@ -145,9 +146,9 @@ class Dog
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
+    // /**
+    //  * @return Collection<int, User>
+    //  */
     public function getGuardian(): Collection
     {
         return $this->guardian;
@@ -172,22 +173,31 @@ class Dog
         return $this;
     }
 
-    public function getAdoptionCase(): ?AdoptionCase
+    public function getAdoptionCase(): Collection
     {
         return $this->adoptionCase;
     }
 
-    public function setAdoptionCase(?AdoptionCase $adoptionCase): self
+    public function addAdoptionCase(AdoptionCase $adoptionCase): self
     {
-        // set the owning side of the relation if necessary
-        if ($adoptionCase->getDog() !== $this) {
+        if (!$this->adoptionCase->contains($adoptionCase)) {
+            $this->adoptionCase->add($adoptionCase);
             $adoptionCase->setDog($this);
         }
-
-        $this->adoptionCase = $adoptionCase;
+        return $this;
+    }
+    public function removeAdoptionCase(AdoptionCase $adoptionCase): self
+    {
+        if ($this->adoptionCase->removeElement($adoptionCase)) {
+            // set the owning side to null (unless already changed)
+            if ($adoptionCase->getDog() === $this) {
+                $adoptionCase->setDog(null);
+            }
+        }
 
         return $this;
     }
+
 
     public function isInAdoption(): ?bool
     {

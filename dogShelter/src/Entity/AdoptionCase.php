@@ -20,7 +20,7 @@ class AdoptionCase
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'adoptionCase', cascade: ['persist'])]
+    #[ORM\ManyToOne(inversedBy: 'adoptionCase')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Dog $dog = null;
 

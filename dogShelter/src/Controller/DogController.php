@@ -6,10 +6,12 @@ use Exception;
 use App\Entity\Dog;
 use App\Form\DogType;
 use App\Entity\AdoptionCase;
+use App\Entity\Documents;
 use Doctrine\ORM\Mapping\Id;
 use App\Repository\DogRepository;
 use App\Repository\UserRepository;
 use App\Repository\AdoptionCaseRepository;
+use App\Repository\DocumentsRepository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -166,13 +168,35 @@ class DogController extends AbstractController
     }
     #[IsGranted('ROLE_PRACOWNIK')]
     #[Route('/{id}', name: 'app_dog_delete', methods: ['POST'])]
-    public function delete(Request $request, Dog $dog, DogRepository $dogRepository): Response
+    public function delete(Request $request, Dog $dog, DogRepository $dogRepository, DocumentsRepository $documentsRepository,AdoptionCaseRepository $adoptionCaseRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$dog->getId(), $request->request->get('_token'))) {
-            if($dog->getAdoptionCase()!= null)
+            
+            if(count($adoptionCases = $dog->getAdoptionCase()) > 0)
             {
-                $this->addFlash('failure','rozstrzygnij najpierw sprawę adopcji');
-                return $this->redirectToRoute('app_adoption_case_show',['id'=>$dog->getAdoptionCase()->getId()]);
+                foreach($adoptionCases as $case)
+                {
+                    $documents = $case->getDocuments();
+                    foreach($documents as $document)
+                    {
+                        $documentsRepository->remove($document);
+                    } 
+                    $client = $case->getClient();
+                    $client->setAvailable(true);
+                    $adoptionCaseRepository->remove($case);
+                    // return $this->redirectToRoute('app_adoption_case_show',['id'=>$case->getId()]);
+                }
+                if($dog->getImage()!=null)
+                {
+                    $dog->setImage(
+                        new File($this->getParameter('dogimages_directory').'/'.$dog->getImage())
+                    );
+                    
+                    $filesystem = new Filesystem();
+                    $filesystem->remove($dog->getImage());
+                }
+
+                $dogRepository->remove($dog, true);   
             }
             else
             {
@@ -198,22 +222,61 @@ class DogController extends AbstractController
     #[Route('/{id}/archive', name: 'app_dog_archive', methods: ['GET', 'POST'])]
     public function archieve(Dog $dog, DogRepository $dogRepository): Response
     {
-        if($adoptionCase = $dog->getAdoptionCase())
+        if($adoptionCases = $dog->getAdoptionCase())
         {
-            
-            $client = $adoptionCase->getClient();
-            $adoptionCase->setarchived(true);
-            $client->setAvailable(true);
-            if($documents = $adoptionCase->getDocuments())
+            foreach($adoptionCases as $adoptionCase)
             {
-                foreach($documents as $document)
+                $client = $adoptionCase->getClient();
+                $adoptionCase->setarchived(true);
+                $client->setAvailable(true);
+                if($documents = $adoptionCase->getDocuments())
                 {
-                    $document->setarchived(true);
+                    foreach($documents as $document)
+                    {
+                        $document->setarchived(true);
+                    }
                 }
             }
         }
         $dog->setarchived(true);
         $dogRepository->save($dog,true);
-        return $this->redirectToRoute('app_dog_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_archives_dogs', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[IsGranted('ROLE_PRACOWNIK')]
+    #[Route('/{id}/restore', name: 'app_dog_restore', methods: ['GET', 'POST'])]
+    public function restore(Dog $dog, DogRepository $dogRepository , AdoptionCaseRepository $adoptionCaseRepository): Response
+    {
+        //pies którego archiwuzuje ma też zarchiwizowaną sprawę więc jak przyracam
+        // to nie trzeba patrzeć czy nie ma jakiejś aktywnej sprawy
+        $guardians = $dog->getGuardian();
+        $allGuardiansAreArchived = true;
+
+        foreach($guardians as $guardian)
+        {   
+            if($guardian->isarchived()==false)
+            {
+                $allGuardiansAreArchived = false;
+            }
+        }
+        if($allGuardiansAreArchived == true)
+        {
+            return $this->render('archives/dogs.html.twig', [
+                'dogs' => $dogRepository->findBy(['archived'=>true]),
+                'dogToRestore' => $dog,
+                'allGuardiansAreArchived'=>$allGuardiansAreArchived
+            ]);
+        }
+        else
+        {
+            $dog->setarchived(false);
+            $dog->setInAdoption(false);
+            $dogRepository->save($dog,true);
+            return $this->render('dog/index.html.twig', [
+                'dogs' => $dogRepository->findBy(['archived'=>false]),
+                'restoredDog' => $dog,
+                'allGuardiansAreArchived'=>$allGuardiansAreArchived
+            ]);
+        }
     }
 }
