@@ -85,4 +85,12 @@ class StatusController extends AbstractController
         $statusRepository->save($status,true);
         return $this->redirectToRoute('app_status_index',[],Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/{id}/restore', name: 'app_status_restore', methods: ['GET', 'POST'])]
+    public function restore(Status $status, StatusRepository $statusRepository): Response
+    {
+        $status->setarchived(false);
+        $statusRepository->save($status,true);
+        return $this->redirectToRoute('app_status_index',[],Response::HTTP_SEE_OTHER);
+    }
 }

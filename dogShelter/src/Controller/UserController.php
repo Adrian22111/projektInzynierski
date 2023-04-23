@@ -315,4 +315,17 @@ class UserController extends AbstractController
             'letArchive'=>$letArchive
         ]);
     }
+
+    #[IsGranted(User::EDIT,'user')]
+    #[Route('/{id}/restore', name: 'app_user_restore', methods: ['GET', 'POST'])]
+    public function restore(User $user, UserRepository $userRepository): Response
+    {
+        $user->setarchived(false);
+        $user->setAvailable(true);
+        $userRepository->save($user,true);   
+        return $this->render('user/index.html.twig', [
+            'users' => $userRepository->findBy(['archived'=>false]),
+
+        ]);
+    }
 }
