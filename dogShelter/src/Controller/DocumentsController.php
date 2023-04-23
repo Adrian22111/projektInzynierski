@@ -164,4 +164,35 @@ class DocumentsController extends AbstractController
         $documentsRepository->save($document,true);
         return $this->redirectToRoute('app_documents_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[IsGranted('ROLE_PRACOWNIK')]
+    #[Route('/{id}/restore', name: 'app_documents_restore', methods: ['GET', 'POST'])]
+    public function restore( Documents $document, DocumentsRepository $documentsRepository): Response
+    {
+        if($adoptionCase = $document->getAdoptionCase())
+        {
+            if($adoptionCase->isarchived() == true)
+            {
+                //blad
+                return $this->render('archives/documents.html.twig', [
+                    'documents' => $documentsRepository->findBy(['archived'=>true]),
+                    'adoptionCase'=>$adoptionCase,
+                    'documentToEdit' => $document,
+                    'adoptionCaseArchived' => true,
+                ]);
+            }
+            else
+            {
+                $document->setarchived(false);
+                $documentsRepository->save($document,true);
+                return $this->redirectToRoute('app_documents_index', [], Response::HTTP_SEE_OTHER);   
+            }
+        }
+        else
+        {
+            $document->setarchived(false);
+            $documentsRepository->save($document,true);
+            return $this->redirectToRoute('app_documents_index', [], Response::HTTP_SEE_OTHER);
+        }
+        
+    }
 }

@@ -38,6 +38,7 @@
 
 
                     <td class=" border-2">
+                        <div class="border-2 bg-green-500 w-full hover:bg-green-400 text-white"><a href="{{ path('app_documents_restore', {'id': document.id}) }}">Przywróć</a></div>
                         <div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white"><a href="{{ path('app_documents_show', {'id': document.id}) }}">Podgląd</a></div>
                          {{ include('documents/_delete_form.html.twig') }}                 
                     </td>
@@ -50,4 +51,54 @@
             </tbody>
         </table>
     </div>
+<!-- Main modal -->
+<div id="defaultModal"  class="fixed  top-0.5 left-0.5 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-2xl max-h-full mx-auto top-1/3">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 ">
+            <!-- Modal header -->
+            <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Niepowodzenie</h3>
+            </div>
+            <!-- Modal body -->
+            <div class=" flex p-2">
+                {% if adoptionCaseArchived is defined and adoptionCaseArchived == true %}
+                    <div class="flex flex-col w-full text-white">
+                        <p>Sprawa adopcji, której dotyczy ten dokument jest zarchiwizowania. Przywróć sprawę bądź zmień podpięcie dokumentu</p>                    
+                    </div>
+                    
+                {% endif %}
+            </div>
+            <!-- Modal footer -->
+            <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                <button onClick="modalHide()" type="button" class="text-white bg-blue-700 hover:bg-blue-800  font-medium rounded-lg text-sm px-5 py-2.5 text-center">Potwierdź</button>
+                {% if adoptionCase is defined %}
+                    <a href="{{path('app_adoption_case_restore',{id:adoptionCase.id})}}" target="_blank" class="text-white bg-green-700 hover:bg-green-800  font-medium rounded-lg text-sm px-5 py-2.5 text-center">Przywróć Sprawę</a>
+                    <a href="{{path('app_documents_edit',{id:documentToEdit.id})}}" target="_blank" class="text-white bg-green-700 hover:bg-green-800  font-medium rounded-lg text-sm px-5 py-2.5 text-center">Edytuj Dokument</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% block javascripts %}
+    <script>
+        function modalShow()
+        {
+              var x = document.getElementById("defaultModal");
+                if (x.classList.contains('hidden')) 
+                {
+                    x.classList.remove('hidden');
+                } 
+        }
+        function modalHide()
+        {
+            var x = document.getElementById("defaultModal");
+                x.classList.add('hidden');
+        }
+    </script>
+
+{% endblock %}
+    {% if  (adoptionCaseArchived is defined and adoptionCaseArchived == true ) %}
+        <script>modalShow()</script>
+    {% endif %}
 {% endblock %}
