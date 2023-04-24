@@ -175,5 +175,14 @@ class PostController extends AbstractController
         $postRepository->save($post,true);
         return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[IsGranted(POST::EDIT,'post')]
+    #[Route('/{id}/restore', name: 'app_post_restore', methods: ['GET', 'POST'])]
+    public function restore(Post $post, PostRepository $postRepository): Response
+    {
+        $post->setarchived(false);
+        $postRepository->save($post,true);
+        return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
+    }
     
 }

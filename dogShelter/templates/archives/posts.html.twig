@@ -38,6 +38,7 @@
                 {# <td class="border-2">{{ post.image|length > 30? post.image|slice(0,26)~post.image|slice(-4):post.image}}</td> #}
                 <td><a href="{{path('app_post_show',{id:post.id})}}">{{include('post/_post_image.html.twig',{'height':24, 'width':24, 'fa':'6x' ,post:post})}}</a></td>
                 <td class="border-2">
+                    <div class="border-2 bg-green-500 w-full hover:bg-green-400 text-white"><a href="{{ path('app_post_restore', {'id': post.id}) }}">Przywróć</a></div>
                     <div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white"><a href="{{ path('app_post_show', {'id': post.id}) }}">Pokaż</a></div>
                     <div>{{ include('post/_delete_form.html.twig') }}</div>
                 </td>
