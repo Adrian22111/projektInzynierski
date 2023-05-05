@@ -31,4 +31,12 @@ class MainPageController extends AbstractController
         ]);
     }
 
+    #[Route('/about', name: 'app_about_us')]
+    public function about(): Response
+    {
+        return $this->render('main_page/about.html.twig', [
+            
+        ]);
+    }
+
 }

@@ -4,15 +4,17 @@ namespace App\Controller;
 
 use App\Entity\Documents;
 use App\Form\DocumentsType;
-use App\Repository\AdoptionCaseRepository;
 use App\Repository\DocumentsRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Repository\AdoptionCaseRepository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
@@ -193,6 +195,66 @@ class DocumentsController extends AbstractController
             $documentsRepository->save($document,true);
             return $this->redirectToRoute('app_documents_index', [], Response::HTTP_SEE_OTHER);
         }
-        
+    }
+    #[IsGranted('ROLE_CLIENT')]
+    #[Route('/{id}/download', name: 'app_documents_download', methods: ['GET', 'POST'])]
+    public function downloadDocument(Documents $document, DocumentsRepository $documentsRepository)
+    {
+        if($this->getParameter('documents_directory') != NULL && $document->getDocumentSource() != NULL )
+        {
+            $filesystem = new Filesystem();
+            $dir = $this->getParameter('documents_directory') . '/' . $document->getDocumentSource();
+            if($filesystem->exists($dir))
+            {
+                try
+                {
+                    //download// 
+                    return $this->file($dir);
+                    //preview
+                    // return $this->file($dir, 'preview.pdf', ResponseHeaderBag::DISPOSITION_INLINE);
+                }
+                catch (FileException $e)
+                {
+                    
+                }
+                
+            }
+            else
+            {
+                return $this->render('documents/index.html.twig', [
+                    'documents' => $documentsRepository->findBy(['archived'=>false]),
+                    'errorMessage' => "Plik nie istnieje",
+                ]); 
+            }  
+        }  
+    }
+    #[IsGranted('ROLE_CLIENT')]
+    #[Route('/{id}/preview', name: 'app_documents_preview', methods: ['GET', 'POST'])]
+    public function previewDocument(Documents $document, DocumentsRepository $documentsRepository)
+    {
+        if($this->getParameter('documents_directory') != NULL && $document->getDocumentSource() != NULL )
+        {
+            $filesystem = new Filesystem();
+            $dir = $this->getParameter('documents_directory') . '/' . $document->getDocumentSource();
+            if($filesystem->exists($dir))
+            {
+                try
+                {
+                    //preview
+                    return $this->file($dir, 'preview.pdf', ResponseHeaderBag::DISPOSITION_INLINE);
+                }
+                catch (FileException $e)
+                {
+                    
+                }    
+            }
+            else
+            {
+                return $this->render('documents/index.html.twig', [
+                    'documents' => $documentsRepository->findBy(['archived'=>false]),
+                    'errorMessage' => "Plik nie istnieje",
+                ]); 
+            }  
+        }  
     }
 }

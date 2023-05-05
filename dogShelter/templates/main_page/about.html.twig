@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Kontakt{% endblock %}
+{% block head %}
+
+
+{% endblock %}
+{% block body %}
+<section>
+    <div class="flex w-full">
+        <div class=" flex flex-col  items-end w-1/2 border-r-2">
+            <div class="flex flex-col items-center mx-auto mt-5">
+                <img class="h-40 w-40" src="{{pageimages~'logo.png'}}"/>
+                <p class="text-2xl text-gray-600">Amstafy Niczyje Fundacja im. </p>
+            </div>
+            <p class="w-10/12 text-left mx-auto mt-10">
+               Nasza misja to odczarowanie mitów na temat psiaków w typie Bull: Amstaffy, Pitbulle, Staffiki, Bulteriery. Pomagamy tym bez szans na dobre życie, pracujemy z nimi, socjalizujemy, szukamy najlepszych miejsc do życia. 
+            </p>
+            <p class="w-10/12 text-left mx-auto mt-5" >
+               Do współpracy zapraszamy wszystkich, którym nie jest obojętny los tych, pod każdym względem wyjątkowych psów; pięknych, silnych, zrównoważonych, niezwykle inteligentnych i oddanych człowiekowi. Celem, który realizujemy nieustannie od kilku lat jest zapewnienie bezpiecznej przystani wszystkim naszym podopiecznym, znalezienie im kochających domów i odpowiedzialnych właścicieli, potrafiących umiejętnie prowadzić TTB. Mamy nadzieję, że dzięki Wam ten cel zostanie osiągnięty w 100%
+            </p>
+            <div class="w-full flex mt-10">
+                <div class="text-l w-1/2 text-center items-center pl-5">
+                    <p class="mb-5">Skontaktuj Się Z Nami</p>
+                    <a href="#" class="flex mb-2 ml-2"><i class="fa-regular fa-envelope fa-2x"></i><p class="ml-2">amstafyniczyje@schronisko.com</p></a>
+                    <a href="#" class="flex mb-2 ml-2"><i class="fa-solid fa-phone fa-2x"></i><p class="ml-2">+48 999 888 777</p></a>
+                </div>
+                <div class="text-l w-1/2  border-l-2 text-center pl-5">
+                    <p class="mb-5">Ponzaj Nas Lepiej</p>
+                    <a href="#" class="flex mb-2 ml-2"><i class="fa-brands fa-youtube fa-2x" ></i><p class="ml-2">Poznaj nas lepiej</p></a>
+                    <a href="#" class="flex mb-2 ml-2"><i class="fa-brands fa-instagram fa-2x"></i><p class="ml-2">Obserwuj nas na Instagramie</p></a>
+                    <a href="#" class="flex mb-2 ml-2"><i class=" fa-brands fa-square-facebook fa-2x "></i><p class="ml-2">Napisz do nas na Facebooku</p></a>
+                </div>
+            </div>
+        </div>
+        <div class=" w-1/2  grid grid-cols-1  content-center border-l-2">
+            <div class="bg-[url('{{ pageimages~'dogavatarplaceholder.jpg' }}')] bg-no-repeat bg-cover bg-center bg-fixed"></div>
+        </div>
+    </div>
+</section>
+{% endblock %} 
