@@ -97,15 +97,16 @@
         <div class="flex-col  w-96 mx-auto mt-2 ">
                 {% if isEmployee == true %}
                     <div class="font-bold text-center mb-2">Psy Pod Opieką</div>
-                    <div class="flex justify-center"> 
+                    {# <div class="flex justify-center">  #}
                     {# grid grid-cols-4 place-items-center #}
+                    <div class="grid grid-cols-4 place-items-center"> 
                         {% for dog in dogs %}
                             <div class="w-22 mr-2 text-center"><a class="text-center flex flex-col" href="{{path('app_dog_show',{id:dog.id})}}">{{ include('dog/_dog_image.html.twig',{'width':20 , 'height':20, dog:dog})}}{{dog}}</a></div>
                         {% endfor %}
                     </div>
                     <div class="font-bold text-center">Opis</div>
                     {% if user.description|length > 5 %}
-                        <div class="text-center">{{ user.description }}</div>
+                        <div class="text-justify">{{ user.description }}</div>
                     {% else %}
                         <div class="text-center">Brak</div>
                     {% endif %}

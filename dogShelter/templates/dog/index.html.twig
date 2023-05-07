@@ -38,9 +38,9 @@
                 {% endif %}
                 </td>
                 {% if dog.description|length > 30  %}
-                    <td class="border-2">{{ dog.description|slice(0,100)~"..."}}</td>
+                    <td class="border-2 max-w-xs">{{ dog.description|slice(0,100)~"..."}}</td>
                 {% elseif dog.description|length  > 0 %}
-                    <td class="border-2 ">{{dog.description}}</td>
+                    <td class="border-2">{{dog.description}}</td>
                 {% else %}
                     <td class="border-2 text-red-500">Brak Opisu</td>
                 {% endif %}
@@ -51,11 +51,11 @@
                         {% endif %}
                     {% endfor %}
                 </td>
-                {% if dog.AdoptionCase.id is defined%}
-                    <td class="border-2"><div><a href="{{path('app_adoption_case_show',{id:dog.AdoptionCase.id})}}">{{dog.AdoptionCase}}</a></div></td>
+                {% for case in dog.AdoptionCase %}
+                    <td class="border-2"><div><a href="{{path('app_adoption_case_show',{id:case.id})}}">{{case}}</a></div></td>
                 {% else %}
                     <td class="border-2 text-red-500">Brak</td>
-                {% endif %}
+                {% endfor %}
                 <td class="border-2"><a href="{{path('app_dog_edit',{id:dog.id})}}">{{include('dog/_dog_image.html.twig',{'height':20,'width':20, dog:dog})}}</a></td>
                 {# {{ dog.image|length > 70? dog.image|slice(0,66)~dog.image|slice(-4):dog.image}} #}
                 <td class="border-2">

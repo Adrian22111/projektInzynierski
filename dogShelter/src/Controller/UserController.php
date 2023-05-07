@@ -96,7 +96,7 @@ class UserController extends AbstractController
     {
         return $this->render('user/show.html.twig', [
             'user' => $user,
-            'dogs' => $dogRepository->findBy(['archived'=>false]),
+            'dogs' => $dogRepository->findDogsByGuardian($user->getId()),
         ]);
     }
     #[IsGranted(User::EDIT,'user')]

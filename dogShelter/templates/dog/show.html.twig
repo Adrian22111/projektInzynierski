@@ -3,7 +3,9 @@
 {% block title %}{{dog.name}}{% endblock %}
 
 {% block body %}
+
 <div class="flex-col justify-center  mt-10 ">
+    <h1 class="text-center text-6xl mb-5 font-serif text-gray-500">{{dog.name}}</h1>
     <div class="w-64 mx-auto mb-4">{{ include('dog/_dog_image.html.twig',{'width':64 , 'height':64, dog:dog})}}</div>
     <table class="table w-1/6  mx-auto ">
         <tbody>
@@ -46,7 +48,8 @@
                 <div class=" w-22 mr-2 text-center ">
                     <a class="text-center"  href="{{path('app_user_show',{id:guardian.id})}}">
                     {{ include('user/_user_avatar.html.twig',{'width':20 , 'height':20, user:guardian})}} 
-                    <div>{{guardian|length > 10 ? guardian|slice(0,10):guardian}}</div>
+                    {# <div>{{guardian|length > 10 ? guardian|slice(0,10):guardian}}</div> #}
+                    <div>{{guardian}}</div>
                     </a>
                 </div>
                 {% endif %}
@@ -62,7 +65,8 @@
     <div class="w-1/6  mx-auto mt-4">
         {% if is_granted('ROLE_PRACOWNIK') %}
             <a href="{{ path('app_dog_edit', {'id': dog.id}) }}"><div class ="border-2 bg-green-500 w-full hover:bg-green-400 text-white text-center">Edytuj</div></a>
-            <a href="{{ path('app_dog_index') }}"><div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white text-center">Lista Psów</div></a>
+            <a href="{{ path('app_dog_index') }}"><div class="border-2 border-t-0 bg-yellow-500 w-full hover:bg-yellow-400 text-white text-center">Lista Psów</div></a>
+            <a href="{{ path('app_dog_archive', {'id': dog.id}) }}"><div class="border-x-2  bg-blue-500 w-full hover:bg-blue-400 text-white text-center">Archiwizuj</div></a>
             {{ include('dog/_delete_form.html.twig') }}
     {% endif %}
     </div>

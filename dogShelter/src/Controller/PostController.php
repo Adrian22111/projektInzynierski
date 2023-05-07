@@ -167,7 +167,7 @@ class PostController extends AbstractController
 
         return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
     }
-    #[IsGranted(POST::EDIT,'post')]
+    #[IsGranted('ROLE_PRACOWNIK')]
     #[Route('/{id}/archive', name: 'app_post_archive', methods: ['GET', 'POST'])]
     public function archive(Post $post, PostRepository $postRepository): Response
     {

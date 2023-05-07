@@ -20,21 +20,27 @@
         {{ form_widget(form.sex,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md  p-2 mt-1 mb-2'}})}}
         {{ form_errors(form.sex) }}
     </div>
-    <div >
-        {{ form_label(form.image,'Zdjęcie Psa',{'label_attr':{'class':'block'}}) }}
-        {{ form_widget(form.image,{'attr':{'class':'w-11/12   shadow-sm border border-gray-300 rounded-md  p-2 mt-6 mb-2 block    mx-auto text-sm mb-2 text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-500  focus:outline-none'}})}}
-        {{ form_errors(form.image) }}
-    </div>
     <div>
+        <div class="w-32 mx-auto mb-4">{{ include('dog/_dog_image.html.twig',{'width':32 , 'height':32, dog:dog})}}</div>
+        <div>
+            {{ form_label(form.image,'Zdjęcie Psa',{'label_attr':{'class':'block'}}) }}
+            {{ form_widget(form.image,{'attr':{'class':'w-11/12   shadow-sm border border-gray-300 rounded-md  p-2 mt-6 mb-2 block    mx-auto text-sm mb-2 text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-500  focus:outline-none'}})}}
+            {{ form_errors(form.image) }}
+        </div>
+    </div>
+    <div >
         {{ form_label(form.guardian,'Opiekun',{'label_attr':{'class':'block'}}) }}
         {{ form_widget(form.guardian,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md  p-2 mt-1 mb-2'}})}}
         {{ form_errors(form.guardian) }}
+        <div class="mt-5">
+            {{ form_label(form.status,'Status Psa',{'label_attr':{'class':'block'}}) }}
+            {{ form_widget(form.status,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md  p-2 mt-1 mb-2'}})}}
+            {{ form_errors(form.status) }}
+        </div>
     </div>
-    <div>
-        {{ form_label(form.status,'Status Psa',{'label_attr':{'class':'block'}}) }}
-        {{ form_widget(form.status,{'attr':{'class':'w-11/12 shadow-sm border border-gray-300 rounded-md  p-2 mt-1 mb-2'}})}}
-        {{ form_errors(form.status) }}
-    </div>
+    {# <div class="col-start-2">
+
+    </div> #}
 </div>
     <div class="px-4">
         {{ form_label(form.description,'Opis',{'label_attr':{'class':'block'}}) }}

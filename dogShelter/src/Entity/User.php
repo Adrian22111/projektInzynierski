@@ -31,7 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank(message:'Brak loginu')]
-    #[Assert\Length(max:180,maxMessage:'Wykorzystano maksymalną liczbe znaków')]
+    #[Assert\Length(max:30,maxMessage:'Wykorzystano maksymalną liczbe znaków')]
     private ?string $username = null;
 
     #[ORM\Column]
@@ -49,7 +49,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 100)]
     #[Assert\Email(message:'Niepoprawny adres Email')]
     #[Assert\NotBlank(message:'Brak Emaila')]
-    #[Assert\Length(max:100,maxMessage:'Wykorzystano maksymalną liczbe znaków')]
+    #[Assert\Length(max:40,maxMessage:'Wykorzystano maksymalną liczbe znaków')]
     private ?string $email = null;
 
     #[Assert\Length(max:1000,maxMessage:'Wykorzystano maksymalną liczbe znaków')]

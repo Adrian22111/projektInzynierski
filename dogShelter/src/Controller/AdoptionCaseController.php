@@ -128,7 +128,7 @@ class AdoptionCaseController extends AbstractController
 
         return $this->redirectToRoute('app_adoption_case_index', [], Response::HTTP_SEE_OTHER);
     }
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_PRACOWNIK')]
     #[Route('/{id}/archive', name: 'app_adoption_case_archive', methods: ['GET', 'POST'])]
     public function archieve(AdoptionCase $adoptionCase, AdoptionCaseRepository $adoptionCaseRepository,): Response
     {

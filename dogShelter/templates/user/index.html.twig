@@ -13,7 +13,7 @@
                 <th class=" border-2">Id</th>
                 <th class=" border-2">Imie i Nazwisko</th>
                 <th class=" border-2">Status</th>
-                <th class=" border-2">Role</th>
+                <th class=" border-2">Rola</th>
                 <th class=" border-2">Email</th>
                 <th class=" border-2">Opis</th>
                 <th class=" border-2">Profil Faceebok</th>
@@ -50,7 +50,7 @@
                 </td>
                 <td class="border-2">{{ user.email }}</td>
                 {% if user.description|length > 30  %}
-                    <td class="border-2">{{ user.description|slice(0,100)~"..."}}</td>
+                    <td class="border-2  max-w-xs">{{ user.description|slice(0,100)~"..."}}</td>
                 {% elseif user.description|length  > 0 %}
                     <td class="border-2 ">{{user.description}}</td>
                 {% else %}

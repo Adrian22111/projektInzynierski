@@ -21,17 +21,31 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[Route('/dog')]
 class DogController extends AbstractController
 {
     #[IsGranted('ROLE_PRACOWNIK')]
     #[Route('/', name: 'app_dog_index', methods: ['GET'])]
-    public function index(DogRepository $dogRepository): Response
+    public function index(DogRepository $dogRepository, UserInterface $user ): Response
     {
-        return $this->render('dog/index.html.twig', [
-            'dogs' => $dogRepository->findBy(['archived'=>false]),
-        ]);
+        if($this->isGranted('ROLE_ADMIN'))
+        {
+            return $this->render('dog/index.html.twig', [
+                'dogs' => $dogRepository->findBy(['archived'=>false]),
+            ]);
+        }
+        else
+        {
+            /** @var User $User */
+            $User = $this->getUser();
+            $id = $User->getId();
+            return $this->render('dog/index.html.twig', [
+                'dogs' => $dogRepository->findDogsByGuardian($user->getId()),
+            ]);
+        }
     }
 
     #[Route('/all', name: 'app_dog_all', methods: ['GET'])]
