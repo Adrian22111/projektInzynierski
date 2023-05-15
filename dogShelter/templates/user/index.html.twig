@@ -100,7 +100,7 @@
             </div>
             <!-- Modal body -->
             <div class=" flex p-2">
-                {% if letArchive is defined and letArchive == false %}
+                {% if (letArchive is defined and letArchive == false) or (letDelete is defined and letDelete == false) %}
                     <div class="flex flex-col w-1/2 text-white">
                     <p>Przekaż sprawy pracownika</p>
                         {% for case in casesToCorrect %}
@@ -141,7 +141,7 @@
     </script>
 
 {% endblock %}
-{% if letArchive is defined and letArchive == false %}
+{% if (letArchive is defined and letArchive == false) or (letDelete is defined and letDelete == false) %}
     <script>modalShow()</script>
 {% endif %}
 {% endblock %}

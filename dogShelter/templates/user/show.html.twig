@@ -114,8 +114,8 @@
         </div>
         <div class="w-full  mx-auto mt-4">
             {% if is_granted('ROLE_PRACOWNIK') %}
-                <a href="{{ path('app_user_index') }}"><div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white text-center">Lista Użytkowników</div></a>
                 {% if "ROLE_ADMIN" not in user.roles or user.id == app.user.id  %}
+                    <a href="{{ path('app_user_index') }}"><div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white text-center">Lista Użytkowników</div></a>
                     <a href="{{ path('app_user_edit', {'id': user.id}) }}"><div class ="border-2 bg-green-500 w-full hover:bg-green-400 text-white text-center">Edytuj</div></a>
                     {{ include('user/_delete_form.html.twig') }}
                 {% endif %}

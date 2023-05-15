@@ -5,13 +5,13 @@
 {% block body %}
     <div class="flex-col   mt-10 ">
         <div class="text-2xl text-center mb-2 ">Zarchiwizowane Dokumenty</div>
-        <table class="w-1/2 border-1 shadow-xl mx-auto">
+        <table class="w-8/12 border-1 shadow-xl mx-auto">
             <thead class="text-center" >
                 <tr>
                     <th class=" border-2">Id</th>
                     <th class=" border-2">Akronim Dokumentu</th>
-                    <th class= "border-2">Status Dokumentu</th>
-                    <th class=" border-2">Plik</th>
+                    <th class= "border-2">Plik</th>
+                    <th class=" border-2">Status Dokumentu</th>
                     <th class=" border-2">Przypisany do sprawy</th>
                     <th class=" border-2">Opcje</th>
                 </tr>
@@ -37,7 +37,7 @@
                     {% endif %}
 
 
-                    <td class=" border-2">
+                    <td class=" border-2 w-32">
                         <div class="border-2 bg-green-500 w-full hover:bg-green-400 text-white"><a href="{{ path('app_documents_restore', {'id': document.id}) }}">Przywróć</a></div>
                         <div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white"><a href="{{ path('app_documents_show', {'id': document.id}) }}">Podgląd</a></div>
                          {{ include('documents/_delete_form.html.twig') }}                 

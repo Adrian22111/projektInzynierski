@@ -30,6 +30,11 @@ use Symfony\Component\Validator\Constraints\Length;
 #[Route('/user')]
 class UserController extends AbstractController
 {
+    public function __construct(private Security $security)
+    {
+        
+    }
+
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
@@ -80,7 +85,6 @@ class UserController extends AbstractController
                 $user->setProfileImage($newFileName);
             }
             $userRepository->save($user, true);
-
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -103,7 +107,6 @@ class UserController extends AbstractController
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, UserRepository $userRepository, SluggerInterface $slugger): Response
     {
-    
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -150,7 +153,18 @@ class UserController extends AbstractController
                 }
             }
             $userRepository->save($user, true);
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            if($this->security->isGranted('ROLE_PRACOWNIK'))
+            {
+                return $this->renderForm('user/edit.html.twig', [
+                    'user' => $user,
+                    'form' => $form,
+                    'isEdit' => true,
+                ]);
+            }
+            else
+            {
+                return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            }
         }
 
         return $this->renderForm('user/edit.html.twig', [
@@ -217,26 +231,110 @@ class UserController extends AbstractController
 
 
     }
-    #[IsGranted(User::EDIT,'user')]
+    #[IsGranted("ROLE_ADMIN")]
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, UserRepository $userRepository): Response
+    public function delete(Request $request, User $user, UserRepository $userRepository, AdoptionCaseRepository $adoptionCaseRepository, DogRepository $dogRepository, DocumentsRepository $documentsRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            if($user->getProfileImage()!= null)
-            {
-                $user->setProfileImage(
-                    new File($this->getParameter('profileimages_directory')."/".$user->getProfileImage())
-                );
-                $filesystem = new Filesystem();
-                $filesystem->remove($user->getProfileImage());
-            }
+        // if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+        //     if($user->getProfileImage()!= null)
+        //     {
+        //         $user->setProfileImage(
+        //             new File($this->getParameter('profileimages_directory')."/".$user->getProfileImage())
+        //         );
+        //         $filesystem = new Filesystem();
+        //         $filesystem->remove($user->getProfileImage());
+        //     }
             
-            $userRepository->remove($user, true);
-        }
+        //     $userRepository->remove($user, true);
+        // }
+        // return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            $casesToCorrect = []; 
+            $dogsToCorrect = []; 
+            $letDelete = true; 
+            $userRoles = $user->getRoles();
+            if(in_array('ROLE_PRACOWNIK',$userRoles) ||in_array('ROLE_ADMIN',$userRoles))
+            {
+                $adoptionCases = $adoptionCaseRepository->findEmployeeCases($user->getId());
+                $dogs = $dogRepository->findDogsByGuardian($user->getId());
+                $posts = $user->getPosts();
+                //sprawdzam czy wszystkie aktywne sprawy mają drugiego pracownika, który może sie dalej nimi zajmować
+                foreach($adoptionCases as $adoptionCase)
+                {
+                    if(count($userRepository->findEmployeeByCaseId($adoptionCase->getId())) < 2 ) //poprawic metode zeby zwracala tylko niezarchiwizowanych
+                    {
+                        $letDelete = false;
+                        $casesToCorrect[] = $adoptionCase;
+                    }
+                }
+                //sprawdzam czy wszystkie psy mają drugiego opiekuna 
+                foreach($dogs as $dog)
+                {
+                    if(count($dogRepository->getGuardians($dog->getId())) < 2 )
+                    {
+                        $letDelete = false;
+                        $dogsToCorrect[] = $dog;
+                    }
+                }
+                if($letDelete == true)
+                {
+                    if($user->getProfileImage()!= null)
+                    {
+                        $user->setProfileImage(
+                            new File($this->getParameter('profileimages_directory')."/".$user->getProfileImage())
+                        );
+                        $filesystem = new Filesystem();
+                        $filesystem->remove($user->getProfileImage());
+                    }
+                    $userRepository->remove($user, true);
+                    foreach($posts as $post)
+                    {
+                        $post->setPostOwner(NULL);
+                    }
+                }
 
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            }
+            else
+            {
+                //jeśli klient
+                $adoptionCases = $adoptionCaseRepository->findClientCases($user->getId());
+                foreach($adoptionCases as $adoptionCase)
+                {
+                    $dog = $adoptionCase->getDog();
+                    $documents = $adoptionCase->getDocuments();
+                    $dog->setInAdoption(false);
+                    foreach($documents as $document)
+                    {
+                            $document->setDocumentSource(
+                                new File($this->getParameter('documents_directory') . '/' . $document->getDocumentSource())
+                            );
+            
+                            $filesystem = new Filesystem();
+                            $filesystem->remove($document->getDocumentSource());
+                            $documentsRepository->remove($document, true);
+                    }
+                    $adoptionCaseRepository->remove($adoptionCase,true);
+                }
+                if($user->getProfileImage()!= null)
+                {
+                    $user->setProfileImage(
+                        new File($this->getParameter('profileimages_directory')."/".$user->getProfileImage())
+                    );
+                    $filesystem = new Filesystem();
+                    $filesystem->remove($user->getProfileImage());
+                }
+                $userRepository->remove($user, true);
+            }   
+            return $this->render('user/index.html.twig', [
+                'users' => $userRepository->findBy(['archived'=>false]),
+                'dogsToCorrect' => $dogsToCorrect,
+                'casesToCorrect'=>$casesToCorrect,
+                'letDelete'=>$letDelete
+            ]);
+        } 
     }
-    #[IsGranted(User::EDIT,'user')]
+    #[IsGranted("ROLE_ADMIN")]
     #[Route('/{id}/archive', name: 'app_user_archive', methods: ['GET', 'POST'])]
     public function archive(Request $request,User $user, UserRepository $userRepository, AdoptionCaseRepository $adoptionCaseRepository, DogRepository $dogRepository, DocumentsRepository $documentsRepository): Response
     {   
@@ -275,10 +373,10 @@ class UserController extends AbstractController
                 // archiwizacja usera
                 // dd(123);
                 $user->setarchived(true);
-                foreach($posts as $post)
-                {
-                    $post->setPostOwner(NULL);
-                }
+                // foreach($posts as $post)
+                // {
+                //     $post->setPostOwner(NULL);
+                // }
                 $userRepository->save($user,true);
             }
 

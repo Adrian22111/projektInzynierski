@@ -3,52 +3,63 @@
 {% block title %}AdoptionCase{% endblock %}
 
 {% block body %}
-<div class="flex-col justify-center mt-10">
-    <div class="text-2xl text-center mb-2">Sprawa nr: {{adoption_case.id}}</div>
-    <div class="text-2xl text-center mb-2">Adopcja psa: {{adoption_case.dog}}</div>
-    <table class="w-1/5  shadow-xl mx-auto ">
-        <tr >
-            <th class="text-left border-2">Id</th>
-            <td class="text-left border-2">{{ adoption_case.id }}</td>
-        </tr> 
-        <tr>
-            <th class="text-left border-2">Pies</th>
-            <td class="text-left border-2"><a href="{{path('app_dog_show',{id:adoption_case.dog.id})}}">{{ adoption_case.dog }}</a></td>
-            
-        </tr> 
-        <tr>
-            <th class="text-left border-2">Klient</th>
-            <td class="text-left border-2"><a href="{{path('app_user_show',{id:adoption_case.client.id})}}">{{ adoption_case.client }}</a></td>
-        </tr> 
-        <tr>
-            <th class="text-left border-2">Pracownicy</th>
-            <td class="text-left border-2">
-                {% for employee in adoption_case.employee %}
-                    <div><a href="{{path('app_user_show',{id:employee.id})}}">{{ employee.username }}</a></div>
-                {% endfor %}
-            </td>
-        </tr> 
-        <tr>
-            <th class="text-left border-2">Dokumenty</th>
-            <td class="text-left border-2">
-                {% for document in adoption_case.documents %}
-                    {% if document.archived == false %}
-                        <div><a href="{{path('app_documents_show',{id:document.id})}}">{{ document.documentName }}</a></div>
-                    {% endif %}
-                {% endfor %}
-            </td>
-        </tr>
-        {% if is_granted('ROLE_PRACOWNIK') %}
-        <tr>
-            <th class="text-left border-2">Opcje</th>
-            <td class="text-left border-2">
-                <div class="w-full bg-green-500 hover:bg-green-400 border-b-2 text-center text-white"><a href="{{ path('app_adoption_case_edit', {'id': adoption_case.id}) }}">Edytuj</a></div>
-                <div class="w-full bg-yellow-500 hover:bg-yellow-400 border-b-2 text-center text-white" ><a href="{{ path('app_adoption_case_index') }}">Wszystkie Sprawy</a></div>
-                <div>{{ include('adoption_case/_delete_form.html.twig') }}</div>
-            </td>
-        </tr> 
-        {% endif %}
-    </table>
+{% if is_granted('ROLE_PRACOWNIK')%}
+<div class="text-2xl text-center mb-2">Sprawa nr: {{adoption_case.id}}</div>
+    {% endif %}
+<div class="text-2xl text-center mb-2">Adopcja psa: {{adoption_case.dog}}</div>
+<div class="flex w-full justify-center content-start">
+        <table class="w-3/12  shadow-xl m-0" >
+         {% if is_granted('ROLE_PRACOWNIK')%}
+            <tr >
+                <th class="text-left border-2">Id</th>
+                <td class="text-left border-2">{{ adoption_case.id }}</td>
+            </tr> 
+            {% endif %}
+            <tr>
+                <th class="text-left border-2">Pies</th>
+                <td class="text-left border-2"><a href="{{path('app_dog_show',{id:adoption_case.dog.id})}}">{{ adoption_case.dog }}</a></td>
+            </tr> 
+            <tr>
+                <th class="text-left border-2">Status</th>
+                <td class="text-left border-2"><a href="{{path('app_status_show',{id:adoption_case.status})}}">{{ adoption_case.status }}</a></td>
+            </tr> 
+            <tr>
+                <th class="text-left border-2">Klient</th>
+                <td class="text-left border-2"><a href="{{path('app_user_show',{id:adoption_case.client.id})}}">{{ adoption_case.client }}</a></td>
+            </tr> 
+            <tr>
+                <th class="text-left border-2">Pracownicy</th>
+                <td class="text-left border-2">
+                    {% for employee in adoption_case.employee %}
+                        <div><a href="{{path('app_user_show',{id:employee.id})}}">{{ employee.name }}{{" "}}{{employee.surname}}</a></div>
+                    {% endfor %}
+                </td>
+            </tr> 
+            <tr>
+                <th class="text-left border-2">Dokumenty</th>
+                <td class="text-left border-2">
+                    {% for document in adoption_case.documents %}
+                        {% if document.archived == false %}
+                            <div><a href="{{path('app_documents_preview',{id:document.id})}}" target="_blank">{{ document.documentName }}</a></div>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+            {% if is_granted('ROLE_PRACOWNIK') %}
+            <tr>
+                <th class="text-left border-2">Opcje</th>
+                <td class="text-left border-2">
+                    <div class="w-full bg-green-500 hover:bg-green-400 border-b-2 text-center text-white"><a href="{{ path('app_adoption_case_edit', {'id': adoption_case.id}) }}">Edytuj</a></div>
+                    <div class="w-full bg-yellow-500 hover:bg-yellow-400 border-b-2 text-center text-white" ><a href="{{ path('app_adoption_case_index') }}">Wszystkie Sprawy</a></div>
+                    <div class="border-x-2 border-b-2 bg-blue-500 w-full hover:bg-blue-400 text-center text-white"><a href="{{ path('app_adoption_case_archive', {'id': adoption_case.id}) }}">Archiwizuj</a></div>
+                    <div>{{ include('adoption_case/_delete_form.html.twig') }}</div>
+                </td>
+            </tr> 
+            {% endif %}
+        </table>
+        <div class="flex my-auto ml-5">
+            <a href="{{path('app_dog_show',{id:adoption_case.dog.id})}}">{{ include('dog/_dog_image.html.twig',{width:80, height:80, dog:adoption_case.dog}) }} </a>  
+        </div>
 </div>
 
 

@@ -72,6 +72,7 @@
         {% endif %}
         {# {% if form.profileImage is defined  %} #}
         {% if form.profileImage is defined and "hidden" not in form.profileImage.vars.block_prefixes %}
+        <div class="w-32 mx-auto mb-4">{{ include('user/_user_avatar.html.twig',{'width':32 , 'height':32, user:user})}}</div>
         <div>
             {{ form_label(form.profileImage,'Zdjęcie Profilowe',{'label_attr':{'class':'block'}}) }}
             {{ form_widget(form.profileImage)}}

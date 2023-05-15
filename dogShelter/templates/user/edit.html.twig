@@ -7,7 +7,9 @@
         <div class="mb-2 text-xl">Edytuj Użytkownika</div>
         <div class="">{{ include('user/_form.html.twig', {'button_label': 'Aktualizuj', 'isEdit' : 'isEdit'}) }}</div>
         <button class="btn bg-orange-500 w-full hover:bg-orange-400 text-white border-2"><a href="{{ path('app_user_change_password',{'id':user.id}) }}">Zmień Hasło</a></button>
-        <div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white "><a href="{{ path('app_user_index') }}">Lista Użytkowników</a></div>
-        <div>{{ include('user/_delete_form.html.twig') }}</div>
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white "><a href="{{ path('app_user_index') }}">Lista Użytkowników</a></div>
+            <div>{{ include('user/_delete_form.html.twig') }}</div>
+        {% endif %}
     </div>
 {% endblock %}
