@@ -6,7 +6,7 @@
 <div class="flex-col justify-center mt-10">
     <div class="text-2xl text-center mb-2">Dokument nr: {{document.id}}</div>
     <div class="text-2xl text-center mb-2"> {{document.documentName}}</div>
-    <table class="w-1/5  shadow-xl mx-auto ">
+    <table class="w-4/12  shadow-xl mx-auto ">
         <tr  >
             <th class="text-left border-2">Id</th>
             <td class="text-left border-2">{{ document.id }}</td>
@@ -33,6 +33,7 @@
         <tr>
             <th class="text-left border-2">Opcje</th>
             <td class="text-left border-2">
+                <div class="w-full bg-green-500 hover:bg-green-400 border-b-2 text-center text-white"><a href="{{ path('app_documents_preview', {'id': document.id}) }}" target="_blank">Podgląd Dokumentu</a></div>
                 <div class="w-full bg-green-500 hover:bg-green-400 border-b-2 text-center text-white"><a href="{{ path('app_documents_edit', {'id': document.id}) }}">Edytuj</a></div>
                 <div class="w-full bg-yellow-500 hover:bg-yellow-400 border-b-2 text-center text-white" ><a href="{{ path('app_documents_index') }}">Wszystkie Dokumenty</a></div>
                 <div>{{ include('documents/_delete_form.html.twig') }}</div>

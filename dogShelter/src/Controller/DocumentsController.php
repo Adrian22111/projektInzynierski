@@ -164,7 +164,7 @@ class DocumentsController extends AbstractController
     {
         $document->setarchived(true);
         $documentsRepository->save($document,true);
-        return $this->redirectToRoute('app_documents_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_archives_documents', [], Response::HTTP_SEE_OTHER);
     }
     #[IsGranted('ROLE_PRACOWNIK')]
     #[Route('/{id}/restore', name: 'app_documents_restore', methods: ['GET', 'POST'])]

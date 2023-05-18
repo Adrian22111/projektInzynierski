@@ -23,11 +23,11 @@
             <tr class="align-top">
                 <td class="border-2">{{ post.id }}</td>
                 <td class="border-2">{{ post.title|length > 30? post.title|slice(0,26)~post.title|slice(-4):post.title }}</td>
-                <td>
+                <td class="border-2">
                 {% if is_granted("ROLE_ADMIN") %}
-                    <a href="{{ path('app_status_show', {'id': post.status.id}) }}">{{post.status}}
+                    <a href="{{ path('app_status_show', {'id': post.status.id}) }}">{{post.status}}</a>
                 {% else %}
-                    <td class="border-2">{{ post.status }}</td>
+                    {{ post.status }}
                 {% endif %}
                 </td>
                 <td class="border-2"><a href="{{path('app_user_show',{id:post.postOwner.id})}}">{{ post.postOwner }}</a></td>
