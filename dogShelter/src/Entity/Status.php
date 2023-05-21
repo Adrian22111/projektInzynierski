@@ -17,7 +17,7 @@ class Status
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 60)]
     #[Assert\NotBlank(message:'Podaj Nazwe Statusu')]
     private ?string $StatusName = null;
 

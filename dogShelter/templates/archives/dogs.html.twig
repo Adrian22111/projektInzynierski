@@ -81,7 +81,7 @@
             <!-- Modal body -->
             <div class=" flex p-2">
                 {% if allGuardiansAreArchived is defined and allGuardiansAreArchived == true %}
-                    <div class="flex flex-col w-1/2 text-white">
+                    <div class="flex flex-col w-full text-white">
                         <p>Opiekunowie przydzeleni do Psa nie są już aktywni. Dodaj innego opiekuna zanim przywrócisz sprawę!</p>                    
                     </div>
                 {% endif %}
@@ -90,7 +90,7 @@
             <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
                 <button onClick="modalHide()" type="button" class="text-white bg-blue-700 hover:bg-blue-800  font-medium rounded-lg text-sm px-5 py-2.5 text-center">Potwierdź</button>
                 {% if dogToRestore is defined %}
-                    <a href="{{path('app_dog_edit',{id:dogToRestore.id})}}" target="_blank" class="text-white bg-green-700 hover:bg-green-800  font-medium rounded-lg text-sm px-5 py-2.5 text-center">Edytuj Psa</a>
+                    <a href="{{path('app_dog_change_guardian',{id:dogToRestore.id})}}"  class="text-white bg-green-700 hover:bg-green-800  font-medium rounded-lg text-sm px-5 py-2.5 text-center">Przydziel Opiekunów</a>
                 {% endif %}
             </div>
         </div>

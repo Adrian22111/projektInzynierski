@@ -5,7 +5,7 @@
 {% block body %}
     <table class="table mx-auto w-4/12 border-1 shadow-xl mx-auto mt-10">
             <thead class="text-center">
-                <th class="border-2">Status</th>
+                <th class="border-2">Treść Statusu</th>
                 <th class="border-2">Dotyczy</th>
                 <th class="border-2">Opcje</th>
             </thead>
@@ -13,7 +13,17 @@
                 <td class="border-2">{{ status.StatusName }}</td>
                 <td class="border-2 ">
                     {% for statusOf in status.refersTo %}
-                        {{ statusOf }}
+                        {% if statusOf == "case" %}
+                            {{"Sprawy"}}
+                        {% elseif statusOf == "dog" %}
+                            {{"Psa"}}
+                        {% elseif statusOf == "user" %}
+                            {{"Użytkownika"}}
+                        {% elseif statusOf == "document" %}
+                            {{"Dokumentu"}}
+                        {% elseif statusOf == "post" %}
+                            {{"Posta"}}
+                        {% endif %}
                     {% endfor %}
                 </td>
                 <td class="border-2">

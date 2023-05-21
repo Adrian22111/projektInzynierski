@@ -13,6 +13,7 @@
     <a href="{{ path('app_post_index') }}"><div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white text-center" >Lista Postów</div></a>
         {% if app.user.id == post.postOwner.id %}
             <a href="{{ path('app_post_edit', {'id': post.id}) }}"><div class="border-2 bg-yellow-500 w-full hover:bg-yellow-400 text-white text-center" >Edytuj</div></a>
+            <a href="{{ path('app_post_archive', {'id': post.id}) }}"><div class="border-2 bg-blue-500 w-full hover:bg-blue-400 text-white text-center" >Archiwizuj</div></a>
             <div>{{ include('post/_delete_form.html.twig') }}</div>
         {% endif %}
     {% endif %}

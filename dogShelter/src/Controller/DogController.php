@@ -5,24 +5,25 @@ namespace App\Controller;
 use Exception;
 use App\Entity\Dog;
 use App\Form\DogType;
-use App\Entity\AdoptionCase;
 use App\Entity\Documents;
+use App\Entity\AdoptionCase;
 use Doctrine\ORM\Mapping\Id;
+use App\Form\changeGuardianType;
 use App\Repository\DogRepository;
 use App\Repository\UserRepository;
-use App\Repository\AdoptionCaseRepository;
 use App\Repository\DocumentsRepository;
+use App\Repository\AdoptionCaseRepository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[Route('/dog')]
 class DogController extends AbstractController
@@ -292,5 +293,26 @@ class DogController extends AbstractController
                 'allGuardiansAreArchived'=>$allGuardiansAreArchived
             ]);
         }
+    }
+
+    #[IsGranted('ROLE_PRACOWNIK')]
+    #[Route('/{id}/set_guardian', name: 'app_dog_change_guardian', methods: ['GET', 'POST'])]
+    public function changeGuardian(Dog $dog, DogRepository $dogRepository,Request $request,): Response
+    {
+        $form = $this->createForm(changeGuardianType::class,$dog);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $guardians = $form->get('guardian')->getData();
+            foreach($guardians as $guardian)
+            {
+                $guardian->addGuardianOf($dog);
+            }
+            $dogRepository->save($dog, true);
+            return $this->redirectToRoute('app_archives_dogs', [], Response::HTTP_SEE_OTHER);
+        }
+        return $this->renderForm('dog/change_guardian.html.twig', [
+            'dog' => $dog,
+            'form' => $form,
+        ]);
     }
 }
